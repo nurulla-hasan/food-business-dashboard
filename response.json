@@ -1,0 +1,33 @@
+{
+    "_id": "68c7930f47b556db75533e84",
+    "weekStart": "2025-09-01T00:00:00.000Z",
+    "weekEnd": "2025-09-09T00:00:00.000Z",
+    "mealType": "Dinner",
+    "image": "/images/profile/1757909775030-hero.png",
+    "dishName": "Foods",
+    "description": "ewqrewrewrt",
+    "ratting": 0,
+    "calories": 120,
+    "quantity": 10,
+    "price": 130,
+    "favorite": false,
+    "nutrition": [
+        {
+            "calories": 130
+        },
+        {
+            "calories": 165
+        },
+        {
+            "calories": 52
+        },
+        {
+            "calories": 200
+        },
+        {
+            "calories": 90
+        }
+    ],
+    "createdAt": "2025-09-15T04:16:15.046Z",
+    "updatedAt": "2025-09-15T04:16:15.046Z"
+}

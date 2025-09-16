@@ -1,0 +1,194 @@
+import React, { useState, Suspense } from 'react';
+import { Plus, Search } from 'lucide-react';
+import Title from '@/components/ui/Title';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import PageLayout from '@/components/main-layout/PageLayout';
+import CustomPagination from '@/components/common/CustomPagination';
+import TableSkeleton from '@/components/skeleton/TableSkeleton';
+import MenuTable from '@/components/menu/table/MenuTable';
+import AddMenuModal from '@/components/menu/modal/AddMenuModal';
+import EditMenuModal from '@/components/menu/modal/EditMenuModal';
+import ConfirmationModal from '@/components/common/ConfirmationModal';
+
+import {
+    useGetAllMenuQuery,
+    useAddMenuMutation,
+    useUpdateMenuMutation,
+    useDeleteMenuMutation
+} from '@/redux/feature/menu/menuApi';
+import usePaginatedSearchQuery from '@/hooks/usePaginatedSearchQuery';
+import Error from '@/components/common/Error';
+import NoData from '@/components/common/NoData';
+import ViewMenuModal from '@/components/menu/modal/ViewMenuModal';
+
+const WeeklyMenu = () => {
+    const {
+        searchTerm,
+        setSearchTerm,
+        currentPage,
+        setCurrentPage,
+        items: menus,
+        totalPages,
+        page,
+        isLoading,
+        isError
+    } = usePaginatedSearchQuery(useGetAllMenuQuery, { resultsKey: "menus" });
+
+    const [addOpen, setAddOpen] = useState(false);
+    const [editOpen, setEditOpen] = useState(false);
+    const [viewOpen, setViewOpen] = useState(false);
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [selectedMenu, setSelectedMenu] = useState(null);
+
+    const [addMenuMutation, { isLoading: addLoading }] = useAddMenuMutation();
+    const [updateMenuMutation, { isLoading: updateLoading }] = useUpdateMenuMutation();
+    const [deleteMenuMutation, { isLoading: deleteLoading }] = useDeleteMenuMutation();
+
+    // Modal Handlers
+    const handleAddMenu = async (formData) => {
+        try {
+            await addMenuMutation(formData).unwrap();
+            setAddOpen(false);
+        } catch (err) {
+            console.error('Add menu failed:', err);
+            // Re-throw the error to be handled by the form
+            throw err;
+        }
+    };
+
+    const handleEditMenu = async (data) => {
+        if (!selectedMenu?._id) return;
+        const formData = new FormData();
+        if (data?.topic_image) {
+            formData.append('topic_image', data.topic_image);
+        }
+        formData.append(
+            'data',
+            JSON.stringify({ id: selectedMenu._id, name: data?.name })
+        );
+        try {
+            await updateMenuMutation({ id: selectedMenu._id, data: formData }).unwrap();
+            setEditOpen(false);
+            setSelectedMenu(null);
+        } catch (err) {
+            console.error('Update menu failed:', err);
+        }
+    };
+
+    const handleDeleteMenu = async () => {
+        if (!selectedMenu?._id) return;
+        try {
+            await deleteMenuMutation(selectedMenu._id).unwrap();
+            setConfirmOpen(false);
+            setSelectedMenu(null);
+        } catch (err) {
+            console.error('Delete menu failed:', err);
+        }
+    };
+
+    return (
+        <>
+            <Suspense fallback={<TableSkeleton columns={4} rows={10} />}>
+                <PageLayout
+                    pagination={
+                        totalPages > 1 && (
+                            <div className="mt-4">
+                                <CustomPagination
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    onPageChange={setCurrentPage}
+                                />
+                            </div>
+                        )
+                    }
+                >
+                    {/* Title and Search */}
+                    <div className="flex flex-col md:flex-row md:items-start justify-between mb-4">
+                        <Title title="Weekly Menu" />
+                        <div className="flex flex-col md:flex-row md:items-center gap-3 w-full md:w-auto">
+                            <div className="relative w-full md:w-64">
+                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                <Input
+                                    type="search"
+                                    placeholder="Search menus..."
+                                    className="pl-9"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </div>
+                            <Button onClick={() => setAddOpen(true)}>
+                                <Plus />
+                                Add Weekly Menu
+                            </Button>
+                        </div>
+                    </div>
+
+                    {/* Table */}
+                    {isLoading ? (
+                        <TableSkeleton columns={4} rows={10} />
+                    ) : isError ? (
+                        <Error msg="Failed to load menus"/>
+                    ) : menus?.length > 0 ? (
+                        <MenuTable
+                            page={page}
+                            limit={10}
+                            data={menus}
+                            onView={(menu) => {
+                                setSelectedMenu(menu);
+                                setViewOpen(true);
+                            }}
+                            onEdit={(menu) => {
+                                setSelectedMenu(menu);
+                                setEditOpen(true);
+                            }}
+                            onDelete={(menu) => {
+                                setSelectedMenu(menu);
+                                setConfirmOpen(true);
+                            }}
+                        />
+                    ) : (
+                        <NoData msg="No menus found"/>
+                    )}
+                </PageLayout>
+            </Suspense>
+
+            {/* Add Menu Modal */}
+            <AddMenuModal
+                isOpen={addOpen}
+                onOpenChange={setAddOpen}
+                onSubmit={handleAddMenu}
+                loading={addLoading}
+            />
+
+            {/* View Menu Modal */}
+            <ViewMenuModal
+                isOpen={viewOpen}
+                onOpenChange={setViewOpen}
+                menu={selectedMenu}
+            />
+
+            {/* Edit Menu Modal */}
+            <EditMenuModal
+                isOpen={editOpen}
+                onOpenChange={setEditOpen}
+                menu={selectedMenu}
+                onSubmit={handleEditMenu}
+                loading={updateLoading}
+            />
+
+            {/* Delete Confirmation Modal */}
+            <ConfirmationModal
+                isOpen={confirmOpen}
+                onOpenChange={setConfirmOpen}
+                title="Confirm Delete Menu"
+                description="Are you sure you want to delete this menu?"
+                confirmText="Delete"
+                loading={deleteLoading}
+                onConfirm={handleDeleteMenu}
+            />
+        </>
+    );
+};
+
+export default WeeklyMenu;
