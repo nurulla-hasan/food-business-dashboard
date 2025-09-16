@@ -2,47 +2,70 @@ import { Suspense, useState } from "react";
 import PageLayout from "@/components/main-layout/PageLayout";
 import CustomPagination from "@/components/common/CustomPagination";
 import Title from "@/components/ui/Title";
-import { useDeleteReportMutation, useGetAllReportQuery } from "@/redux/feature/report/reportApi";
-import ReportTable from "@/components/report/table/ReportTable";
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { useGetAllOrderQuery, useUpdateOrderMutation } from "@/redux/feature/order/orderApi";
+import OrderTable from "@/components/order/table/OrderTable";
+import { Calendar as CalendarIcon, X } from "lucide-react";
 import TableSkeleton from "@/components/skeleton/TableSkeleton";
-import { ErrorToast, SuccessToast } from "@/lib/utils";
-import ConfirmationModal from "@/components/common/ConfirmationModal";
 import usePaginatedSearchQuery from "@/hooks/usePaginatedSearchQuery";
 import Error from "@/components/common/Error";
 import NoData from "@/components/common/NoData";
+import { toast } from "sonner";
+import useDebounce from "@/hooks/usedebounce";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { cn, formatDate } from "@/lib/utils";
+
 const OrderManagement = () => {
+
+  const [filters, setFilters] = useState({
+    status: '',
+    date: '',
+  });
+
+  const handleFilterChange = (key, value) => {
+    setFilters(prev => ({
+      ...prev,
+      [key]: value === 'all' ? '' : value
+    }));
+  };
+
+  const handleDateSelect = (date) => {
+    setFilters(prev => ({
+      ...prev,
+      date: date ? formatDate(date) : ''
+    }));
+  };
+
+  const debouncedFilters = useDebounce(filters, 600, () => setCurrentPage(1));
   const {
-    searchTerm,
-    setSearchTerm,
     currentPage,
     setCurrentPage,
-    items: reports,
+    items: orders,
     totalPages,
     page,
     isLoading,
     isError,
-  } = usePaginatedSearchQuery(useGetAllReportQuery);
+  } = usePaginatedSearchQuery(useGetAllOrderQuery, { resultsKey: "orders" }, debouncedFilters);
 
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  const [selectedReport, setSelectedReport] = useState(null);
-  const [deleteReport, { isLoading: deleteLoading, isSuccess: deleteSuccess }] = useDeleteReportMutation();
 
-  // Handler
-  const handleDelete = async () => {
-    try {
-      await deleteReport(selectedReport._id).unwrap();
-      if (deleteSuccess) {
-        SuccessToast("Report deleted successfully");
+
+  const [updateOrder] = useUpdateOrderMutation();
+
+  const handleStatusChange = async (orderId, status) => {
+    toast.promise(
+      updateOrder({ orderId, status }).unwrap(),
+      {
+        loading: 'Updating status...',
+        success: `Order has been marked as ${status}.`,
+        error: 'Failed to update order status.',
       }
-    } catch (err) {
-      ErrorToast(err?.data?.message);
-    }
+    );
   };
 
   return (
-    <Suspense fallback={<div className="flex items-center justify-center h-64">Loading Report...</div>}>
+    <Suspense fallback={<TableSkeleton rows={10} />}>
       <PageLayout
         pagination={
           totalPages > 1 && (
@@ -56,54 +79,76 @@ const OrderManagement = () => {
           )
         }
       >
-        {/* Title and Search */}
         <div className="flex flex-col md:flex-row md:items-start justify-between mb-4">
           <Title title="Order Management" />
-          <div className="flex flex-col md:flex-row md:items-center gap-3 w-full md:w-auto">
-            <div className="relative w-full md:w-64">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search order..."
-                className="pl-9"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full sm:w-auto mt-2 md:mt-0">
+            <Select
+              value={filters.status}
+              onValueChange={(value) => handleFilterChange('status', value)}>
+              <SelectTrigger className="w-full sm:w-[180px]">
+                <SelectValue placeholder="Filter by Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="pending">Pending</SelectItem>
+                <SelectItem value="complete">Complete</SelectItem>
+                <SelectItem value="cancel">Cancel</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <div className="flex items-center gap-2">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "w-full sm:w-[200px] justify-start text-left font-normal",
+                      !filters.date && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {filters.date ? formatDate(new Date(filters.date)) : <span>Pick a date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={filters.date ? new Date(filters.date) : null}
+                    onSelect={handleDateSelect}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              {filters.date && (
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => handleDateSelect(null)}
+                >
+                  <span className="sr-only">Clear date</span>
+                  <X />
+                </Button>
+              )}
             </div>
           </div>
         </div>
         {
           isLoading ? (
-            <TableSkeleton />
+            <TableSkeleton rows={10} columns={8} />
           ) : isError ? (
-            <Error msg="Failed to load orders"/>
-          ) : reports?.length > 0 ? (
-            <ReportTable
-              reports={reports}
+            <Error msg="Failed to load orders" />
+          ) : orders?.length > 0 ? (
+            <OrderTable
+              data={orders}
               page={page}
               limit={10}
-              deleteLoading={deleteLoading}
-              onDelete={(report) => {
-                setConfirmOpen(true);
-                setSelectedReport(report);
-              }}
+              onStatusChange={handleStatusChange}
             />
           ) : (
-            <NoData msg="No orders found"/>
+            <NoData msg="No orders found" />
           )
         }
       </PageLayout>
-
-      {/* Delete Confirmation Modal */}
-      <ConfirmationModal
-        isOpen={confirmOpen}
-        onOpenChange={setConfirmOpen}
-        title={"Confirm Delete Order"}
-        description={"Are you sure you want to delete this order?"}
-        confirmText={"Delete"}
-        loading={deleteLoading}
-        onConfirm={handleDelete}
-      />
     </Suspense>
   );
 };

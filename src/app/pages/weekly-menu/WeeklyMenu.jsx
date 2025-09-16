@@ -52,7 +52,6 @@ const WeeklyMenu = () => {
             setAddOpen(false);
         } catch (err) {
             console.error('Add menu failed:', err);
-            // Re-throw the error to be handled by the form
             throw err;
         }
     };
