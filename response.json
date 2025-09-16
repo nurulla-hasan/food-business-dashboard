@@ -16,16 +16,17 @@
             "calories": 130
         },
         {
-            "calories": 165
+            "protein": 5
+            
         },
         {
-            "calories": 52
+            "carbohydrates": 10
         },
         {
-            "calories": 200
+            "fat": 2
         },
         {
-            "calories": 90
+            "fiber": 1
         }
     ],
     "createdAt": "2025-09-15T04:16:15.046Z",
