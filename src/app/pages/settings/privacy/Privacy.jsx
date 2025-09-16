@@ -81,7 +81,7 @@ const Privacy = () => {
                         <JoditEditor
                             ref={editor}
                             value={content}
-                            onBlur={(newContent) => setContent(newContent)}
+                            onChange={(newContent) => setContent(newContent)}
                             config={editorConfig}
                         />
                     </div>

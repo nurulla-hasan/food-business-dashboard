@@ -23,6 +23,11 @@ import NoData from '@/components/common/NoData';
 import ViewMenuModal from '@/components/menu/modal/ViewMenuModal';
 
 const WeeklyMenu = () => {
+    const [filters, setFilters] = useState({
+        date: '',
+        mealType: '',
+    });
+
     const {
         searchTerm,
         setSearchTerm,
@@ -33,7 +38,7 @@ const WeeklyMenu = () => {
         page,
         isLoading,
         isError
-    } = usePaginatedSearchQuery(useGetAllMenuQuery, { resultsKey: "menus" });
+    } = usePaginatedSearchQuery(useGetAllMenuQuery, { resultsKey: "menus", searchKey: "searchTerm" }, filters);
 
     const [addOpen, setAddOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
@@ -127,7 +132,7 @@ const WeeklyMenu = () => {
                     {isLoading ? (
                         <TableSkeleton columns={4} rows={10} />
                     ) : isError ? (
-                        <Error msg="Failed to load menus"/>
+                        <Error msg="Failed to load menus" />
                     ) : menus?.length > 0 ? (
                         <MenuTable
                             page={page}
@@ -147,7 +152,7 @@ const WeeklyMenu = () => {
                             }}
                         />
                     ) : (
-                        <NoData msg="No menus found"/>
+                        <NoData msg="No menus found" />
                     )}
                 </PageLayout>
             </Suspense>
