@@ -94,6 +94,22 @@ const ViewMenuModal = ({ isOpen, onOpenChange, menu }) => {
                                         </InfoSection>
                                     </>
                                 )}
+                                <Separator />
+                                {menu.nutrition && menu.nutrition.length > 0 && (
+                                    <InfoSection title="Nutrition">
+                                        <div className="space-y-2">
+                                            {menu.nutrition.map((nutrient, index) => {
+                                                const [label, value] = Object.entries(nutrient)[0];
+                                                return (
+                                                    <div key={index} className="flex justify-between items-center">
+                                                        <span className="text-sm font-medium">{label}</span>
+                                                        <span className="font-bold">{value}</span>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </InfoSection>
+                                )}
                             </div>
                         </div>
                     </div>
