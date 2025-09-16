@@ -2,23 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { format } from "date-fns";
-import { Calendar as CalendarIcon, UploadCloud, PlusCircle, XCircle } from "lucide-react";
+import { UploadCloud, PlusCircle, XCircle } from "lucide-react";
 
-import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { RangeCalendar } from '@/components/ui/range-calender';
 
 const formSchema = z.object({
-  weekStart: z.date({ required_error: 'Week start date is required.' }),
-  weekEnd: z.date({ required_error: 'Week end date is required.' }),
+  dateRange: z.object({
+    from: z.date({ required_error: "A start date is required." }),
+    to: z.date({ required_error: "An end date is required." }),
+  }),
   mealType: z.enum(["Breakfast", "Lunch", "Dinner"], {
     required_error: "You need to select a meal type.",
   }),
@@ -33,17 +32,13 @@ const formSchema = z.object({
     name: z.string().min(1, { message: 'Nutrient name cannot be empty.' }),
     value: z.coerce.number().positive({ message: 'Value must be a positive number.' })
   })).optional(),
-}).refine((data) => data.weekEnd > data.weekStart, {
-  message: "Week end date must be after week start date.",
-  path: ["weekEnd"],
 });
 
 const AddMenuModal = ({ isOpen, onOpenChange, onSubmit, loading }) => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      weekStart: undefined,
-      weekEnd: undefined,
+      dateRange: { from: undefined, to: undefined },
       mealType: undefined,
       image: undefined,
       dishName: '',
@@ -79,8 +74,8 @@ const AddMenuModal = ({ isOpen, onOpenChange, onSubmit, loading }) => {
       formData.append('image', values.image);
     }
     
-    formData.append('weekStart', formatDate(values.weekStart));
-    formData.append('weekEnd', formatDate(values.weekEnd));
+    formData.append('weekStart', formatDate(values.dateRange.from));
+    formData.append('weekEnd', formatDate(values.dateRange.to));
     formData.append('mealType', values.mealType);
     formData.append('dishName', values.dishName);
     formData.append('description', values.description);
@@ -144,84 +139,22 @@ const AddMenuModal = ({ isOpen, onOpenChange, onSubmit, loading }) => {
                   )}
                 />
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="weekStart"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col">
-                        <FormLabel>Week Start</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant={"outline"}
-                                className={cn(
-                                  "w-full pl-3 text-left font-normal",
-                                  !field.value && "text-muted-foreground"
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value, "PPP")
-                                ) : (
-                                  <span>Pick a date</span>
-                                )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                              initialFocus
-                            />
-                          </PopoverContent>
-                        </Popover>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="weekEnd"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col">
-                        <FormLabel>Week End</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant={"outline"}
-                                className={cn(
-                                  "w-full pl-3 text-left font-normal",
-                                  !field.value && "text-muted-foreground"
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value, "PPP")
-                                ) : (
-                                  <span>Pick a date</span>
-                                )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                              initialFocus
-                            />
-                          </PopoverContent>
-                        </Popover>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                <FormField
+                  control={form.control}
+                  name="dateRange"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Week Availability</FormLabel>
+                      <FormControl>
+                        <RangeCalendar
+                          value={field.value}
+                          onSelect={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 <FormField
                   control={form.control}

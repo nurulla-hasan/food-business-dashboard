@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Eye, MoreHorizontal } from "lucide-react";
 import { formatDate, getInitials } from "@/lib/utils";
 
-const OrderTable = ({ data, page, limit, onStatusChange }) => {
+const OrderTable = ({ data, page, limit, onStatusChange, onView }) => {
 
   // Helper to determine badge color based on status
   const getStatusVariant = (status) => {
@@ -85,7 +85,7 @@ const OrderTable = ({ data, page, limit, onStatusChange }) => {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <Button size="icon" variant="outline">
+                <Button size="icon" variant="outline" onClick={() => onView(order)}>
                   <Eye />
                 </Button>
               </TableCell>

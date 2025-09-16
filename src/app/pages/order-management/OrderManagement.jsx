@@ -16,8 +16,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { cn, formatDate } from "@/lib/utils";
+import OrderViewModal from "@/components/order/modal/OrderViewModal";
 
 const OrderManagement = () => {
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   const [filters, setFilters] = useState({
     status: '',
@@ -48,8 +51,6 @@ const OrderManagement = () => {
     isLoading,
     isError,
   } = usePaginatedSearchQuery(useGetAllOrderQuery, { resultsKey: "orders" }, debouncedFilters);
-
-
 
   const [updateOrder] = useUpdateOrderMutation();
 
@@ -143,12 +144,18 @@ const OrderManagement = () => {
               page={page}
               limit={10}
               onStatusChange={handleStatusChange}
+              onView={(order) => {
+                setSelectedOrder(order);
+                setIsViewModalOpen(true);
+              }}
             />
           ) : (
             <NoData msg="No orders found" />
           )
         }
       </PageLayout>
+
+      <OrderViewModal isOpen={isViewModalOpen} onOpenChange={setIsViewModalOpen} order={selectedOrder} />
     </Suspense>
   );
 };
