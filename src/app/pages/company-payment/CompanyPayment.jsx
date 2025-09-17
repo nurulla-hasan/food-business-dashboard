@@ -1,22 +1,24 @@
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import Title from "@/components/ui/Title";
 import PageLayout from "@/components/main-layout/PageLayout";
 import CustomPagination from "@/components/common/CustomPagination";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { useGetAllCompanyPaymentQuery } from "@/redux/feature/company-payment/companyPaymentApi";
+import { useGetAllCompanyPaymentQuery, useUpdateCompanyPaymentMutation } from "@/redux/feature/company-payment/companyPaymentApi";
 import CompanyPaymentTable from "@/components/company-payment/table/CompanyPaymentTable";
 import TableSkeleton from "@/components/skeleton/TableSkeleton";
 import usePaginatedSearchQuery from "@/hooks/usePaginatedSearchQuery";
 import Error from "@/components/common/Error";
 import NoData from "@/components/common/NoData";
 import { useNavigate } from "react-router-dom";
-// import { useState } from "react";
-// import CompanyPaymentViewModal from "@/components/company-payment/modal/CompanyPaymentViewModal";
+import ConfirmationModal from "@/components/common/ConfirmationModal";
+import { toast } from "sonner";
+import { getMonthNumber } from "@/lib/utils";
 
 const CompanyPayment = () => {
-  // const [selectedPayment, setSelectedPayment] = useState(null);
-  // const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState(null);
+
   const navigate = useNavigate();
   const {
     searchTerm,
@@ -30,6 +32,31 @@ const CompanyPayment = () => {
     isError,
   } = usePaginatedSearchQuery(useGetAllCompanyPaymentQuery, { resultsKey: "company" });
 
+  const [updateCompanyPayment, { isLoading: isUpdating }] = useUpdateCompanyPaymentMutation();
+
+  const handleUpdatePaymentStatus = async () => {
+    if (selectedPayment.paymentStatus === "Paid") {
+      toast.info("Payment already marked as Paid");
+      return;
+    }
+    setConfirmModalOpen(true);
+  };
+
+  const handleConfirmUpdatePaymentStatus = async () => {
+    try {
+      await updateCompanyPayment({
+        company_id: selectedPayment?._id,
+        status: "Paid",
+        month: getMonthNumber(selectedPayment?.month),
+        year: selectedPayment?.year,
+      }).unwrap();
+      toast.success("Payment status updated successfully");
+      setConfirmModalOpen(false);
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to update payment status");
+    }
+  }
 
   return (
     <Suspense fallback={<TableSkeleton columns={6} rows={10} />}>
@@ -75,21 +102,30 @@ const CompanyPayment = () => {
               data={payments}
               page={page}
               limit={10}
-            onView={(payment) => {
-              navigate(`/company-payment/${payment._id}`);
-            }}
+              onCheck={(payment) => {
+                setSelectedPayment(payment);
+                handleUpdatePaymentStatus();
+              }}
+              onView={(payment) => {
+                navigate(`/company-payment/${payment._id}`);
+              }}
             />
           ) : (
             <NoData msg="No payments found" />
           )
         }
       </PageLayout>
-      {/* 
-      <CompanyPaymentViewModal
-        selectedPayment={selectedPayment}
-        isOpen={isViewModalOpen}
-        onOpenChange={setIsViewModalOpen}
-      /> */}
+
+      <ConfirmationModal
+        isOpen={confirmModalOpen}
+        onConfirm={handleConfirmUpdatePaymentStatus}
+        onOpenChange={setConfirmModalOpen}
+        title="Confirm Payment Update"
+        description={`Are you sure you want to mark the payment for ${selectedPayment?.name} for the month of ${selectedPayment?.month} as 'Paid'?`}
+        loading={isUpdating}
+        confirmText="Mark as Paid"
+      />
+
     </Suspense>
   );
 };

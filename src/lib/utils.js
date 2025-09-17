@@ -38,3 +38,40 @@ export const getImageUrl = (imagePath) => {
   if (!imagePath) return '';
   return imagePath.startsWith('/') ? `${IMAGE_BASE_URL}${imagePath}` : `${IMAGE_BASE_URL}/${imagePath}`;
 };
+
+// Get Status Variant
+export const getStatusVariant = (status) => {
+  switch (status?.toLowerCase()) {
+    case "paid":
+      return "success";
+    case "complete":
+      return "default";
+    case "pending":
+      return "warning";
+    case "cancel":
+      return "destructive";
+    default:
+      return "outline";
+  }
+};
+
+// Get Month Number
+export const getMonthNumber = (monthName) => {
+  const months = {
+    'january': '01',
+    'february': '02',
+    'march': '03',
+    'april': '04',
+    'may': '05',
+    'june': '06',
+    'july': '07',
+    'august': '08',
+    'september': '09',
+    'october': '10',
+    'november': '11',
+    'december': '12'
+  };
+  const formattedName = monthName.toLowerCase();
+
+  return months[formattedName] || null;
+}

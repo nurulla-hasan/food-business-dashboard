@@ -8,9 +8,11 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { Eye } from "lucide-react";
+import { CheckCheck, Eye } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { getStatusVariant } from "@/lib/utils";
 
-const CompanyPaymentTable = ({ data, page, limit, onView }) => {
+const CompanyPaymentTable = ({ data, page, limit, onCheck, onView }) => {
     return (
         <ScrollArea className="w-[calc(100vw-32px)] overflow-hidden overflow-x-auto md:w-full rounded-lg whitespace-nowrap">
             <Table>
@@ -33,8 +35,19 @@ const CompanyPaymentTable = ({ data, page, limit, onView }) => {
                             <TableCell>{item.totalOrder}</TableCell>
                             <TableCell>{item.month}</TableCell>
                             <TableCell>{item.totalPrice}</TableCell>
-                            <TableCell>{item.paymentStatus}</TableCell>
-                            <TableCell className="text-right">
+                            <TableCell>
+                                <Badge variant={getStatusVariant(item.paymentStatus)} className="capitalize">
+                                    {item.paymentStatus}
+                                </Badge>
+                            </TableCell>
+                            <TableCell className="text-right space-x-2">
+                                <Button
+                                    variant="outline"
+                                    size="icon"
+                                    onClick={() => onCheck?.(item)}
+                                >
+                                    <CheckCheck />
+                                </Button>
                                 <Button
                                     variant="outline"
                                     size="icon"

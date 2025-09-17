@@ -23,10 +23,18 @@ const companyPaymentApi = baseApi.injectEndpoints({
             providesTags: ["COMPANY_PAYMENT"],
         }),
 
+        // GET SINGLE COMPANY DETAILS
+        getCompanyDetails: builder.query({
+            query: (id) => ({
+                url: `/dashboard/get_company_details/${id}`,
+                method: "GET",
+            }),
+            providesTags: ["COMPANY_PAYMENT"],
+        }),
 
-        // GET ALL COMPANY PAYMENT
+        // GET SINGLE COMPANY EMPLOYER ORDERS
         getCompanyOrder: builder.query({
-            query: (args) => {
+            query: ({ id, ...args }) => {
                 const params = new URLSearchParams();
                 if (args) {
                     Object.entries(args).forEach(([key, value]) => {
@@ -36,7 +44,7 @@ const companyPaymentApi = baseApi.injectEndpoints({
                     });
                 }
                 return {
-                    url: "/dashboard/get_company_order/68be73057759085b1cc1bff4",
+                    url: `/dashboard/get_company_order/${id}`,
                     method: "GET",
                     params,
                 };
@@ -44,19 +52,11 @@ const companyPaymentApi = baseApi.injectEndpoints({
             providesTags: ["COMPANY_PAYMENT"],
         }),
 
-        // GET COMPANY DETAILS
-        getCompanyDetails: builder.query({
-            query: (id) => ({
-                url: `/dashboard/get_company_details/${id}`,
-                method: "GET",
-            }),
-            providesTags: ["COMPANY_PAYMENT"],
-        }),
 
         // UPDATE COMPANY PAYMENT
         updateCompanyPayment: builder.mutation({
-            query: ({id, data}) => ({
-                url: `/dashboard/update_company_payment_monthly/${id}`,
+            query: (data) => ({
+                url: "/dashboard/update_company_payment_monthly",
                 method: "PATCH",
                 body: data,
             }),
