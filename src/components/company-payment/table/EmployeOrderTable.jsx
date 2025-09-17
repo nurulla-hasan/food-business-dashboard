@@ -20,7 +20,8 @@ const EmployeOrderTable = ({ data, page, limit }) => {
                         <TableHead>Order ID</TableHead>
                         <TableHead>Meal Type</TableHead>
                         <TableHead>Date</TableHead>
-                        <TableHead>Status</TableHead>
+                        <TableHead>Order Status</TableHead>
+                        <TableHead>Payment Status</TableHead>
                         <TableHead className="text-right">Amount</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -34,6 +35,11 @@ const EmployeOrderTable = ({ data, page, limit }) => {
                             <TableCell>
                                 <Badge variant={getStatusVariant(order.status)} className="capitalize">
                                     {order.status}
+                                </Badge>
+                            </TableCell>
+                            <TableCell>
+                                <Badge variant={getStatusVariant(order.paymentStatus)} className="capitalize">
+                                    {order.paymentStatus}
                                 </Badge>
                             </TableCell>
                             <TableCell className="text-right">৳{order.menuPrice.toFixed(2)}</TableCell>
