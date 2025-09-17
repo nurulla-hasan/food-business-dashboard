@@ -7,13 +7,14 @@ const Login = lazy(()=> import('@/app/pages/auth/login/Login'));
 const ForgetPassword = lazy(()=> import('@/app/pages/auth/forget-password/ForgetPassword'));
 const ResetPassword = lazy(()=> import('@/app/pages/auth/reset-password/ResetPassword'));
 const VerifyOtp = lazy(()=> import('@/app/pages/auth/verify-otp/VerifyOtp'));
-const CompanyPayment = lazy(()=> import('@/app/pages/company-payment/CompanyPayment'));
 //======================================================================================================================
 const Dashboard = lazy(()=> import('@/app/pages/dasboard/Dashboard'));
 const Users = lazy(()=> import('@/app/pages/users/Users'));
 const CompanyManagement = lazy(()=> import('@/app/pages/company-management/CompanyManagement'));
 const WeeklyMenu = lazy(()=> import('@/app/pages/weekly-menu/WeeklyMenu'));
 const OrderManagement = lazy(()=> import('@/app/pages/order-management/OrderManagement'));
+const CompanyPayment = lazy(()=> import('@/app/pages/company-payment/CompanyPayment'));
+const CompanyPaymentDetails = lazy(()=> import('@/app/pages/company-payment/details/CompanyPaymentDetails'));
 const Profile = lazy(()=> import('@/app/pages/settings/profile/Profile'));
 const Privacy = lazy(()=> import('@/app/pages/settings/privacy/Privacy'));
 const Terms = lazy(()=> import('@/app/pages/settings/terms/Terms'));
@@ -49,6 +50,10 @@ export const router = createBrowserRouter([
             {
                 path: "company-payment",
                 element: <CompanyPayment />
+            },
+            {
+                path: "company-payment/:id",
+                element: <CompanyPaymentDetails />
             },
             // {
             //     path: "notifications",

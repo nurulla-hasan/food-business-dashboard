@@ -30,8 +30,6 @@ const menuApi = baseApi.injectEndpoints({
                     url: "/dashboard/create-menu",
                     method: "POST",
                     body: formData,
-                    // Don't set content-type, let the browser set it with the correct boundary
-                    headers: {},
                 };
             },
             invalidatesTags: ["MENU"],

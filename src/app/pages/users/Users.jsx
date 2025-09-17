@@ -9,7 +9,7 @@ import TableSkeleton from "@/components/skeleton/TableSkeleton";
 import { Search } from "lucide-react";
 import UserDetailsModal from "@/components/users/modal/UserDetailsModal";
 import ConfirmationModal from "@/components/common/ConfirmationModal";
-import { useGetAllSkillQuery } from "@/redux/feature/client/clientApi";
+import { useGetAllSkillQuery } from "@/redux/feature/company/company";
 import { ErrorToast, SuccessToast } from "@/lib/utils";
 import usePaginatedSearchQuery from "@/hooks/usePaginatedSearchQuery";
 import NoData from "@/components/common/NoData";

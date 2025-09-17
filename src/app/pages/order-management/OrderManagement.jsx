@@ -22,10 +22,7 @@ const OrderManagement = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
-  const [filters, setFilters] = useState({
-    status: '',
-    date: '',
-  });
+  const [filters, setFilters] = useState({});
 
   const handleFilterChange = (key, value) => {
     setFilters(prev => ({
@@ -86,7 +83,7 @@ const OrderManagement = () => {
             <Select
               value={filters.status}
               onValueChange={(value) => handleFilterChange('status', value)}>
-              <SelectTrigger className="w-full sm:w-[180px]">
+              <SelectTrigger className="w-full sm:w-fit">
                 <SelectValue placeholder="Filter by Status" />
               </SelectTrigger>
               <SelectContent>
@@ -97,7 +94,7 @@ const OrderManagement = () => {
               </SelectContent>
             </Select>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 relative w-full sm:w-fit">
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -121,14 +118,12 @@ const OrderManagement = () => {
                 </PopoverContent>
               </Popover>
               {filters.date && (
-                <Button
-                  variant="outline"
-                  size="icon"
+                <div
+                  className="absolute right-1 top-1/2 -translate-y-1/2 p-2 cursor-pointer"
                   onClick={() => handleDateSelect(null)}
                 >
-                  <span className="sr-only">Clear date</span>
-                  <X />
-                </Button>
+                  <X size={14} />
+                </div>
               )}
             </div>
           </div>

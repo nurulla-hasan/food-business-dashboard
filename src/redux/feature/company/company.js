@@ -1,6 +1,6 @@
 import { baseApi } from "../baseApi"
 
-const clientApi = baseApi.injectEndpoints({
+const companyApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
 
         // GET ALL COMPANY
@@ -55,4 +55,4 @@ const clientApi = baseApi.injectEndpoints({
     })
 })
 
-export const { useGetAllCompanyQuery, useAddCompanyMutation, useUpdateCompanyMutation, useDeleteCompanyMutation } = clientApi
+export const { useGetAllCompanyQuery, useAddCompanyMutation, useUpdateCompanyMutation, useDeleteCompanyMutation } = companyApi

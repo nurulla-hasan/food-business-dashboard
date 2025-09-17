@@ -9,7 +9,7 @@ import {
   useAddCompanyMutation,
   useUpdateCompanyMutation,
   useDeleteCompanyMutation,
-} from "@/redux/feature/client/clientApi";
+} from "@/redux/feature/company/company";
 import CompanyManagementTable from "@/components/company-management/table/CompanyManagementTable";
 import TableSkeleton from "@/components/skeleton/TableSkeleton";
 import { Input } from "@/components/ui/input";
@@ -101,7 +101,7 @@ const CompanyManagement = () => {
         <div className="flex flex-col md:flex-row md:items-start justify-between mb-4">
           <Title title="Company Management" />
           <div className="flex flex-col md:flex-row md:items-center gap-3 w-full md:w-auto">
-            <div className="relative w-full md:w-64">
+            <div className="relative w-full sm:w-fit">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 type="search"

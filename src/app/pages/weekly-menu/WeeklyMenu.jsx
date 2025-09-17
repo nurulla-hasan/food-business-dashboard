@@ -1,5 +1,5 @@
 import React, { useState, Suspense } from 'react';
-import { CalendarIcon, Plus, Search, X } from 'lucide-react';
+import { Plus, Search } from 'lucide-react';
 import Title from '@/components/ui/Title';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,27 +22,15 @@ import Error from '@/components/common/Error';
 import NoData from '@/components/common/NoData';
 import ViewMenuModal from '@/components/menu/modal/ViewMenuModal';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Calendar } from '@/components/ui/calendar';
-import { cn, formatDate } from '@/lib/utils';
 import useDebounce from '@/hooks/usedebounce';
 
 const WeeklyMenu = () => {
-    const [filters, setFilters] = useState({
-        date: '',
-        mealType: '',
-    });
+    const [filters, setFilters] = useState({});
 
     const handleFilterChange = (key, value) => {
         setFilters(prev => ({
             ...prev,
             [key]: value === 'all' ? '' : value
-        }));
-    };
-    const handleDateSelect = (date) => {
-        setFilters(prev => ({
-            ...prev,
-            date: date ? formatDate(date) : ''
         }));
     };
     const debouncedFilters = useDebounce(filters, 600, () => setCurrentPage(1));
@@ -142,41 +130,6 @@ const WeeklyMenu = () => {
                                     <SelectItem value="Dinner">Dinner</SelectItem>
                                 </SelectContent>
                             </Select>
-
-                            <div className="flex items-center gap-2">
-                                <Popover>
-                                    <PopoverTrigger asChild>
-                                        <Button
-                                            variant={"outline"}
-                                            className={cn(
-                                                "w-full sm:w-fit justify-start text-left font-normal",
-                                                !filters.date && "text-muted-foreground"
-                                            )}
-                                        >
-                                            <CalendarIcon />
-                                            {filters.date ? formatDate(new Date(filters.date)) : <span>Pick a date</span>}
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-auto p-0" align="start">
-                                        <Calendar
-                                            mode="single"
-                                            selected={filters.date ? new Date(filters.date) : null}
-                                            onSelect={handleDateSelect}
-                                            initialFocus
-                                        />
-                                    </PopoverContent>
-                                </Popover>
-                                {filters.date && (
-                                    <Button
-                                        variant="outline"
-                                        size="icon"
-                                        onClick={() => handleDateSelect(null)}
-                                    >
-                                        <span className="sr-only">Clear date</span>
-                                        <X />
-                                    </Button>
-                                )}
-                            </div>
                             <div className="relative w-full md:w-fit">
                                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                 <Input
