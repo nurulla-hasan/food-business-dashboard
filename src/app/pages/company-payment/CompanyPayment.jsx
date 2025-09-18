@@ -26,31 +26,30 @@ const CompanyPayment = () => {
   const [selectedPayment, setSelectedPayment] = useState(null);
 
   const [filters, setFilters] = useState({});
-  console.log(filters);
 
+  // Handle Date Select
   const handleDateSelect = (date) => {
     if (!date) {
-      const { month, year, date: prevDate, ...rest } = filters;
-      setFilters(rest);
+      setFilters(prev => ({
+        ...Object.fromEntries(
+          Object.entries(prev).filter(([key]) => !['month', 'year', 'selectedDay'].includes(key))
+        )
+      }));
       return;
     }
-
-    const d = typeof date === "string" ? new Date(date) : date;
-    if (!(d instanceof Date) || isNaN(d.getTime())) {
-      console.warn("Invalid date passed to handleDateSelect:", date);
-      return;
-    }
-    const month = d.getMonth() + 1;
-    const year = d.getFullYear();
-    setFilters((prev) => ({
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const selectedDay = date.getDate();
+    setFilters(prev => ({
       ...prev,
-      date: d,
       month,
       year,
+      selectedDay
     }));
   };
 
-  const debouncedFilters = useDebounce(filters, 600, () => setCurrentPage(1));
+  const { month, year } = filters;
+  const debouncedFilters = useDebounce({ month, year }, 600);
   const {
     searchTerm,
     setSearchTerm,
@@ -65,27 +64,55 @@ const CompanyPayment = () => {
 
   const [updateCompanyPayment, { isLoading: isUpdating }] = useUpdateCompanyPaymentMutation();
 
-  const handleUpdatePaymentStatus = async () => {
-    if (selectedPayment.paymentStatus === "Paid") {
-      toast.info("Payment already marked as Paid");
+  // Handle Update Payment Status
+  const handleUpdatePaymentStatus = () => {
+    if (!selectedPayment) {
+      toast.error("No payment selected");
       return;
     }
+
+    if (!selectedPayment.totalOrder || selectedPayment.totalOrder === 0) {
+      toast.error("Cannot process payment: No orders found for this month");
+      return;
+    }
+
+    if (selectedPayment.paymentStatus === "Paid") {
+      toast.info("Payment is already marked as Paid");
+      return;
+    }
+
+
     setConfirmModalOpen(true);
   };
 
+  // Handle Confirm Update Payment Status
   const handleConfirmUpdatePaymentStatus = async () => {
+    if (!selectedPayment?._id || !selectedPayment?.month || !selectedPayment?.year) {
+      toast.error("Missing required payment information");
+      return;
+    }
+
+    const payload = {
+      company_id: selectedPayment._id,
+      status: "Paid",
+      month: getMonthNumber(selectedPayment.month),
+      year: selectedPayment.year,
+    }
+    console.log(payload);
+
     try {
-      await updateCompanyPayment({
-        company_id: selectedPayment?._id,
-        status: "Paid",
-        month: getMonthNumber(selectedPayment?.month),
-        year: selectedPayment?.year,
-      }).unwrap();
-      toast.success("Payment status updated successfully");
-      setConfirmModalOpen(false);
+      const result = await updateCompanyPayment(payload).unwrap();
+
+      if (result?.success) {
+        toast.success("Payment status updated successfully");
+      } else {
+        throw new Error(result?.message || "Failed to update payment status");
+      }
     } catch (error) {
-      console.log(error);
-      toast.error("Failed to update payment status");
+      console.error("Update payment error:", error);
+      toast.error(error?.data?.message || "Failed to update payment status. Please try again.");
+    } finally {
+      setConfirmModalOpen(false);
     }
   }
 
@@ -116,23 +143,32 @@ const CompanyPayment = () => {
                     variant={"outline"}
                     className={cn(
                       "w-full sm:w-[200px] justify-start text-left font-normal",
-                      !filters.date && "text-muted-foreground"
+                      !(filters.month && filters.year) && "text-muted-foreground"
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {filters.date ? formatDate(new Date(filters.date)) : <span>Pick a date</span>}
+                    {filters.month && filters.year
+                      ? formatDate(`${filters.year}-${filters.month}-${filters.selectedDay}`)
+                      : <span>Pick a date</span>}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
-                    selected={filters.date ? new Date(filters.date) : null}
+                    selected={filters.month && filters.year
+                      ? new Date(filters.year, filters.month - 1, filters.selectedDay || new Date().getDate())
+                      : null
+                    }
                     onSelect={handleDateSelect}
                     initialFocus
+                    defaultMonth={filters.month && filters.year
+                      ? new Date(filters.year, filters.month - 1, 1)
+                      : new Date()
+                    }
                   />
                 </PopoverContent>
               </Popover>
-              {filters.date && (
+              {filters.month && filters.year && (
                 <div
                   className="absolute right-1 top-1/2 -translate-y-1/2 p-2 cursor-pointer"
                   onClick={() => handleDateSelect(null)}

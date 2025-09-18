@@ -42,6 +42,8 @@ export const getImageUrl = (imagePath) => {
 // Get Status Variant
 export const getStatusVariant = (status) => {
   switch (status?.toLowerCase()) {
+    case "N/A":
+      return "default";
     case "paid":
       return "success";
     case "complete":

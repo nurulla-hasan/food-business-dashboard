@@ -19,12 +19,12 @@ const CompanyPaymentTable = ({ data, page, limit, onCheck, onView }) => {
                 <TableHeader>
                     <TableRow>
                         <TableHead>S.N</TableHead>
-                        <TableHead>Name</TableHead> 
+                        <TableHead>Name</TableHead>
                         <TableHead>Total Order</TableHead>
                         <TableHead>Month</TableHead>
                         <TableHead>Total Price</TableHead>
                         <TableHead>Payment Status</TableHead>
-                        <TableHead className="text-right">Action</TableHead>                        
+                        <TableHead className="text-right">Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -36,8 +36,8 @@ const CompanyPaymentTable = ({ data, page, limit, onCheck, onView }) => {
                             <TableCell>{item.month}</TableCell>
                             <TableCell>{item.totalPrice}</TableCell>
                             <TableCell>
-                                <Badge variant={getStatusVariant(item.paymentStatus)} className="capitalize">
-                                    {item.paymentStatus}
+                                <Badge variant={getStatusVariant(item.totalOrder === 0 ? "N/A" : item.paymentStatus)} className="capitalize">
+                                    {item.totalOrder === 0 ? "N/A" : item.paymentStatus}
                                 </Badge>
                             </TableCell>
                             <TableCell className="text-right space-x-2">

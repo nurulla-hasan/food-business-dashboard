@@ -1,14 +1,14 @@
 import { useParams } from "react-router-dom";
 import { useGetCompanyDetailsQuery, useGetCompanyOrderQuery } from "@/redux/feature/company-payment/companyPaymentApi";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, CalendarIcon, Search, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getInitials } from "@/lib/utils";
+import { cn, formatDate, getInitials } from "@/lib/utils";
 import usePaginatedSearchQuery from "@/hooks/usePaginatedSearchQuery";
 import PageLayout from "@/components/main-layout/PageLayout";
 import CustomPagination from "@/components/common/CustomPagination";
@@ -16,19 +16,44 @@ import EmployeOrderTable from "@/components/company-payment/table/EmployeOrderTa
 import TableSkeleton from "@/components/skeleton/TableSkeleton";
 import Error from "@/components/common/Error";
 import { useState } from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import useDebounce from "@/hooks/usedebounce";
+import { Input } from "@/components/ui/input";
 
 const CompanyPaymentDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
+    const [filters, setFilters] = useState({});
+    // Handle Date Select
+    const handleDateSelect = (date) => {
+        if (!date) {
+            setFilters(prev => ({
+                ...Object.fromEntries(
+                    Object.entries(prev).filter(([key]) => !['month', 'year', 'selectedDay'].includes(key))
+                )
+            }));
+            return;
+        }
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        const selectedDay = date.getDate();
+        setFilters(prev => ({
+            ...prev,
+            month,
+            year,
+            selectedDay
+        }));
+    };
+
     const { data, isLoading: companyDetailsLoading, isError: companyDetailsError } = useGetCompanyDetailsQuery(id);
 
-    const [filters, setFilters] = useState({
-        year: "2025",
-        month: "09",
-    });
-
+    const { month, year } = filters;
+    const debouncedFilters = useDebounce({ month, year }, 600);
     const {
+        searchTerm,
+        setSearchTerm,
         currentPage,
         setCurrentPage,
         items: orders,
@@ -36,7 +61,7 @@ const CompanyPaymentDetails = () => {
         page,
         isLoading: orderLoading,
         isError: orderError,
-    } = usePaginatedSearchQuery(useGetCompanyOrderQuery, { limit: 7, resultsKey: "orders" }, { id, ...filters });
+    } = usePaginatedSearchQuery(useGetCompanyOrderQuery, { limit: 6, resultsKey: "orders" }, { id, ...debouncedFilters });
 
     const company = data?.data?.company;
     const totalOrder = data?.data?.totalOrder || 0;
@@ -174,6 +199,63 @@ const CompanyPaymentDetails = () => {
                     </div>
                 </div>
 
+                <div className="flex flex-col md:flex-row md:items-start justify-end mb-4">
+                    <div className="flex flex-col md:flex-row md:items-center gap-3 w-full md:w-auto">
+                        {/* Date Filter */}
+                        <div className="flex items-center gap-2 relative w-full sm:w-fit">
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <Button
+                                        variant={"outline"}
+                                        className={cn(
+                                            "w-full sm:w-[200px] justify-start text-left font-normal",
+                                            !(filters.month && filters.year) && "text-muted-foreground"
+                                        )}
+                                    >
+                                        <CalendarIcon className="mr-2 h-4 w-4" />
+                                        {filters.month && filters.year
+                                            ? formatDate(`${filters.year}-${filters.month}-${filters.selectedDay}`)
+                                            : <span>Pick a date</span>}
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0" align="start">
+                                    <Calendar
+                                        mode="single"
+                                        selected={filters.month && filters.year
+                                            ? new Date(filters.year, filters.month - 1, filters.selectedDay || new Date().getDate())
+                                            : null
+                                        }
+                                        onSelect={handleDateSelect}
+                                        initialFocus
+                                        defaultMonth={filters.month && filters.year
+                                            ? new Date(filters.year, filters.month - 1, 1)
+                                            : new Date()
+                                        }
+                                    />
+                                </PopoverContent>
+                            </Popover>
+                            {filters.month && filters.year && (
+                                <div
+                                    className="absolute right-1 top-1/2 -translate-y-1/2 p-2 cursor-pointer"
+                                    onClick={() => handleDateSelect(null)}
+                                >
+                                    <X size={14} />
+                                </div>
+                            )}
+                        </div>
+                        {/* Search Input */}
+                        <div className="relative w-full sm:fit">
+                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input
+                                type="search"
+                                placeholder="Search payment..."
+                                className="pl-9"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                </div>
                 {/* Full Width Table at Bottom */}
                 {
                     orderLoading ? (
@@ -184,7 +266,7 @@ const CompanyPaymentDetails = () => {
                         <EmployeOrderTable
                             data={orders}
                             page={page}
-                            limit={7}
+                            limit={6}
                         />
                     ) : (
                         <p className="text-center text-muted-foreground sm:mt-[20vh]">No orders found</p>

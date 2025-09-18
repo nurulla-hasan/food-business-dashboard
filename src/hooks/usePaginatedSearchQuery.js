@@ -1,16 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useDebounce from "./usedebounce";
 
-export default function usePaginatedSearchQuery(queryHook, { limit = 10, debounceMs = 600, resultsKey = "results" } = {}, filters = {}) {
+export default function usePaginatedSearchQuery(queryHook, { limit = 10, debounceMs = 600, resultsKey = "results", searchKey = "searchTerm" } = {}, filters = {}) {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const debouncedSearch = useDebounce(searchTerm, debounceMs, setCurrentPage);
+  const debouncedSearch = useDebounce(searchTerm, debounceMs);
+
+  const stringifiedFilters = JSON.stringify(filters);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearch, stringifiedFilters]);
 
   const { data, isLoading, isError } = queryHook({
     page: currentPage,
     limit,
-    searchTerm: debouncedSearch,
+    [searchKey]: debouncedSearch,
     ...filters,
   });
 

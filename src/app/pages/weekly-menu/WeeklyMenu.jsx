@@ -33,7 +33,8 @@ const WeeklyMenu = () => {
             [key]: value === 'all' ? '' : value
         }));
     };
-    const debouncedFilters = useDebounce(filters, 600, () => setCurrentPage(1));
+    
+    const debouncedFilters = useDebounce(filters, 600);
     const {
         searchTerm,
         setSearchTerm,
@@ -44,7 +45,7 @@ const WeeklyMenu = () => {
         page,
         isLoading,
         isError
-    } = usePaginatedSearchQuery(useGetAllMenuQuery, { resultsKey: "menus", searchKey: "searchTerm" }, debouncedFilters);
+    } = usePaginatedSearchQuery(useGetAllMenuQuery, { resultsKey: "menus", }, debouncedFilters);
 
     const [addOpen, setAddOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
