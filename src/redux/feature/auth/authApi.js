@@ -9,7 +9,7 @@ const authApi = baseApi.injectEndpoints({
         // GET ADMIN PROFILE
         getAdminProfile: builder.query({
             query: () => ({
-                url: "/user/get-my-profile",
+                url: "/auth/profile",
                 method: "GET",
             }),
             providesTags: ["PROFILE"],
@@ -28,7 +28,7 @@ const authApi = baseApi.injectEndpoints({
         // UPDATE ADMIN PROFILE
         updateAdminProfile: builder.mutation({
             query: (data) => ({
-                url: "/super-admin/update-profile",
+                url: "/auth/edit-profile",
                 method: "PATCH",
                 body: data,
             }),
@@ -40,7 +40,7 @@ const authApi = baseApi.injectEndpoints({
             query: (data) => {
                 return {
                     url: "/auth/change-password",
-                    method: 'POST',
+                    method: 'PATCH',
                     body: data
                 }
             },

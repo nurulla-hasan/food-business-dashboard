@@ -50,7 +50,7 @@ const EditProfileForm = ({ pendingImage, onClearPending, isLoading, isError }) =
     defaultValues: {
       name: admin?.name || "",
       email: admin?.email || "",
-      phone: admin?.contact || "",
+      phone: admin?.phone_number || "",
       address: admin?.address || "",
     },
   });
@@ -60,7 +60,7 @@ const EditProfileForm = ({ pendingImage, onClearPending, isLoading, isError }) =
       form.reset({
         name: admin?.name || "",
         email: admin?.email || "",
-        phone: admin?.contact || "",
+        phone: admin?.phone_number || "",
         address: admin?.address || "",
       });
     }
@@ -72,19 +72,17 @@ const EditProfileForm = ({ pendingImage, onClearPending, isLoading, isError }) =
         const formData = new FormData();
         formData.append("profile_image", pendingImage);
         formData.append(
-          "data",
-          JSON.stringify({
-            name: values.name,
-            contact: values.phone,
-            address: values.address,
-          })
+          "name", values.name
         );
+        formData.append("phone_number", values.phone);
+        formData.append("address", values.address);
+
         await updateProfile(formData).unwrap();
         onClearPending?.();
       } else {
         const payload = {
           name: values.name,
-          contact: values.phone,
+          phone_number: values.phone,
           address: values.address,
         };
         await updateProfile(payload).unwrap();
@@ -155,7 +153,10 @@ const EditProfileForm = ({ pendingImage, onClearPending, isLoading, isError }) =
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input disabled {...field} />
+                        <div className="relative">
+                          <Input disabled {...field} />
+                          <Lock size={14} className="absolute right-3 top-1/2 -translate-y-1/2" />
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>

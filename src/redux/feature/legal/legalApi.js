@@ -7,7 +7,7 @@ const legalApi = baseApi.injectEndpoints({
         // GET ABOUT
         getAbout: builder.query({
             query: () => ({
-                url: "/manage/get-about-us",
+                url: "/dashboard/get-about-us",
                 method: "GET",
             }),
             providesTags: ["LEGAL"],
@@ -16,7 +16,7 @@ const legalApi = baseApi.injectEndpoints({
         // GET TERMS
         getTerms: builder.query({
             query: () => ({
-                url: "/manage/get-terms-conditions",
+                url: "/dashboard/get-terms-conditions",
                 method: "GET",
             }),
             providesTags: ["LEGAL"],
@@ -25,25 +25,25 @@ const legalApi = baseApi.injectEndpoints({
         // GET PRIVACY POLICY
         getPrivacyPolicy: builder.query({
             query: () => ({
-                url: "/manage/get-privacy-policy",
+                url: "/dashboard/get-privacy-policy",
                 method: "GET",
             }),
             providesTags: ["LEGAL"],
         }),
 
         // GET CONTACT
-        getContact: builder.query({
-            query: () => ({
-                url: "/manage/get-contact",
-                method: "GET",
-            }),
-            providesTags: ["LEGAL"],
-        }),
+        // getContact: builder.query({
+        //     query: () => ({
+        //         url: "/manage/get-contact",
+        //         method: "GET",
+        //     }),
+        //     providesTags: ["LEGAL"],
+        // }),
 
         // ADD ABOUT
         addAbout: builder.mutation({
             query: (data) => ({
-                url: "/manage/add-about-us",
+                url: "/dashboard/addupdate-about-us",
                 method: "POST",
                 body: data,
             }),
@@ -53,7 +53,7 @@ const legalApi = baseApi.injectEndpoints({
         // ADD TERMS
         addTerms: builder.mutation({
             query: (data) => ({
-                url: "/manage/add-terms-conditions",
+                url: "/dashboard/addupdate-termsConditions",
                 method: "POST",
                 body: data,
             }),
@@ -63,7 +63,7 @@ const legalApi = baseApi.injectEndpoints({
         // ADD PRIVACY POLICY
         addPrivacyPolicy: builder.mutation({
             query: (data) => ({
-                url: "/manage/add-privacy-policy",
+                url: "/dashboard/addupdate-privacy-policy",
                 method: "POST",
                 body: data,
             }),
@@ -71,15 +71,15 @@ const legalApi = baseApi.injectEndpoints({
         }),
 
         // ADD CONTACT
-        addContact: builder.mutation({
-            query: (data) => ({
-                url: "/manage/add-contact",
-                method: "POST",
-                body: data,
-            }),
-            invalidatesTags: ["LEGAL"],
-        }),
+        // addContact: builder.mutation({
+        //     query: (data) => ({
+        //         url: "/manage/add-contact",
+        //         method: "POST",
+        //         body: data,
+        //     }),
+        //     invalidatesTags: ["LEGAL"],
+        // }),
     })
 })
 
-export const { useGetTermsQuery, useGetPrivacyPolicyQuery, useAddTermsMutation, useAddPrivacyPolicyMutation, useAddAboutMutation, useGetAboutQuery, useGetContactQuery, useAddContactMutation } = legalApi
+export const { useGetTermsQuery, useGetPrivacyPolicyQuery, useAddTermsMutation, useAddPrivacyPolicyMutation, useAddAboutMutation, useGetAboutQuery } = legalApi

@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSelector } from "react-redux";
-import { getInitials } from "@/lib/utils";
+import { getImageUrl, getInitials } from "@/lib/utils";
 import { Camera, ShieldCheck, User2 } from "lucide-react";
 import { useRef } from "react";
 import { ErrorToast } from "@/lib/utils";
@@ -39,7 +39,7 @@ const ProfileSummary = ({ previewUrl, onSelectImage, isLoading, isError }) => {
                 <>
                   <div className="relative">
                     <Avatar className="h-20 w-20 border">
-                      <AvatarImage src={previewUrl || admin?.profile_image} alt={admin?.name || "User"} />
+                      <AvatarImage src={previewUrl || getImageUrl(admin?.profile_image)} alt={admin?.name || "User"} />
                       <AvatarFallback>{getInitials(admin?.name)}</AvatarFallback>
                     </Avatar>
                     <button

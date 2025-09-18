@@ -7,15 +7,15 @@ import { useBlockUserMutation, useGetAllUserQuery } from "@/redux/feature/user/u
 import UsersTable from "@/components/users/table/UsersTable";
 import TableSkeleton from "@/components/skeleton/TableSkeleton";
 import { Search } from "lucide-react";
-import UserDetailsModal from "@/components/users/modal/UserDetailsModal";
 import ConfirmationModal from "@/components/common/ConfirmationModal";
-import { useGetAllSkillQuery } from "@/redux/feature/company/company";
 import { ErrorToast, SuccessToast } from "@/lib/utils";
-import usePaginatedSearchQuery from "@/hooks/usePaginatedSearchQuery";
 import NoData from "@/components/common/NoData";
 import Error from "@/components/common/Error";
+import usePaginatedSearchQuery from "@/hooks/usePaginatedSearchQuery";
 
 const Users = () => {
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
     const {
         searchTerm,
         setSearchTerm,
@@ -26,19 +26,18 @@ const Users = () => {
         page,
         isLoading: usersLoading,
         isError: usersError,
-    } = usePaginatedSearchQuery(useGetAllUserQuery);
-
-    const [selectedUser, setSelectedUser] = useState(null);
-    const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-    const [confirmOpen, setConfirmOpen] = useState(false);
-
-    const { data: SkillData } = useGetAllSkillQuery();
-    const skills = SkillData?.data?.result;
+    } = usePaginatedSearchQuery(useGetAllUserQuery, { resultsKey: "employers" });
 
     const [toggleBanUser, { isLoading: banLoading }] = useBlockUserMutation();
-    const handleToggleBanUser = async (userId) => {
+
+    const handleToggleBanUser = async (selectedUser) => {
         try {
-            const response = await toggleBanUser(userId).unwrap();
+            const response = await toggleBanUser(
+                {
+                    email: selectedUser.email,
+                    is_block: !selectedUser.is_block
+                }
+            ).unwrap();
             SuccessToast(response?.message);
             setConfirmOpen(false);
         } catch (error) {
@@ -82,34 +81,21 @@ const Users = () => {
                 {usersLoading ? (
                     <TableSkeleton />
                 ) : usersError ? (
-                    <Error msg="Failed to load users"/>
+                    <Error msg="Failed to load users" />
                 ) : users?.length > 0 ? (
                     <UsersTable
-                        users={users}
+                        data={users}
                         page={page}
                         limit={10}
-                        banLoading={banLoading}
-                        onDelete={(user) => {
-                            setSelectedUser(user);
+                        onBlock={(user) => {
                             setConfirmOpen(true);
-                        }}
-                        onView={(user) => {
                             setSelectedUser(user);
-                            setIsDetailsOpen(true);
                         }}
                     />
                 ) : (
-                    <NoData msg="No users found"/>
+                    <NoData msg="No users found" />
                 )}
             </PageLayout>
-
-            {/* User Details Modal */}
-            <UserDetailsModal
-                isOpen={isDetailsOpen}
-                onOpenChange={setIsDetailsOpen}
-                user={selectedUser}
-                skills={skills}
-            />
 
             {/* Confirmation Modal */}
             <ConfirmationModal
@@ -119,7 +105,7 @@ const Users = () => {
                 description={selectedUser?.name ? `Are you sure you want to ${selectedUser?.user?.isBlocked ? 'unblock' : 'block'} (${selectedUser.name})?` : `Are you sure you want to ${selectedUser?.user?.isBlocked ? 'unblock' : 'block'} this user?`}
                 confirmText={selectedUser?.user?.isBlocked ? 'Unblock' : 'Block'}
                 loading={banLoading}
-                onConfirm={() => handleToggleBanUser(selectedUser.user._id)}
+                onConfirm={() => handleToggleBanUser(selectedUser)}
             />
         </Suspense>
     );

@@ -15,7 +15,7 @@ const userApi = baseApi.injectEndpoints({
                     });
                 }
                 return {
-                    url: "/normal-user/get-all-user",
+                    url: "/dashboard/admin-employer-profile",
                     method: "GET",
                     params,
                 };
@@ -23,35 +23,17 @@ const userApi = baseApi.injectEndpoints({
             providesTags: ["USER"],
         }),
 
-        // GET ALL DONOR
-        getAllDonor: builder.query({
-            query: (args) => {
-                const params = new URLSearchParams();
-                if (args) {
-                    Object.entries(args).forEach(([key, value]) => {
-                        if (value) {
-                            params.append(key, value);
-                        }
-                    });
-                }
-                return {
-                    url: "/donate/get-all-donner",
-                    method: "GET",
-                    params,
-                };
-            },
-            providesTags: ["USER"],
-        }),
 
         // BLOCK UNBLOCK TOGGLE USER
         blockUser: builder.mutation({
-            query: (id) => ({
-                url: `/user/block-unblock/${id}`,
+            query: (data) => ({
+                url: `/auth/block-unblock`,
                 method: "PATCH",
+                body: data
             }),
             invalidatesTags: ["USER"],
         }),
     })
 })
 
-export const { useGetAllUserQuery, useGetAllDonorQuery, useBlockUserMutation } = userApi
+export const { useGetAllUserQuery, useBlockUserMutation } = userApi

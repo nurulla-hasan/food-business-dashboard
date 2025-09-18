@@ -10,7 +10,6 @@ import usePaginatedSearchQuery from "@/hooks/usePaginatedSearchQuery";
 import Error from "@/components/common/Error";
 import NoData from "@/components/common/NoData";
 import { toast } from "sonner";
-import useDebounce from "@/hooks/usedebounce";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
@@ -38,7 +37,6 @@ const OrderManagement = () => {
     }));
   };
 
-  const debouncedFilters = useDebounce(filters, 600, () => setCurrentPage(1));
   const {
     currentPage,
     setCurrentPage,
@@ -47,7 +45,7 @@ const OrderManagement = () => {
     page,
     isLoading,
     isError,
-  } = usePaginatedSearchQuery(useGetAllOrderQuery, { resultsKey: "orders" }, debouncedFilters);
+  } = usePaginatedSearchQuery(useGetAllOrderQuery, { resultsKey: "orders" }, filters);
 
   const [updateOrder] = useUpdateOrderMutation();
 

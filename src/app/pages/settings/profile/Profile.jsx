@@ -1,4 +1,4 @@
-'use client';
+
 import { Suspense, useState } from "react";
 import { Card } from "@/components/ui/card";
 import ProfileSummary from "@/components/profile/ProfileSummary";
@@ -20,9 +20,9 @@ const Profile = () => {
 
     return (
         <Suspense fallback={<div className="flex items-center justify-center h-64">Loading Profile...</div>}>
-            <div className="space-y-4">
+            <div>
                 {/* Page Header */}
-                <div className="flex flex-col md:flex-row md:items-start justify-between mb-4">
+                <div className="flex flex-col md:flex-row md:items-start justify-between">
                     <Title title="Admin Profile" />
                 </div>
 
