@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { SquarePen, Trash } from "lucide-react";
 
 
-const CompanyManagementTable = ({ data, onEdit, onDelete, updateLoading, deleteLoading, page, limit }) => {
+const CompanyManagementTable = ({ data, onEdit, onDelete, updateLoading, deleteLoading, page, limit, isActionButton = true }) => {
     return (
         <ScrollArea className="w-[calc(100vw-32px)] overflow-hidden overflow-x-auto md:w-full rounded-lg whitespace-nowrap">
             <Table>
@@ -17,7 +17,7 @@ const CompanyManagementTable = ({ data, onEdit, onDelete, updateLoading, deleteL
                         <TableHead>Phone</TableHead>
                         <TableHead>Plants</TableHead>
                         <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Action</TableHead>
+                        {isActionButton && <TableHead className="text-right">Action</TableHead>}
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -31,14 +31,18 @@ const CompanyManagementTable = ({ data, onEdit, onDelete, updateLoading, deleteL
                                 <Badge variant="outline">{item.plants || "N/A"}</Badge>
                             </TableCell>
                             <TableCell><Badge variant="outline">{item.status}</Badge></TableCell>
-                            <TableCell className="text-right space-x-2">
-                                <Button onClick={() => onEdit?.(item)} variant="outline" size="icon" disabled={updateLoading}>
-                                    <SquarePen />
-                                </Button>
-                                <Button onClick={() => onDelete?.(item)} variant="outline" size="icon" className="text-red-500" disabled={deleteLoading}>
-                                    <Trash />
-                                </Button>
-                            </TableCell>
+                            {isActionButton && (
+                                <TableCell className="text-right space-x-2">
+                                    <>
+                                        <Button onClick={() => onEdit?.(item)} variant="outline" size="icon" disabled={updateLoading}>
+                                            <SquarePen />
+                                        </Button>
+                                        <Button onClick={() => onDelete?.(item)} variant="outline" size="icon" className="text-red-500" disabled={deleteLoading}>
+                                            <Trash />
+                                        </Button>
+                                    </>
+                                </TableCell>
+                            )}
                         </TableRow>
                     ))}
                 </TableBody>
