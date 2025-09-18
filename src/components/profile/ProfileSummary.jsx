@@ -27,7 +27,7 @@ const ProfileSummary = ({ previewUrl, onSelectImage, isLoading, isError }) => {
   };
   return (
     <div className="space-y-4">
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden py-0">
         <div className="p-6 bg-accent/50 dark:bg-accent/30">
           <div className="flex flex-col items-center text-center gap-3">
             {

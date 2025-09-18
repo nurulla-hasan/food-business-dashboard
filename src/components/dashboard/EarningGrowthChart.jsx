@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 const EarningGrowthChart = ({earningGrowthChartData, onYearChange, selectedYear}) => {
     const { chartData = [], yearsDropdown = [], } = earningGrowthChartData || {};
     return (
-        <div className="bg-card p-6 rounded-lg shadow-lg">
+        <div className="bg-sidebar p-6 rounded-lg">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold">Earning Growth</h2>
                 <Select onValueChange={onYearChange} value={selectedYear?.toString()}>

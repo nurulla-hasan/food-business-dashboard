@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useSelector } from "react-redux";
 import { useGetAdminProfileQuery } from "@/redux/feature/auth/authApi";
-import { getInitials } from "@/lib/utils";
+import { getImageUrl, getInitials } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const Topbar = ({ onMenuClick }) => {
@@ -75,7 +75,7 @@ const Topbar = ({ onMenuClick }) => {
                         ) : (
                             <>
                                 <Avatar className="h-10 w-10">
-                                    <AvatarImage src={admin?.profile_image} alt={admin?.name || "User avatar"} />
+                                    <AvatarImage src={getImageUrl(admin?.profile_image)} alt={admin?.name || "User avatar"} />
                                     <AvatarFallback>{getInitials(admin?.name)}</AvatarFallback>
                                 </Avatar>
                                 <span className="font-medium truncate max-w-[180px]" title={admin?.name || "User"}>
@@ -92,7 +92,7 @@ const Topbar = ({ onMenuClick }) => {
                                 <Skeleton className="h-10 w-10 rounded-full lg:hidden" />
                             ) : (
                                 <Avatar className="h-10 w-10 lg:hidden">
-                                    <AvatarImage src={admin?.profile_image} alt={admin?.name || "User avatar"} />
+                                    <AvatarImage src={getImageUrl(admin?.profile_image)} alt={admin?.name || "User avatar"} />
                                     <AvatarFallback>{getInitials(admin?.name)}</AvatarFallback>
                                 </Avatar>
                             )}

@@ -57,7 +57,7 @@ const ChangePasswordForm = () => {
   };
 
   return (
-    <Card>
+    <Card className="py-0">
       <CardContent className="p-4 sm:p-6 space-y-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

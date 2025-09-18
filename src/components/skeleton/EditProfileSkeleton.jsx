@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 const EditProfileSkeleton = () => {
     return (
-        <Card>
+        <Card className="py-0">
             <CardContent className="p-4 sm:p-6 space-y-6">
                 {/* Personal Information */}
                 <section className="space-y-4">

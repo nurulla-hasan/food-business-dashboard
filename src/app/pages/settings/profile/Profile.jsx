@@ -48,7 +48,7 @@ const Profile = () => {
 
                     {/* Right Column */}
                     <div className="lg:col-span-8">
-                        <Card>
+                        <Card className="py-0 bg-sidebar">
                             <Tabs defaultValue="profile" className="w-full">
                                 <div className="px-4 pt-4">
                                     <TabsList className="flex gap-2">
@@ -57,7 +57,7 @@ const Profile = () => {
                                     </TabsList>
                                 </div>
 
-                                <div className="p-4 sm:p-6">
+                                <div className="p-4">
                                     <TabsContent value="profile">
                                         <EditProfileForm
                                             pendingImage={pendingImage}

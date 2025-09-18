@@ -23,7 +23,7 @@ function TableHeader({
   return (
     <thead
       data-slot="table-header"
-      className={cn("[&_tr]:border-b bg-accent", className)}
+      className={cn("[&_tr]:border-b bg-primary/50", className)}
       {...props} />
   );
 }
@@ -35,7 +35,7 @@ function TableBody({
   return (
     <tbody
       data-slot="table-body"
-      className={cn("[&_tr:last-child]:border-0 bg-sidebar/80 dark:bg-sidebar/20", className)}
+      className={cn("[&_tr:last-child]:border-0 bg-sidebar", className)}
       {...props} />
   );
 }

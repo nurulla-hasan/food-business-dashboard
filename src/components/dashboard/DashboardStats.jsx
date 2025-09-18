@@ -1,15 +1,15 @@
 
 import { useGetDashboardStatsQuery } from "@/redux/feature/dashboard/dashboardApi";
-import { CircleDollarSign, HandHeart, UserX, Users } from "lucide-react";
+import { CircleDollarSign, Hamburger, Users } from "lucide-react";
 
 const StatCard = ({ icon, title, value, containerClassName }) => (
-    <div className={`p-6 rounded-lg shadow-lg ${containerClassName}`}>
+    <div className={`p-6 rounded-lg bg-sidebar ${containerClassName}`}>
         <div className="flex items-center justify-between">
             <div>
                 <p className="text-sm font-medium text-muted-foreground">{title}</p>
                 <p className="text-3xl font-bold">{value}</p>
             </div>
-            <div className="bg-background p-4 rounded-full">
+            <div className="bg-green-500 dark:bg-green-800 p-4 rounded-full">
                 {icon}
             </div>
         </div>
@@ -22,26 +22,26 @@ const DashboardStats = () => {
 
     const statsData = [
         {
-            icon: <CircleDollarSign className="h-6 w-6 " />,
-            title: "Total Donation",
+            icon: <Users className="h-6 w-6 " />,
+            title: "Total Company",
             value: stats?.totalDonationAmount || 0,
             containerClassName: "bg-card"
         },
         {
             icon: <Users className="h-6 w-6 " />,
-            title: "Total User",
+            title: "Active Company",
             value: stats?.totalUser || 0,
             containerClassName: "bg-card"
         },
         {
-            icon: <HandHeart className="h-6 w-6 " />,
-            title: "Total Donor",
+            icon: <Hamburger className="h-6 w-6 " />,
+            title: "This Weeks Mills",
             value: stats?.totalDonors || 0,
             containerClassName: "bg-card"
         },
         {
-            icon: <UserX className="h-6 w-6 text-destructive" />,
-            title: "Blocked account",
+            icon: <CircleDollarSign className="h-6 w-6" />,
+            title: "Total Revenue",
             value: stats?.totalBlockAccount || 0,
             containerClassName: "bg-card"
         }
