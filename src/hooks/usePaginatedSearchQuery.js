@@ -1,23 +1,25 @@
 import { useState, useEffect } from "react";
 import useDebounce from "./usedebounce";
 
-export default function usePaginatedSearchQuery(queryHook, { limit = 10, debounceMs = 600, resultsKey = "results", searchKey = "searchTerm" } = {}, filters = {}) {
+export default function usePaginatedSearchQuery(queryHook, { limit = 10, resultsKey = "results" }, filters = {}) {
+  const searchKey = "searchTerm";
+
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const debouncedSearch = useDebounce(searchTerm, debounceMs);
+  const debouncedSearch = useDebounce(searchTerm);
+  const debouncedFilters = useDebounce(filters);
 
-  const stringifiedFilters = JSON.stringify(filters);
-
+  const stringifiedDebouncedFilters = JSON.stringify(debouncedFilters);
   useEffect(() => {
     setCurrentPage(1);
-  }, [debouncedSearch, stringifiedFilters]);
+  }, [debouncedSearch, stringifiedDebouncedFilters]);
 
   const { data, isLoading, isError } = queryHook({
     page: currentPage,
     limit,
     [searchKey]: debouncedSearch,
-    ...filters,
+    ...debouncedFilters,
   });
 
   const rawResults = data?.data?.[resultsKey];
@@ -30,9 +32,9 @@ export default function usePaginatedSearchQuery(queryHook, { limit = 10, debounc
     setSearchTerm,
     currentPage,
     setCurrentPage,
-    items,
     totalPages,
     page,
+    items,
     isLoading,
     isError,
   };

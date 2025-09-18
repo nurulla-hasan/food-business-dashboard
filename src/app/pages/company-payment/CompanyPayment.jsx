@@ -18,7 +18,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import useDebounce from "@/hooks/usedebounce";
 
 const CompanyPayment = () => {
   const navigate = useNavigate();
@@ -49,7 +48,6 @@ const CompanyPayment = () => {
   };
 
   const { month, year } = filters;
-  const debouncedFilters = useDebounce({ month, year }, 600);
   const {
     searchTerm,
     setSearchTerm,
@@ -60,7 +58,7 @@ const CompanyPayment = () => {
     page,
     isLoading,
     isError,
-  } = usePaginatedSearchQuery(useGetAllCompanyPaymentQuery, { resultsKey: "company" }, debouncedFilters);
+  } = usePaginatedSearchQuery(useGetAllCompanyPaymentQuery, { resultsKey: "company" }, { month, year });
 
   const [updateCompanyPayment, { isLoading: isUpdating }] = useUpdateCompanyPaymentMutation();
 

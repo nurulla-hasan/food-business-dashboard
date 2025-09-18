@@ -18,7 +18,6 @@ import Error from "@/components/common/Error";
 import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import useDebounce from "@/hooks/usedebounce";
 import { Input } from "@/components/ui/input";
 
 const CompanyPaymentDetails = () => {
@@ -50,7 +49,6 @@ const CompanyPaymentDetails = () => {
     const { data, isLoading: companyDetailsLoading, isError: companyDetailsError } = useGetCompanyDetailsQuery(id);
 
     const { month, year } = filters;
-    const debouncedFilters = useDebounce({ month, year }, 600);
     const {
         searchTerm,
         setSearchTerm,
@@ -61,7 +59,7 @@ const CompanyPaymentDetails = () => {
         page,
         isLoading: orderLoading,
         isError: orderError,
-    } = usePaginatedSearchQuery(useGetCompanyOrderQuery, { limit: 6, resultsKey: "orders" }, { id, ...debouncedFilters });
+    } = usePaginatedSearchQuery(useGetCompanyOrderQuery, { limit: 6, resultsKey: "orders" }, { id, month, year });
 
     const company = data?.data?.company;
     const totalOrder = data?.data?.totalOrder || 0;

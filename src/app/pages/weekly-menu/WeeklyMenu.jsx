@@ -22,7 +22,6 @@ import Error from '@/components/common/Error';
 import NoData from '@/components/common/NoData';
 import ViewMenuModal from '@/components/menu/modal/ViewMenuModal';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import useDebounce from '@/hooks/usedebounce';
 
 const WeeklyMenu = () => {
     const [filters, setFilters] = useState({});
@@ -34,7 +33,6 @@ const WeeklyMenu = () => {
         }));
     };
     
-    const debouncedFilters = useDebounce(filters, 600);
     const {
         searchTerm,
         setSearchTerm,
@@ -45,7 +43,7 @@ const WeeklyMenu = () => {
         page,
         isLoading,
         isError
-    } = usePaginatedSearchQuery(useGetAllMenuQuery, { resultsKey: "menus", }, debouncedFilters);
+    } = usePaginatedSearchQuery(useGetAllMenuQuery, { resultsKey: "menus" }, filters);
 
     const [addOpen, setAddOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
