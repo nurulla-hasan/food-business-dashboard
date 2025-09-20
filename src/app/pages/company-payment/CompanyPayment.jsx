@@ -62,27 +62,6 @@ const CompanyPayment = () => {
 
   const [updateCompanyPayment, { isLoading: isUpdating }] = useUpdateCompanyPaymentMutation();
 
-  // Handle Update Payment Status
-  const handleUpdatePaymentStatus = () => {
-    if (!selectedPayment) {
-      toast.error("No payment selected");
-      return;
-    }
-
-    if (!selectedPayment.totalOrder || selectedPayment.totalOrder === 0) {
-      toast.error("Cannot process payment: No orders found for this month");
-      return;
-    }
-
-    if (selectedPayment.paymentStatus === "Paid") {
-      toast.info("Payment is already marked as Paid");
-      return;
-    }
-
-
-    setConfirmModalOpen(true);
-  };
-
   // Handle Confirm Update Payment Status
   const handleConfirmUpdatePaymentStatus = async () => {
     if (!selectedPayment?._id || !selectedPayment?.month || !selectedPayment?.year) {
@@ -96,7 +75,7 @@ const CompanyPayment = () => {
       month: getMonthNumber(selectedPayment.month),
       year: selectedPayment.year,
     }
-    console.log(payload);
+    // console.log(payload);
 
     try {
       const result = await updateCompanyPayment(payload).unwrap();
@@ -202,7 +181,7 @@ const CompanyPayment = () => {
               limit={10}
               onCheck={(payment) => {
                 setSelectedPayment(payment);
-                handleUpdatePaymentStatus();
+                setConfirmModalOpen(true);
               }}
               onView={(payment) => {
                 navigate(`/company-payment/${payment._id}`);

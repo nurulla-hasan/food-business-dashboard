@@ -42,6 +42,7 @@ const CompanyPaymentTable = ({ data, page, limit, onCheck, onView }) => {
                             </TableCell>
                             <TableCell className="text-right space-x-2">
                                 <Button
+                                    disabled={item.paymentStatus === "Paid"}
                                     variant="outline"
                                     size="icon"
                                     onClick={() => onCheck?.(item)}

@@ -6,7 +6,7 @@ const dashboardApi = baseApi.injectEndpoints({
         // GET DASHBOARD STATS
         getDashboardStats: builder.query({
             query: () => ({
-                url: "/meta/get-meta-data",
+                url: "/dashboard/get-total-count",
                 method: "GET",
             }),
             providesTags: ["DASHBOARD"],
@@ -14,20 +14,20 @@ const dashboardApi = baseApi.injectEndpoints({
 
         // GET DASHBOARD USER CHART
         getDashboardUserChart: builder.query({
-            query: ({ year } = {}) => ({
-                url: "/meta/user-chart-data",
+            query: () => ({
+                url: "/dashboard/get-user-overview",
                 method: "GET",
-                params: year ? { year } : {}
+                // params: years ? { years } : {}
             }),
             providesTags: ["DASHBOARD"],
         }),
 
         // GET DASHBOARD EARNING CHART
         getDashboardEarningChart: builder.query({
-            query: ({ year } = {}) => ({
-                url: "/meta/earning-chart-data",
+            query: ({ years } = {}) => ({
+                url: "/dashboard/get-earning-overview",
                 method: "GET",
-                params: year ? { year } : {}
+                params: years ? { years } : {}
             }),
             providesTags: ["DASHBOARD"],
         }),
@@ -35,4 +35,8 @@ const dashboardApi = baseApi.injectEndpoints({
     })
 })
 
-export const { useGetDashboardStatsQuery, useGetDashboardUserChartQuery, useGetDashboardEarningChartQuery } = dashboardApi;
+export const { 
+    useGetDashboardStatsQuery,
+    useGetDashboardUserChartQuery,
+    useGetDashboardEarningChartQuery 
+} = dashboardApi;

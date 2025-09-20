@@ -1,6 +1,5 @@
 
-import { useGetDashboardStatsQuery } from "@/redux/feature/dashboard/dashboardApi";
-import { CircleDollarSign, Hamburger, Users } from "lucide-react";
+import { DollarSign, ListOrdered, Users } from "lucide-react";
 
 const StatCard = ({ icon, title, value, containerClassName }) => (
     <div className={`p-6 rounded-lg bg-sidebar ${containerClassName}`}>
@@ -16,33 +15,31 @@ const StatCard = ({ icon, title, value, containerClassName }) => (
     </div>
 );
 
-const DashboardStats = () => {
-    const { data } = useGetDashboardStatsQuery();
-    const stats = data?.data;
+const DashboardStats = ({ data: stats }) => {
 
     const statsData = [
         {
             icon: <Users className="h-6 w-6 " />,
             title: "Total Company",
-            value: stats?.totalDonationAmount || 0,
+            value: stats?.totalCompanies || 0,
             containerClassName: "bg-card"
         },
         {
             icon: <Users className="h-6 w-6 " />,
-            title: "Active Company",
-            value: stats?.totalUser || 0,
+            title: "Total Employer",
+            value: stats?.totalEmployers || 0,
             containerClassName: "bg-card"
         },
         {
-            icon: <Hamburger className="h-6 w-6 " />,
-            title: "This Weeks Mills",
-            value: stats?.totalDonors || 0,
+            icon: <DollarSign className="h-6 w-6 " />,
+            title: "Total Income",
+            value: stats?.totalIncome || 0,
             containerClassName: "bg-card"
         },
         {
-            icon: <CircleDollarSign className="h-6 w-6" />,
-            title: "Total Revenue",
-            value: stats?.totalBlockAccount || 0,
+            icon: <ListOrdered className="h-6 w-6" />,
+            title: "Total Order",
+            value: stats?.totalOrders || 0,
             containerClassName: "bg-card"
         }
     ];

@@ -26,8 +26,8 @@ const Dashboard = () => {
 
     // API Queries
     const { data: dashboardStatsData, isLoading: isStatsLoading } = useGetDashboardStatsQuery();
-    const { data: userGrowthData, isLoading: isUserGrowthLoading } = useGetDashboardUserChartQuery({ year: userYear });
-    const { data: earningData, isLoading: isEarningLoading } = useGetDashboardEarningChartQuery({ year: earningYear });
+    const { data: userGrowthData, isLoading: isUserGrowthLoading } = useGetDashboardUserChartQuery({ years: userYear });
+    const { data: earningData, isLoading: isEarningLoading } = useGetDashboardEarningChartQuery({ years: earningYear });
 
     const {
         items: companies,
@@ -59,14 +59,14 @@ const Dashboard = () => {
                     {isUserGrowthLoading ?
                         <ChartSkeleton /> :
                         <UserGrowthChart
-                            userGrowthChartData={userGrowthData?.data}
+                            userGrowthChartData={userGrowthData}
                             onYearChange={handleUserYearChange}
                             selectedYear={userYear}
                         />}
                     {isEarningLoading ?
                         <ChartSkeleton /> :
                         <EarningGrowthChart
-                            earningGrowthChartData={earningData?.data}
+                            earningGrowthChartData={earningData}
                             onYearChange={handleEarningYearChange}
                             selectedYear={earningYear}
                         />}

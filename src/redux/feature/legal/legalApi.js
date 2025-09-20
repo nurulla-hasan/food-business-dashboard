@@ -16,7 +16,7 @@ const legalApi = baseApi.injectEndpoints({
         // GET TERMS
         getTerms: builder.query({
             query: () => ({
-                url: "/dashboard/get-terms-conditions",
+                url: "/dashboard/get-rules",
                 method: "GET",
             }),
             providesTags: ["LEGAL"],
