@@ -31,13 +31,13 @@ const Users = () => {
     const [toggleBanUser, { isLoading: banLoading }] = useBlockUserMutation();
 
     const handleToggleBanUser = async (selectedUser) => {
+        const payload = {
+            role: "EMPLOYER",
+            email: selectedUser.email,
+            is_block: !selectedUser?.authId?.is_block
+        }
         try {
-            const response = await toggleBanUser(
-                {
-                    email: selectedUser.email,
-                    is_block: !selectedUser.is_block
-                }
-            ).unwrap();
+            const response = await toggleBanUser(payload).unwrap();
             SuccessToast(response?.message);
             setConfirmOpen(false);
         } catch (error) {
@@ -101,9 +101,9 @@ const Users = () => {
             <ConfirmationModal
                 isOpen={confirmOpen}
                 onOpenChange={setConfirmOpen}
-                title={`Confirm ${selectedUser?.user?.isBlocked ? 'Unblock' : 'Block'} User`}
-                description={selectedUser?.name ? `Are you sure you want to ${selectedUser?.user?.isBlocked ? 'unblock' : 'block'} (${selectedUser.name})?` : `Are you sure you want to ${selectedUser?.user?.isBlocked ? 'unblock' : 'block'} this user?`}
-                confirmText={selectedUser?.user?.isBlocked ? 'Unblock' : 'Block'}
+                title={`Confirm ${selectedUser?.authId?.is_block ? 'Unblock' : 'Block'} User`}
+                description={selectedUser?.name ? `Are you sure you want to ${selectedUser?.authId?.is_block ? 'unblock' : 'block'} (${selectedUser.name})?` : `Are you sure you want to ${selectedUser?.authId?.is_block ? 'unblock' : 'block'} this user?`}
+                confirmText={selectedUser?.authId?.is_block ? 'Unblock' : 'Block'}
                 loading={banLoading}
                 onConfirm={() => handleToggleBanUser(selectedUser)}
             />

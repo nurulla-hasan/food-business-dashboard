@@ -56,10 +56,7 @@ const UsersTable = ({ data, page, limit, onBlock }) => {
                                     </Badge>
                                 </TableCell>
                                 <TableCell className="text-right space-x-2">
-                                    {/* <Button variant="outline" size="icon" onClick={() => onView(user)}>
-                                        <Eye className="h-5 w-5" />
-                                    </Button> */}
-                                    <Button onClick={() => onBlock(user)} variant="outline" size="icon" className="text-red-500">
+                                    <Button disabled={user.status === 'pending'} onClick={() => onBlock(user)} variant="outline" size="icon" className="text-red-500">
                                         <Ban className="h-5 w-5" />
                                     </Button>
                                 </TableCell>
