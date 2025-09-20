@@ -2,12 +2,15 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 
 import {
     LayoutGrid, Settings, LogOut, ChevronDown,
-    ListOrdered,
-    CircleDollarSign,
     UserRoundPen,
     BadgeInfo,
     ReceiptText,
-    GlobeLock
+    GlobeLock,
+    UserRoundCog,
+    Building2,
+    UtensilsCrossed,
+    ListOrdered,
+    DollarSign
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
@@ -19,11 +22,11 @@ import { Button } from "../ui/button";
 
 const navItems = [
     { name: "Dashboard", icon: LayoutGrid, href: "/" },
-    { name: "Company Management", icon: ListOrdered, href: "/company-management" },
-    { name: "User Managment", icon: ListOrdered, href: "/users" },
-    { name: "Weekly Menu", icon: CircleDollarSign, href: "/weekly-menu" },
-    { name: "Order Management", icon: CircleDollarSign, href: "/order-management" },
-    { name: "Company Payment", icon: CircleDollarSign, href: "/company-payment" },
+    { name: "Company Management", icon: Building2, href: "/company-management" },
+    { name: "User Managment", icon: UserRoundCog, href: "/users" },
+    { name: "Weekly Menu", icon: UtensilsCrossed, href: "/weekly-menu" },
+    { name: "Order Management", icon: ListOrdered, href: "/order-management" },
+    { name: "Company Payment", icon: DollarSign, href: "/company-payment" },
 ];
 
 
