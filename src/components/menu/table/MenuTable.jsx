@@ -14,7 +14,7 @@ const MenuTable = ({ data, onEdit, onDelete, onView, page, limit }) => {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>S.No</TableHead>
+                        <TableHead>S.N</TableHead>
                         <TableHead>Image</TableHead>
                         <TableHead>Dish Name</TableHead>
                         <TableHead>Meal Type</TableHead>

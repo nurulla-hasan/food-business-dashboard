@@ -11,7 +11,7 @@ const CompanyManagementTable = ({ data, onEdit, onDelete, updateLoading, deleteL
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>S.No</TableHead>
+                        <TableHead>S.N</TableHead>
                         <TableHead>Company Name</TableHead>
                         <TableHead>Email</TableHead>
                         <TableHead>Phone</TableHead>

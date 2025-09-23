@@ -60,6 +60,7 @@ const Topbar = ({ onMenuClick }) => {
                 {/* Theme Toggle */}
                 <Toggle
                     variant="outline"
+                    size="sm"
                     className="group rounded-full hidden lg:flex"
                     pressed={theme === "dark"}
                     onPressedChange={() =>
