@@ -269,5 +269,76 @@
       "order_status": "Estado del pedido",
       "amount": "Cantidad"
     }
+  },
+  "profile": {
+    "loading": "Cargando perfil...",
+    "title": "Perfil de administrador",
+    "edit_profile": "Editar perfil",
+    "change_password": "Cambiar contraseña",
+    "save_changes": "Guardar cambios",
+    "password": {
+      "title": "Cambiar contraseña",
+      "current": "Contraseña actual",
+      "new": "Nueva contraseña",
+      "confirm_new": "Confirmar nueva contraseña",
+      "placeholder": "••••••••",
+      "validation": {
+        "min_length": "Al menos 6 caracteres",
+        "no_match": "Las contraseñas no coinciden"
+      },
+      "toast": {
+        "fail": "Error al cambiar la contraseña"
+      }
+    },
+    "edit": {
+      "error_load": "Error al cargar el perfil",
+      "personal_info": "Información personal",
+      "user_name": "Nombre de usuario",
+      "user_name_placeholder": "Tu nombre",
+      "pending_image_notice": "Se seleccionó una nueva imagen de perfil. Se cargará cuando hagas clic en \"Guardar cambios\".",
+      "clear": "Limpiar",
+      "email_address": "Dirección de correo electrónico",
+      "email_label": "Correo electrónico",
+      "contact_info": "Información de contacto",
+      "contact_number": "Número de contacto",
+      "contact_number_placeholder": "Tu número de contacto",
+      "street_address": "Dirección",
+      "street_address_placeholder": "Tu dirección",
+      "validation": {
+        "name_short": "El nombre es demasiado corto",
+        "phone_long": "El número de teléfono debe tener más de 10 caracteres"
+      },
+      "toast": {
+        "success": "Perfil actualizado correctamente",
+        "fail": "Error al actualizar el perfil"
+      }
+    },
+    "summary": {
+      "error_load": "Error al cargar el perfil",
+      "user_fallback": "Usuario",
+      "change_image_aria": "Cambiar imagen de perfil",
+      "choose_image_title": "Elegir imagen de perfil",
+      "pending": "Pendiente",
+      "profile_card": "Perfil",
+      "complete": "Completo",
+      "security_card": "Seguridad",
+      "secure": "Seguro",
+      "toast": {
+        "select_fail": "Error al seleccionar la imagen"
+      }
+    }
+  },
+  "legal": {
+    "save": "Guardar",
+    "error_generic": "Algo salió mal",
+    "about_us": "Sobre nosotros",
+    "about_placeholder": "Escribe tu Sobre nosotros aquí...",
+    "about_success": "Sobre nosotros actualizado correctamente",
+    "privacy_policy": "Política de privacidad",
+    "privacy_placeholder": "Escribe tu Política de privacidad aquí...",
+    "privacy_success": "Política de privacidad actualizada correctamente",
+    "terms": "Términos y condiciones",
+    "terms_placeholder": "Escribe tus Términos y condiciones aquí...",
+    "terms_success": "Términos y condiciones actualizados correctamente"
   }
 }

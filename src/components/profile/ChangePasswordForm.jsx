@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Lock } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,19 +19,22 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useChangePasswordMutation } from "@/redux/feature/auth/authApi";
 import { ErrorToast } from "@/lib/utils";
 
-const formSchema = z
+const getFormSchema = (t) => z
   .object({
-    oldPassword: z.string().min(6, "At least 6 characters"),
-    newPassword: z.string().min(6, "At least 6 characters"),
-    confirmNewPassword: z.string().min(6, "At least 6 characters"),
+    oldPassword: z.string().min(6, t('password.validation.min_length')),
+    newPassword: z.string().min(6, t('password.validation.min_length')),
+    confirmNewPassword: z.string().min(6, t('password.validation.min_length')),
   })
   .refine((vals) => vals.newPassword === vals.confirmNewPassword, {
     path: ["confirmNewPassword"],
-    message: "Passwords do not match",
+    message: t('password.validation.no_match'),
   });
 
 const ChangePasswordForm = () => {
+  const { t } = useTranslation('profile');
   const [changePassword, { isLoading }] = useChangePasswordMutation();
+
+  const formSchema = getFormSchema(t);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -51,7 +55,7 @@ const ChangePasswordForm = () => {
       form.reset();
     } catch (err) {
       console.log(err)
-      const msg = err?.data?.message || "Failed to change password";
+      const msg = err?.data?.message || t('password.toast.fail');
       ErrorToast(msg);
     }
   };
@@ -66,7 +70,7 @@ const ChangePasswordForm = () => {
                 <div className="h-6 w-6 rounded-full border grid place-items-center bg-primary/10 text-primary">
                   <Lock size={14} />
                 </div>
-                <h3 className="text-sm font-semibold">Change Password</h3>
+                <h3 className="text-sm font-semibold">{t('password.title')}</h3>
               </div>
               <div className="grid grid-cols-1 gap-4">
                 <FormField
@@ -74,9 +78,9 @@ const ChangePasswordForm = () => {
                   name="oldPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Current Password</FormLabel>
+                      <FormLabel>{t('password.current')}</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} />
+                        <Input type="password" placeholder={t('password.placeholder')} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -87,9 +91,9 @@ const ChangePasswordForm = () => {
                   name="newPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>New Password</FormLabel>
+                      <FormLabel>{t('password.new')}</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} />
+                        <Input type="password" placeholder={t('password.placeholder')} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -100,9 +104,9 @@ const ChangePasswordForm = () => {
                   name="confirmNewPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Confirm New Password</FormLabel>
+                      <FormLabel>{t('password.confirm_new')}</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} />
+                        <Input type="password" placeholder={t('password.placeholder')} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -112,7 +116,7 @@ const ChangePasswordForm = () => {
             </section>
             <div className="pt-2">
               <Button loading={isLoading} className="w-full" type="submit" disabled={isLoading}>
-                Save Changes
+                {t('save_changes')}
               </Button>
             </div>
           </form>

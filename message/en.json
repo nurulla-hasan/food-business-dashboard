@@ -269,5 +269,76 @@
       "order_status": "Order Status",
       "amount": "Amount"
     }
+  },
+  "profile": {
+    "loading": "Loading Profile...",
+    "title": "Admin Profile",
+    "edit_profile": "Edit Profile",
+    "change_password": "Change Password",
+    "save_changes": "Save Changes",
+    "password": {
+      "title": "Change Password",
+      "current": "Current Password",
+      "new": "New Password",
+      "confirm_new": "Confirm New Password",
+      "placeholder": "••••••••",
+      "validation": {
+        "min_length": "At least 6 characters",
+        "no_match": "Passwords do not match"
+      },
+      "toast": {
+        "fail": "Failed to change password"
+      }
+    },
+    "edit": {
+      "error_load": "Failed to load profile",
+      "personal_info": "Personal Information",
+      "user_name": "User Name",
+      "user_name_placeholder": "Your name",
+      "pending_image_notice": "New profile image selected. It will be uploaded when you click \"Save Changes\".",
+      "clear": "Clear",
+      "email_address": "Email Address",
+      "email_label": "Email",
+      "contact_info": "Contact Information",
+      "contact_number": "Contact Number",
+      "contact_number_placeholder": "Your contact number",
+      "street_address": "Street Address",
+      "street_address_placeholder": "Your address",
+      "validation": {
+        "name_short": "Name is too short",
+        "phone_long": "Phone number must be longer than 10 characters"
+      },
+      "toast": {
+        "success": "Profile updated successfully",
+        "fail": "Failed to update profile"
+      }
+    },
+    "summary": {
+      "error_load": "Failed to load profile",
+      "user_fallback": "User",
+      "change_image_aria": "Change profile image",
+      "choose_image_title": "Choose profile image",
+      "pending": "Pending",
+      "profile_card": "Profile",
+      "complete": "Complete",
+      "security_card": "Security",
+      "secure": "Secure",
+      "toast": {
+        "select_fail": "Failed to select image"
+      }
+    }
+  },
+  "legal": {
+    "save": "Save",
+    "error_generic": "Something went wrong",
+    "about_us": "About Us",
+    "about_placeholder": "Write your About here...",
+    "about_success": "About updated successfully",
+    "privacy_policy": "Privacy Policy",
+    "privacy_placeholder": "Write your Privacy Policy here...",
+    "privacy_success": "Privacy Policy updated successfully",
+    "terms": "Terms & Conditions",
+    "terms_placeholder": "Write your Terms & Conditions here...",
+    "terms_success": "Terms updated successfully"
   }
 }

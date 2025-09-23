@@ -8,9 +8,11 @@ import { SuccessToast } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/theme/theme-provider";
 import Error from "@/components/common/Error";
+import { useTranslation } from "react-i18next";
 const LegalSkeleton = lazy(()=> import('@/components/legal/LegalSkeleton'));
 
 const Terms = () => {
+    const { t } = useTranslation('legal');
     const [content, setContent] = useState("");
     const editor = useRef(null);
     const { theme } = useTheme();
@@ -30,7 +32,7 @@ const Terms = () => {
     const handleSubmit = async () => {
         const res = await addTerms({ description: content });
         if (res?.data?.success) {
-            SuccessToast("Terms updated successfully");
+            SuccessToast(t('terms_success'));
         }
     };
 
@@ -48,11 +50,11 @@ const Terms = () => {
             showCharsCounter: true,
             showWordsCounter: true,
             showXPathInStatusbar: false,
-            placeholder: "Write your Terms & Conditions here...",
+            placeholder: t('terms_placeholder'),
             theme: currentTheme,
             buttons: ['bold', 'italic', 'underline', '|', 'ul', 'ol', '|', 'font', 'fontsize', 'brush', 'paragraph', '|', 'link', 'table', '|', 'undo', 'redo', '|', 'hr', 'eraser', 'fullsize'],
         };
-    }, [theme]);
+    }, [theme, t]);
 
     return (
         <Suspense fallback={<LegalSkeleton />}>
@@ -64,18 +66,18 @@ const Terms = () => {
                                 disabled={addTermsLoading}
                                 loading={addTermsLoading} className="w-24 mx-auto mt-4"
                                 onClick={handleSubmit}>
-                                Save
+                                {t('save')}
                             </Button>
                         )}
                     </>
                 }
             >
-                <Title title="Terms" />
+                <Title title={t('terms')} />
 
                 {isLoading ? (
                     <LegalSkeleton />
                 ) : termsError ? (
-                    <Error msg="Something went wrong"/>
+                    <Error msg={t('error_generic')}/>
                 ) : (
                     <div className="rounded-lg shadow p-4">
                         <JoditEditor

@@ -6,6 +6,7 @@ import { z } from "zod";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Lock, ShieldCheck, User2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,17 +25,18 @@ import { ErrorToast, SuccessToast } from "@/lib/utils";
 import EditProfileSkeleton from "../skeleton/EditProfileSkeleton";
 import Error from "../common/Error";
 
-const formSchema = z.object({
-  name: z.string().trim().min(2, "Name is too short"),
+const getFormSchema = (t) => z.object({
+  name: z.string().trim().min(2, t('edit.validation.name_short')),
   email: z.string().email(),
-  phone: z
-    .string()
-    .trim()
-    .optional()
-    .transform((v) => (v === "" ? undefined : v))
-    .refine((v) => !v || v.length > 10, {
-      message: "Phone number must be longer than 10 characters",
-    }),
+  phone:
+    z
+      .string()
+      .trim()
+      .optional()
+      .transform((v) => (v === "" ? undefined : v))
+      .refine((v) => !v || v.length > 10, {
+        message: t('edit.validation.phone_long'),
+      }),
   address: z
     .string()
     .optional()
@@ -42,8 +44,11 @@ const formSchema = z.object({
 });
 
 const EditProfileForm = ({ pendingImage, onClearPending, isLoading, isError }) => {
+  const { t } = useTranslation('profile');
   const admin = useSelector((state) => state.auth.admin);
   const [updateProfile, { isLoading: updateLoading }] = useUpdateAdminProfileMutation();
+
+  const formSchema = getFormSchema(t);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -87,10 +92,10 @@ const EditProfileForm = ({ pendingImage, onClearPending, isLoading, isError }) =
         };
         await updateProfile(payload).unwrap();
       }
-      SuccessToast("Profile updated successfully");
+      SuccessToast(t('edit.toast.success'));
       form.reset({ ...values });
     } catch (err) {
-      const msg = err?.data?.message || "Failed to update profile";
+      const msg = err?.data?.message || t('edit.toast.fail');
       ErrorToast(msg);
     }
   };
@@ -99,7 +104,7 @@ const EditProfileForm = ({ pendingImage, onClearPending, isLoading, isError }) =
     isLoading ? (
       <EditProfileSkeleton />
     ) : isError ? (
-      <Error msg="Failed to load profile" />
+      <Error msg={t('edit.error_load')} />
     ) : (
       <Card className="py-0">
         <CardContent className="p-4 sm:p-6 space-y-6">
@@ -111,7 +116,7 @@ const EditProfileForm = ({ pendingImage, onClearPending, isLoading, isError }) =
                   <div className="h-6 w-6 rounded-full border grid place-items-center bg-primary/10 text-primary">
                     <User2 size={14} />
                   </div>
-                  <h3 className="text-sm font-semibold">Personal Information</h3>
+                  <h3 className="text-sm font-semibold">{t('edit.personal_info')}</h3>
                 </div>
                 <div className="grid grid-cols-1 gap-4">
                   <FormField
@@ -119,9 +124,9 @@ const EditProfileForm = ({ pendingImage, onClearPending, isLoading, isError }) =
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>User Name</FormLabel>
+                        <FormLabel>{t('edit.user_name')}</FormLabel>
                         <FormControl>
-                          <Input placeholder="Your name" {...field} />
+                          <Input placeholder={t('edit.user_name_placeholder')} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -129,8 +134,8 @@ const EditProfileForm = ({ pendingImage, onClearPending, isLoading, isError }) =
                   />
                   {pendingImage && (
                     <div className="text-xs rounded border px-3 py-2 bg-amber-500/20 text-muted-foreground">
-                      New profile image selected. It will be uploaded when you click &quot;Save Changes&quot;.
-                      <button type="button" className="ml-2 underline" onClick={() => onClearPending?.()}>Clear</button>
+                      {t('edit.pending_image_notice')}
+                      <button type="button" className="ml-2 underline" onClick={() => onClearPending?.()}>{t('edit.clear')}</button>
                     </div>
                   )}
                 </div>
@@ -144,14 +149,14 @@ const EditProfileForm = ({ pendingImage, onClearPending, isLoading, isError }) =
                   <div className="h-6 w-6 rounded-full border grid place-items-center bg-primary/10 text-primary">
                     <Lock size={14} />
                   </div>
-                  <h3 className="text-sm font-semibold">Email Address</h3>
+                  <h3 className="text-sm font-semibold">{t('edit.email_address')}</h3>
                 </div>
                 <FormField
                   control={form.control}
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>{t('edit.email_label')}</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Input disabled {...field} />
@@ -172,7 +177,7 @@ const EditProfileForm = ({ pendingImage, onClearPending, isLoading, isError }) =
                   <div className="h-6 w-6 rounded-full border grid place-items-center bg-primary/10 text-primary">
                     <ShieldCheck size={14} />
                   </div>
-                  <h3 className="text-sm font-semibold">Contact Information</h3>
+                  <h3 className="text-sm font-semibold">{t('edit.contact_info')}</h3>
                 </div>
                 <div className="grid grid-cols-1 gap-4">
                   <FormField
@@ -180,9 +185,9 @@ const EditProfileForm = ({ pendingImage, onClearPending, isLoading, isError }) =
                     name="phone"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Contact Number</FormLabel>
+                        <FormLabel>{t('edit.contact_number')}</FormLabel>
                         <FormControl>
-                          <Input type="tel" placeholder="Your contact number" {...field} />
+                          <Input type="tel" placeholder={t('edit.contact_number_placeholder')} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -193,9 +198,9 @@ const EditProfileForm = ({ pendingImage, onClearPending, isLoading, isError }) =
                     name="address"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Street Address</FormLabel>
+                        <FormLabel>{t('edit.street_address')}</FormLabel>
                         <FormControl>
-                          <Input placeholder="Your address" {...field} />
+                          <Input placeholder={t('edit.street_address_placeholder')} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -206,7 +211,7 @@ const EditProfileForm = ({ pendingImage, onClearPending, isLoading, isError }) =
 
               <div className="pt-2">
                 <Button loading={updateLoading} className="w-full" type="submit" disabled={updateLoading}>
-                  Save Changes
+                  {t('save_changes')}
                 </Button>
               </div>
             </form>

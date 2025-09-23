@@ -12,18 +12,20 @@ import {
 } from "@/components/ui/tabs";
 import Title from "@/components/ui/Title";
 import { useGetAdminProfileQuery } from "@/redux/feature/auth/authApi";
+import { useTranslation } from "react-i18next";
 
 const Profile = () => {
+    const { t } = useTranslation('profile');
     const [pendingImage, setPendingImage] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
     const { isLoading, isError } = useGetAdminProfileQuery();
 
     return (
-        <Suspense fallback={<div className="flex items-center justify-center h-64">Loading Profile...</div>}>
+        <Suspense fallback={<div className="flex items-center justify-center h-64">{t('loading')}</div>}>
             <div>
                 {/* Page Header */}
                 <div className="flex flex-col md:flex-row md:items-start justify-between">
-                    <Title title="Admin Profile" />
+                    <Title title={t('title')} />
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
@@ -52,8 +54,8 @@ const Profile = () => {
                             <Tabs defaultValue="profile" className="w-full">
                                 <div className="px-4 pt-4">
                                     <TabsList className="flex gap-2">
-                                        <TabsTrigger value="profile">Edit Profile</TabsTrigger>
-                                        <TabsTrigger value="password">Change Password</TabsTrigger>
+                                        <TabsTrigger value="profile">{t('edit_profile')}</TabsTrigger>
+                                        <TabsTrigger value="password">{t('change_password')}</TabsTrigger>
                                     </TabsList>
                                 </div>
 
