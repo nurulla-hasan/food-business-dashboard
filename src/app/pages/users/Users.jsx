@@ -12,8 +12,10 @@ import { ErrorToast, SuccessToast } from "@/lib/utils";
 import NoData from "@/components/common/NoData";
 import Error from "@/components/common/Error";
 import usePaginatedSearchQuery from "@/hooks/usePaginatedSearchQuery";
+import { useTranslation } from "react-i18next";
 
 const Users = () => {
+    const { t } = useTranslation('users');
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
     const {
@@ -66,11 +68,11 @@ const Users = () => {
             >
                 {/* Title and Search */}
                 <div className="flex flex-col md:flex-row md:items-start justify-between mb-4">
-                    <Title title="Users" />
+                    <Title title={t('title')} />
                     <div className="relative w-full md:w-auto">
                         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
-                            placeholder="Search users..."
+                            placeholder={t('search_placeholder')}
                             className="pl-10 w-full md:w-64"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
@@ -81,7 +83,7 @@ const Users = () => {
                 {usersLoading ? (
                     <TableSkeleton />
                 ) : usersError ? (
-                    <Error msg="Failed to load users" />
+                    <Error msg={t('error_load')} />
                 ) : users?.length > 0 ? (
                     <UsersTable
                         data={users}
@@ -93,7 +95,7 @@ const Users = () => {
                         }}
                     />
                 ) : (
-                    <NoData msg="No users found" />
+                    <NoData msg={t('no_data')} />
                 )}
             </PageLayout>
 
@@ -101,9 +103,9 @@ const Users = () => {
             <ConfirmationModal
                 isOpen={confirmOpen}
                 onOpenChange={setConfirmOpen}
-                title={`Confirm ${selectedUser?.authId?.is_block ? 'Unblock' : 'Block'} User`}
-                description={selectedUser?.name ? `Are you sure you want to ${selectedUser?.authId?.is_block ? 'unblock' : 'block'} (${selectedUser.name})?` : `Are you sure you want to ${selectedUser?.authId?.is_block ? 'unblock' : 'block'} this user?`}
-                confirmText={selectedUser?.authId?.is_block ? 'Unblock' : 'Block'}
+                title={t(selectedUser?.authId?.is_block ? 'confirm_unblock_title' : 'confirm_block_title')}
+                description={selectedUser?.name ? t(selectedUser?.authId?.is_block ? 'confirm_unblock_desc' : 'confirm_block_desc', { name: selectedUser.name }) : t(selectedUser?.authId?.is_block ? 'confirm_unblock_desc_no_name' : 'confirm_block_desc_no_name')}
+                confirmText={t(selectedUser?.authId?.is_block ? 'unblock' : 'block')}
                 loading={banLoading}
                 onConfirm={() => handleToggleBanUser(selectedUser)}
             />

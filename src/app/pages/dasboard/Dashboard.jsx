@@ -3,8 +3,8 @@ import CompanyManagementTable from "@/components/company-management/table/Compan
 import DashboardStats from "@/components/dashboard/DashboardStats";
 import EarningGrowthChart from "@/components/dashboard/EarningGrowthChart";
 import UserGrowthChart from "@/components/dashboard/UserGrowthChart";
-import ChartSkeleton from "@/components/dashboard/skeleton/ChartSkeleton";
-import DashboardStatsSkeleton from "@/components/dashboard/skeleton/DashboardStatsSkeleton";
+import ChartSkeleton from "@/components/skeleton/ChartSkeleton";
+import DashboardStatsSkeleton from "@/components/skeleton/DashboardStatsSkeleton";
 import PageLayout from "@/components/main-layout/PageLayout";
 import TableSkeleton from "@/components/skeleton/TableSkeleton";
 import { Button } from "@/components/ui/button";

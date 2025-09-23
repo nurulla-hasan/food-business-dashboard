@@ -20,8 +20,10 @@ import { ErrorToast, SuccessToast } from "@/lib/utils";
 import usePaginatedSearchQuery from "@/hooks/usePaginatedSearchQuery";
 import Error from "@/components/common/Error";
 import NoData from "@/components/common/NoData";
+import { useTranslation } from "react-i18next";
 
 const CompanyManagement = () => {
+  const { t } = useTranslation('company_management');
   const {
     searchTerm,
     setSearchTerm,
@@ -49,7 +51,7 @@ const CompanyManagement = () => {
     try {
       await addCompanyMutation(values).unwrap();
       setAddOpen(false);
-      SuccessToast("Company added successfully");
+      SuccessToast(t('toast.add_success'));
     } catch (err) {
       ErrorToast(err?.data?.message);
     }
@@ -64,7 +66,7 @@ const CompanyManagement = () => {
       }).unwrap();
       setEditOpen(false);
       setSelectedClient(null);
-      SuccessToast("Company updated successfully");
+      SuccessToast(t('toast.update_success'));
     } catch (err) {
       ErrorToast(err?.data?.message);
     }
@@ -76,7 +78,7 @@ const CompanyManagement = () => {
       await deleteCompanyMutation(selectedClient._id).unwrap();
       setConfirmOpen(false);
       setSelectedClient(null);
-      SuccessToast("Company deleted successfully");
+      SuccessToast(t('toast.delete_success'));
     } catch (err) {
       ErrorToast(err?.data?.message);
     }
@@ -99,13 +101,13 @@ const CompanyManagement = () => {
       >
         {/* Title and Search */}
         <div className="flex flex-col md:flex-row md:items-start justify-between mb-4">
-          <Title title="Company Management" />
+          <Title title={t('title')} />
           <div className="flex flex-col md:flex-row md:items-center gap-3 w-full md:w-auto">
             <div className="relative w-full sm:w-fit">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 type="search"
-                placeholder="Search company..."
+                placeholder={t('search_placeholder')}
                 className="pl-9"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -113,7 +115,7 @@ const CompanyManagement = () => {
             </div>
             <Button onClick={() => setAddOpen(true)}>
               <Plus />
-              Add Company
+              {t('add_company_button')}
             </Button>
           </div>
         </div>
@@ -122,7 +124,7 @@ const CompanyManagement = () => {
         {isLoading ? (
           <TableSkeleton columns={3} rows={10} />
         ) : isError ? (
-          <Error msg="Failed to load companies"/>
+          <Error msg={t('error_load')}/>
         ) : companies?.length > 0 ? (
           <CompanyManagementTable
             data={companies}
@@ -140,7 +142,7 @@ const CompanyManagement = () => {
             deleteLoading={deleteLoading}
           />
         ) : (
-          <NoData msg="No companies found"/>
+          <NoData msg={t('no_data')}/>
         )}
       </PageLayout>
 
@@ -165,9 +167,9 @@ const CompanyManagement = () => {
       <ConfirmationModal
         isOpen={confirmOpen}
         onOpenChange={setConfirmOpen}
-        title={"Confirm Delete Company"}
-        description={"Are you sure you want to delete this company?"}
-        confirmText={"Delete"}
+        title={t('confirm_delete_title')}
+        description={t('confirm_delete_desc')}
+        confirmText={t('delete')}
         loading={deleteLoading}
         onConfirm={handleDeleteCompany}
       />
