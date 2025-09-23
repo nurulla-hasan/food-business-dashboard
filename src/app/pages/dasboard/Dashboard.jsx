@@ -18,8 +18,10 @@ import {
 import { MoveRight } from "lucide-react";
 import { Suspense, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Dashboard = () => {
+    const { t } = useTranslation('dashboard');
     // Year State
     const [userYear, setUserYear] = useState(new Date().getFullYear());
     const [earningYear, setEarningYear] = useState(new Date().getFullYear());
@@ -75,19 +77,19 @@ const Dashboard = () => {
                 {/* Table */}
                 <div className="mt-4">
                     <div className="flex justify-between items-center mb-4">
-                        <h3 className="text-lg font-medium">Recent Companies</h3>
+                        <h3 className="text-lg font-medium">{t('recent_companies')}</h3>
                         <Link 
                             to="/company-management" 
                             className="text-primary hover:underline text-sm font-medium"
                         >
-                            <Button variant="ghost">View All <MoveRight /></Button>
+                            <Button variant="ghost">{t('view_all')} <MoveRight /></Button>
                         </Link>
                     </div>
                     {
                         isLoading ?
                             <TableSkeleton columns={3} rows={4} />
                             : isError ?
-                                <p className="text-center text-red-500">Failed to load companies</p>
+                                <p className="text-center text-red-500">{t('failed_to_load_companies')}</p>
                                 : companies?.length > 0 ? (
                                     <CompanyManagementTable
                                         data={companies}
@@ -100,7 +102,7 @@ const Dashboard = () => {
                                         isActionButton={false}
                                     />
                                 ) : (
-                                    <p className="text-center text-muted-foreground">No companies found</p>
+                                    <p className="text-center text-muted-foreground">{t('no_companies_found')}</p>
                                 )
                     }
                 </div>

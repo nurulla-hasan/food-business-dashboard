@@ -21,7 +21,7 @@ import { useTranslation } from "react-i18next";
 
 const Topbar = ({ onMenuClick }) => {
     const { setTheme, theme } = useTheme();
-    const { t, i18n } = useTranslation();
+    const { t, i18n } = useTranslation(['topbar', 'common']);
     const admin = useSelector((state) => state.auth.admin);
     const { isLoading } = useGetAdminProfileQuery();
 
@@ -157,7 +157,7 @@ const Topbar = ({ onMenuClick }) => {
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onClick={handleLogout}>
                                 <LogOutIcon size={16} className="opacity-60 mr-2" aria-hidden="true" />
-                                <span>{t('logout')}</span>
+                                <span>{t('common:logout')}</span>
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

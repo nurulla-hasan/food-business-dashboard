@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 
 
 const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['sidebar', 'common']);
     const dispatch = useDispatch();
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const location = useLocation();
@@ -114,7 +114,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             <div className="border-t p-4">
                 <Button onClick={handleLogout} variant="outline" className="justify-start w-full">
                     <LogOut />
-                    {t('logout')}
+                    {t('common:logout')}
                 </Button>
             </div>
         </div>

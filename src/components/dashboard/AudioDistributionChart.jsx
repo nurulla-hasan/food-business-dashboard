@@ -1,21 +1,23 @@
 
 import { Pie, PieChart, ResponsiveContainer, Cell, Tooltip } from 'recharts';
+import { useTranslation } from 'react-i18next';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 const AudioDistributionChart = ({ audioDistributionChartData }) => {
+    const { t } = useTranslation('dashboard');
     const { shortAudioCount = 0, longAudioCount = 0, totalCount = 0 } = audioDistributionChartData || {};
     
     const chartData = [
-        { name: 'Total Audio', value: totalCount, percentage: totalCount > 0 ? Math.round((totalCount / totalCount) * 100) : 0 },
-        { name: 'Short Duration Audio', value: shortAudioCount, percentage: totalCount > 0 ? Math.round((shortAudioCount / totalCount) * 100) : 0 },
-        { name: 'Long Duration Audio', value: longAudioCount, percentage: totalCount > 0 ? Math.round((longAudioCount / totalCount) * 100) : 0 },
+        { name: t('total_audio'), value: totalCount, percentage: totalCount > 0 ? Math.round((totalCount / totalCount) * 100) : 0 },
+        { name: t('short_duration_audio'), value: shortAudioCount, percentage: totalCount > 0 ? Math.round((shortAudioCount / totalCount) * 100) : 0 },
+        { name: t('long_duration_audio'), value: longAudioCount, percentage: totalCount > 0 ? Math.round((longAudioCount / totalCount) * 100) : 0 },
     ];
     return (
         <div className="bg-card p-6 rounded-lg shadow-lg">
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Audio Distribution</h2>
-                <div className="text-sm text-muted-foreground">Total: {totalCount} Audios</div>
+                <h2 className="text-lg font-semibold">{t('audio_distribution')}</h2>
+                <div className="text-sm text-muted-foreground">{t('total_audios', { count: totalCount })}</div>
             </div>
             <ResponsiveContainer width="100%" height={200}>
                 <PieChart>

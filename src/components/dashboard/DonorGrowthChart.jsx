@@ -1,15 +1,17 @@
 import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useTranslation } from 'react-i18next';
 
 const DonorGrowthChart = ({donorGrowthChartData, onYearChange, selectedYear}) => {
+    const { t } = useTranslation('dashboard');
     const { chartData = [], yearsDropdown = [], } = donorGrowthChartData || {};
     return (
         <div className="bg-card p-6 rounded-lg shadow-lg">
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Donor Growth</h2>
+                <h2 className="text-lg font-semibold">{t('donor_growth')}</h2>
                 <Select onValueChange={onYearChange} value={selectedYear?.toString()}>
                     <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Year" />
+                        <SelectValue placeholder={t('year')} />
                     </SelectTrigger>
                     <SelectContent>
                         {yearsDropdown?.map((year) => (
@@ -25,7 +27,7 @@ const DonorGrowthChart = ({donorGrowthChartData, onYearChange, selectedYear}) =>
                     <YAxis axisLine={true} tickLine={false}/>
                     <Tooltip />
                     <Legend />
-                    <Area type="monotone" dataKey="totalDonate" stroke="#8884d8" fill="#8884d8" />
+                    <Area type="monotone" dataKey="totalDonate" name={t('total_donate')} stroke="#8884d8" fill="#8884d8" />
                 </AreaChart>
             </ResponsiveContainer>
         </div>

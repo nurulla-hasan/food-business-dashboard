@@ -1,16 +1,18 @@
 
 import { Line, LineChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useTranslation } from 'react-i18next';
 
 const BondOverview = ({ bondOverviewData, onYearChange, selectedYear }) => {
+    const { t } = useTranslation('dashboard');
     const { chartData = [], yearsDropdown = [], ...stats } = bondOverviewData || {};
     return (
         <div className="bg-card p-6 rounded-lg shadow-lg">
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Bond Overview</h2>
+                <h2 className="text-lg font-semibold">{t('bond_overview')}</h2>
                 <Select onValueChange={onYearChange} value={selectedYear?.toString()}>
                     <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Year" />
+                        <SelectValue placeholder={t('year')} />
                     </SelectTrigger>
                     <SelectContent>
                         {yearsDropdown?.map((year) => (
@@ -21,19 +23,19 @@ const BondOverview = ({ bondOverviewData, onYearChange, selectedYear }) => {
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                 <div className="p-4 rounded-lg bg-background">
-                    <p className="text-sm text-muted-foreground">Total bond</p>
+                    <p className="text-sm text-muted-foreground">{t('total_bond')}</p>
                     <p className="text-lg font-bold">{stats.total || 0}</p>
                 </div>
                 <div className="p-4 rounded-lg bg-background">
-                    <p className="text-sm text-muted-foreground">Completed bond</p>
+                    <p className="text-sm text-muted-foreground">{t('completed_bond')}</p>
                     <p className="text-lg font-bold">{stats.completed || 0}</p>
                 </div>
                 <div className="p-4 rounded-lg bg-background">
-                    <p className="text-sm text-muted-foreground">Incomplete bond</p>
+                    <p className="text-sm text-muted-foreground">{t('incomplete_bond')}</p>
                     <p className="text-lg font-bold">{stats.incomplete || 0}</p>
                 </div>
                 <div className="p-4 rounded-lg bg-background">
-                    <p className="text-sm text-muted-foreground">Ongoing bond</p>
+                    <p className="text-sm text-muted-foreground">{t('ongoing_bond')}</p>
                     <p className="text-lg font-bold">{stats.ongoing || 0}</p>
                 </div>
             </div>
@@ -44,10 +46,10 @@ const BondOverview = ({ bondOverviewData, onYearChange, selectedYear }) => {
                     <YAxis axisLine={true} tickLine={false} />
                     <Tooltip />
                     <Legend />
-                    <Line type="monotone" dataKey="total" stroke="#6366f1" />
-                    <Line type="monotone" dataKey="completed" stroke="#10b981" />
-                    <Line type="monotone" dataKey="incomplete" stroke="#f43f5e" />
-                    <Line type="monotone" dataKey="ongoing" stroke="#f59e0b" />
+                    <Line type="monotone" dataKey="total" name={t('total')} stroke="#6366f1" />
+                    <Line type="monotone" dataKey="completed" name={t('completed')} stroke="#10b981" />
+                    <Line type="monotone" dataKey="incomplete" name={t('incomplete')} stroke="#f43f5e" />
+                    <Line type="monotone" dataKey="ongoing" name={t('ongoing')} stroke="#f59e0b" />
                 </LineChart>
             </ResponsiveContainer>
         </div>

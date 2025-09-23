@@ -1,5 +1,6 @@
 
 import { DollarSign, ListOrdered, Users } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const StatCard = ({ icon, title, value, containerClassName }) => (
     <div className={`p-6 rounded-lg bg-sidebar ${containerClassName}`}>
@@ -16,29 +17,30 @@ const StatCard = ({ icon, title, value, containerClassName }) => (
 );
 
 const DashboardStats = ({ data: stats }) => {
+    const { t } = useTranslation('dashboard');
 
     const statsData = [
         {
             icon: <Users className="h-6 w-6 " />,
-            title: "Total Company",
+            title: t('total_company'),
             value: stats?.totalCompanies || 0,
             containerClassName: "bg-card"
         },
         {
             icon: <Users className="h-6 w-6 " />,
-            title: "Total Employer",
+            title: t('total_employer'),
             value: stats?.totalEmployers || 0,
             containerClassName: "bg-card"
         },
         {
             icon: <DollarSign className="h-6 w-6 " />,
-            title: "Total Income",
+            title: t('total_income'),
             value: stats?.totalIncome || 0,
             containerClassName: "bg-card"
         },
         {
             icon: <ListOrdered className="h-6 w-6" />,
-            title: "Total Order",
+            title: t('total_order'),
             value: stats?.totalOrders || 0,
             containerClassName: "bg-card"
         }

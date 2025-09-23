@@ -1,8 +1,10 @@
 
 import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useTranslation } from 'react-i18next';
 
 const EarningGrowthChart = ({earningGrowthChartData, onYearChange, selectedYear}) => {
+    const { t } = useTranslation('dashboard');
     const { result = [], yearlyTotal = 0 } = earningGrowthChartData?.data || {};
 
     const years = Array.from({length: 6}, (_, i) => 2025 + i);
@@ -10,14 +12,14 @@ const EarningGrowthChart = ({earningGrowthChartData, onYearChange, selectedYear}
         <div className="bg-sidebar p-6 rounded-lg">
             <div className="flex justify-between items-center mb-4">
                 <div>
-                    <h2 className="text-lg font-semibold">Earning Growth</h2>
+                    <h2 className="text-lg font-semibold">{t('earning_growth')}</h2>
                     <p className="text-sm text-muted-foreground">
-                        Yearly Total: <span className="font-medium">${yearlyTotal?.toLocaleString()}</span>
+                        {t('yearly_total')} <span className="font-medium">${yearlyTotal?.toLocaleString()}</span>
                     </p>
                 </div>
                 <Select onValueChange={onYearChange} value={selectedYear?.toString()}>
                     <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Year" />
+                        <SelectValue placeholder={t('year')} />
                     </SelectTrigger>
                     <SelectContent>
                         {years?.map((year) => (
@@ -36,7 +38,7 @@ const EarningGrowthChart = ({earningGrowthChartData, onYearChange, selectedYear}
                     <Area 
                         type="monotone" 
                         dataKey="income" 
-                        name="Income"
+                        name={t('income')}
                         stroke="#1bd477" 
                         fill="#1bd477" 
                         fillOpacity={0.4}
