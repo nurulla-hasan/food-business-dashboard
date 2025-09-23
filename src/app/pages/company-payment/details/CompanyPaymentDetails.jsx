@@ -19,8 +19,10 @@ import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
+import { useTranslation } from "react-i18next";
 
 const CompanyPaymentDetails = () => {
+    const { t } = useTranslation('company_payment');
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -82,12 +84,12 @@ const CompanyPaymentDetails = () => {
     if (companyDetailsError || !company) {
         return (
             <div className="text-center py-10">
-                <h2 className="text-xl font-semibold mb-2">Error loading company details</h2>
+                <h2 className="text-xl font-semibold mb-2">{t('details.error_loading')}</h2>
                 <p className="text-muted-foreground mb-4">
-                    {companyDetailsError ? "Failed to load company information." : "Company not found"}
+                    {companyDetailsError ? t('details.failed_to_load') : t('details.not_found')}
                 </p>
                 <Button onClick={() => navigate(-1)} variant="outline">
-                    Go Back
+                    {t('details.go_back')}
                 </Button>
             </div>
         );
@@ -116,9 +118,9 @@ const CompanyPaymentDetails = () => {
                         onClick={() => navigate(-1)}
                     >
                         <ArrowLeft className="h-4 w-4" />
-                        <span className="sr-only">Back</span>
+                        <span className="sr-only">{t('details.back')}</span>
                     </Button>
-                    <h1 className="text-xl md:text-2xl font-bold">Company Details</h1>
+                    <h1 className="text-xl md:text-2xl font-bold">{t('details.company_details')}</h1>
                 </div>
                 {/* Top Section - Cards and Company Info Side By Side */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -126,7 +128,7 @@ const CompanyPaymentDetails = () => {
                     <div className="lg:col-span-1">
                         <Card className="h-full bg-accent">
                             <CardHeader className="flex flex-row items-center justify-between">
-                                <CardTitle>Company Information</CardTitle>
+                                <CardTitle>{t('details.company_information')}</CardTitle>
                                 <Badge variant={company.status === 'active' ? 'default' : 'destructive'}>
                                     {company.status}
                                 </Badge>
@@ -146,21 +148,21 @@ const CompanyPaymentDetails = () => {
                                     <Separator />
                                     <div className="grid gap-4 md:grid-cols-2">
                                         <div className="space-y-2">
-                                            <h4 className="text-sm font-medium text-muted-foreground">Contact Information</h4>
+                                            <h4 className="text-sm font-medium text-muted-foreground">{t('details.contact_information')}</h4>
                                             <div className="space-y-1">
                                                 <p className="text-sm">{company.phone_number || 'N/A'}</p>
                                                 <p className="text-sm">{company.address || 'N/A'}</p>
                                             </div>
                                         </div>
                                         <div className="space-y-2">
-                                            <h4 className="text-sm font-medium text-muted-foreground">Additional Information</h4>
+                                            <h4 className="text-sm font-medium text-muted-foreground">{t('details.additional_information')}</h4>
                                             <div className="space-y-1">
                                                 <p className="text-sm">
-                                                    <span className="text-muted-foreground">Member since:</span>{' '}
+                                                    <span className="text-muted-foreground">{t('details.member_since')}</span>{' '}
                                                     {new Date(company.createdAt).toLocaleDateString()}
                                                 </p>
                                                 <p className="text-sm">
-                                                    <span className="text-muted-foreground">Last updated:</span>{' '}
+                                                    <span className="text-muted-foreground">{t('details.last_updated')}</span>{' '}
                                                     {new Date(company.updatedAt).toLocaleDateString()}
                                                 </p>
                                             </div>
@@ -175,22 +177,22 @@ const CompanyPaymentDetails = () => {
                         <div>
                             <Card className="bg-accent">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-2xl font-bold">Total Orders</CardTitle>
+                                    <CardTitle className="text-2xl font-bold">{t('details.total_orders')}</CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="text-2xl font-bold">{totalOrder}</div>
-                                    <p className="text-xs text-muted-foreground">All time orders</p>
+                                    <p className="text-xs text-muted-foreground">{t('details.all_time_orders')}</p>
                                 </CardContent>
                             </Card>
                         </div>
                         <div>
                             <Card className="bg-accent">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-2xl font-bold">Total Employers</CardTitle>
+                                    <CardTitle className="text-2xl font-bold">{t('details.total_employers')}</CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="text-2xl font-bold">{totalEmployers}</div>
-                                    <p className="text-xs text-muted-foreground">Active employers</p>
+                                    <p className="text-xs text-muted-foreground">{t('details.active_employers')}</p>
                                 </CardContent>
                             </Card>
                         </div>
@@ -213,7 +215,7 @@ const CompanyPaymentDetails = () => {
                                         <CalendarIcon className="mr-2 h-4 w-4" />
                                         {filters.month && filters.year
                                             ? formatDate(`${filters.year}-${filters.month}-${filters.selectedDay}`)
-                                            : <span>Pick a date</span>}
+                                            : <span>{t('pick_date')}</span>}
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0" align="start">
@@ -246,7 +248,7 @@ const CompanyPaymentDetails = () => {
                             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                             <Input
                                 type="search"
-                                placeholder="Search payment..."
+                                placeholder={t('search_placeholder')}
                                 className="pl-9"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -259,7 +261,7 @@ const CompanyPaymentDetails = () => {
                     orderLoading ? (
                         <TableSkeleton columns={6} rows={6} />
                     ) : orderError ? (
-                        <Error msg="Failed to load orders" />
+                        <Error msg={t('details.error_load_orders')} />
                     ) : orders?.length > 0 ? (
                         <EmployeOrderTable
                             data={orders}
@@ -267,7 +269,7 @@ const CompanyPaymentDetails = () => {
                             limit={6}
                         />
                     ) : (
-                        <p className="text-center text-muted-foreground sm:mt-[20vh]">No orders found</p>
+                        <p className="text-center text-muted-foreground sm:mt-[20vh]">{t('details.no_orders_found')}</p>
                     )
                 }
             </div>

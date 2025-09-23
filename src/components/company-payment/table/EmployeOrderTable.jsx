@@ -9,20 +9,22 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { formatDate, getStatusVariant } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 const EmployeOrderTable = ({ data, page, limit }) => {
+    const { t } = useTranslation('company_payment');
     return (
         <ScrollArea className="w-[calc(100vw-32px)] overflow-hidden overflow-x-auto md:w-full rounded-lg whitespace-nowrap border">
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>S.N</TableHead>
-                        <TableHead>Order ID</TableHead>
-                        <TableHead>Meal Type</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Order Status</TableHead>
-                        <TableHead>Payment Status</TableHead>
-                        <TableHead className="text-right">Amount</TableHead>
+                        <TableHead>{t('table.sn')}</TableHead>
+                        <TableHead>{t('table.order_id')}</TableHead>
+                        <TableHead>{t('table.meal_type')}</TableHead>
+                        <TableHead>{t('table.date')}</TableHead>
+                        <TableHead>{t('table.order_status')}</TableHead>
+                        <TableHead>{t('table.payment_status')}</TableHead>
+                        <TableHead className="text-right">{t('table.amount')}</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>

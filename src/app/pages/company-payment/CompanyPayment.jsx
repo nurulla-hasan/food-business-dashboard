@@ -18,8 +18,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 const CompanyPayment = () => {
+  const { t } = useTranslation('company_payment');
   const navigate = useNavigate();
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
@@ -65,7 +67,7 @@ const CompanyPayment = () => {
   // Handle Confirm Update Payment Status
   const handleConfirmUpdatePaymentStatus = async () => {
     if (!selectedPayment?._id || !selectedPayment?.month || !selectedPayment?.year) {
-      toast.error("Missing required payment information");
+      toast.error(t('toast.missing_info'));
       return;
     }
 
@@ -81,13 +83,13 @@ const CompanyPayment = () => {
       const result = await updateCompanyPayment(payload).unwrap();
 
       if (result?.success) {
-        toast.success("Payment status updated successfully");
+        toast.success(t('toast.update_success'));
       } else {
-        throw new Error(result?.message || "Failed to update payment status");
+        throw new Error(result?.message || t('toast.update_failed'));
       }
     } catch (error) {
       console.error("Update payment error:", error);
-      toast.error(error?.data?.message || "Failed to update payment status. Please try again.");
+      toast.error(error?.data?.message || t('toast.update_failed_retry'));
     } finally {
       setConfirmModalOpen(false);
     }
@@ -110,7 +112,7 @@ const CompanyPayment = () => {
       >
         {/* Header: Title and Action Button */}
         <div className="flex flex-col md:flex-row md:items-start justify-between mb-4">
-          <Title title="Company Payment" />
+          <Title title={t('title')} />
           <div className="flex flex-col md:flex-row md:items-center gap-3 w-full md:w-auto">
             {/* Date Filter */}
             <div className="flex items-center gap-2 relative w-full sm:w-fit">
@@ -126,7 +128,7 @@ const CompanyPayment = () => {
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {filters.month && filters.year
                       ? formatDate(`${filters.year}-${filters.month}-${filters.selectedDay}`)
-                      : <span>Pick a date</span>}
+                      : <span>{t('pick_date')}</span>}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
@@ -159,7 +161,7 @@ const CompanyPayment = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 type="search"
-                placeholder="Search payment..."
+                placeholder={t('search_placeholder')}
                 className="pl-9"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -173,7 +175,7 @@ const CompanyPayment = () => {
           isLoading ? (
             <TableSkeleton />
           ) : isError ? (
-            <Error msg="Failed to load payments" />
+            <Error msg={t('error_load_payments')} />
           ) : payments?.length > 0 ? (
             <CompanyPaymentTable
               data={payments}
@@ -188,7 +190,7 @@ const CompanyPayment = () => {
               }}
             />
           ) : (
-            <NoData msg="No payments found" />
+            <NoData msg={t('no_payments_found')} />
           )
         }
       </PageLayout>
@@ -197,10 +199,10 @@ const CompanyPayment = () => {
         isOpen={confirmModalOpen}
         onConfirm={handleConfirmUpdatePaymentStatus}
         onOpenChange={setConfirmModalOpen}
-        title="Confirm Payment Update"
-        description={`Are you sure you want to mark the payment for ${selectedPayment?.name} for the month of ${selectedPayment?.month} as 'Paid'?`}
+        title={t('confirm_update_title')}
+        description={t('confirm_update_desc', { name: selectedPayment?.name, month: selectedPayment?.month })}
         loading={isUpdating}
-        confirmText="Mark as Paid"
+        confirmText={t('mark_as_paid')}
       />
 
     </Suspense>

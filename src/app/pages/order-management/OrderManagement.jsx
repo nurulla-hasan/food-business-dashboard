@@ -16,8 +16,10 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { cn, formatDate } from "@/lib/utils";
 import OrderViewModal from "@/components/order/modal/OrderViewModal";
+import { useTranslation } from "react-i18next";
 
 const OrderManagement = () => {
+  const { t } = useTranslation('order_management');
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
@@ -53,9 +55,9 @@ const OrderManagement = () => {
     toast.promise(
       updateOrder({ orderId, status }).unwrap(),
       {
-        loading: 'Updating status...',
-        success: `Order has been marked as ${status}.`,
-        error: 'Failed to update order status.',
+        loading: t('toast.loading'),
+        success: t('toast.success', { status }),
+        error: t('toast.error'),
       }
     );
   };
@@ -76,19 +78,19 @@ const OrderManagement = () => {
         }
       >
         <div className="flex flex-col md:flex-row md:items-start justify-between mb-4">
-          <Title title="Order Management" />
+          <Title title={t('title')} />
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full sm:w-auto mt-2 md:mt-0">
             <Select
               value={filters.status}
               onValueChange={(value) => handleFilterChange('status', value)}>
               <SelectTrigger className="w-full sm:w-fit">
-                <SelectValue placeholder="Filter by Status" />
+                <SelectValue placeholder={t('filter_by_status')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="complete">Complete</SelectItem>
-                <SelectItem value="cancel">Cancel</SelectItem>
+                <SelectItem value="all">{t('all_status')}</SelectItem>
+                <SelectItem value="pending">{t('pending')}</SelectItem>
+                <SelectItem value="complete">{t('complete')}</SelectItem>
+                <SelectItem value="cancel">{t('cancel')}</SelectItem>
               </SelectContent>
             </Select>
 
@@ -103,7 +105,7 @@ const OrderManagement = () => {
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {filters.date ? formatDate(new Date(filters.date)) : <span>Pick a date</span>}
+                    {filters.date ? formatDate(new Date(filters.date)) : <span>{t('pick_date')}</span>}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
@@ -130,7 +132,7 @@ const OrderManagement = () => {
           isLoading ? (
             <TableSkeleton rows={10} columns={8} />
           ) : isError ? (
-            <Error msg="Failed to load orders" />
+            <Error msg={t('error_load')} />
           ) : orders?.length > 0 ? (
             <OrderTable
               data={orders}
@@ -143,7 +145,7 @@ const OrderManagement = () => {
               }}
             />
           ) : (
-            <NoData msg="No orders found" />
+            <NoData msg={t('no_data')} />
           )
         }
       </PageLayout>

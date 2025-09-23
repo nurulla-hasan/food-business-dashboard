@@ -7,8 +7,10 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from "@/components/ui/button";
 import { Eye, MoreHorizontal } from "lucide-react";
 import { formatDate, getInitials } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 const OrderTable = ({ data, page, limit, onStatusChange, onView }) => {
+  const { t } = useTranslation('order_management');
 
   // Helper to determine badge color based on status
   const getStatusVariant = (status) => {
@@ -29,14 +31,14 @@ const OrderTable = ({ data, page, limit, onStatusChange, onView }) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>S.N</TableHead>
-            <TableHead>Customer</TableHead>
-            <TableHead>Dish Name</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>Order Date</TableHead>
-            <TableHead>Payment</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead>{t('sn')}</TableHead>
+            <TableHead>{t('customer')}</TableHead>
+            <TableHead>{t('dish_name')}</TableHead>
+            <TableHead>{t('price')}</TableHead>
+            <TableHead>{t('order_date')}</TableHead>
+            <TableHead>{t('payment')}</TableHead>
+            <TableHead>{t('status')}</TableHead>
+            <TableHead className="text-right">{t('actions')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

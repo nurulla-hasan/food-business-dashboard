@@ -7,8 +7,10 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { formatDate, getImageUrl, getInitials } from '@/lib/utils';
 import { Calendar, DollarSign, Hash, Mail, MapPin, Phone, ShoppingCart, User } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const OrderViewModal = ({ isOpen, onOpenChange, order }) => {
+    const { t } = useTranslation('order_management');
     if (!order) return null;
 
     const getStatusVariant = (status) => {
@@ -30,7 +32,7 @@ const OrderViewModal = ({ isOpen, onOpenChange, order }) => {
                 <ScrollArea className="max-h-[90vh]">
                     <div className="p-6">
                         <DialogHeader className="mb-4">
-                            <DialogTitle className="text-2xl lg:text-3xl font-bold text-primary">Order Details</DialogTitle>
+                            <DialogTitle className="text-2xl lg:text-3xl font-bold text-primary">{t('order_details')}</DialogTitle>
                             <DialogDescription className="flex items-center gap-2 pt-1">
                                 <Hash className="h-4 w-4" />
                                 <span className="font-mono text-sm">{order._id}</span>
@@ -40,15 +42,15 @@ const OrderViewModal = ({ isOpen, onOpenChange, order }) => {
                         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8">
                             {/* Left Column: Menu Item Details */}
                             <div className="lg:col-span-2 space-y-4">
-                                <InfoSection icon={<ShoppingCart />} title="Ordered Item">
+                                <InfoSection icon={<ShoppingCart />} title={t('ordered_item')}>
                                     <div className="relative aspect-video overflow-hidden rounded-lg border">
                                         <img 
-                                            src={order.menus_id?.image ? getImageUrl(order.menus_id.image) : 'https://placehold.co/600x400?text=No+Image'}
-                                            alt={order.menus_id?.dishName || 'Menu item'}
+                                            src={order.menus_id?.image ? getImageUrl(order.menus_id.image) : `https://placehold.co/600x400?text=${t('no_image')}`}
+                                            alt={order.menus_id?.dishName || t('menu_item')}
                                             className="h-full w-full object-cover"
                                             onError={(e) => {
                                                 e.target.onerror = null;
-                                                e.target.src = 'https://placehold.co/600x400?text=Image+Not+Found';
+                                                e.target.src = `https://placehold.co/600x400?text=${t('image_not_found')}`;
                                             }}
                                         />
                                     </div>
@@ -65,7 +67,7 @@ const OrderViewModal = ({ isOpen, onOpenChange, order }) => {
 
                             {/* Right Column: Customer and Order Details */}
                             <div className="lg:col-span-3 space-y-6">
-                                <InfoSection icon={<User />} title="Customer Information">
+                                <InfoSection icon={<User />} title={t('customer_information')}>
                                     <div className="flex items-center gap-4">
                                         <Avatar className="h-16 w-16 border-2 border-primary/20">
                                             <AvatarImage src={order.user?.profile_image} />
@@ -84,18 +86,18 @@ const OrderViewModal = ({ isOpen, onOpenChange, order }) => {
 
                                 <Separator />
 
-                                <InfoSection icon={<Calendar />} title="Order Status">
+                                <InfoSection icon={<Calendar />} title={t('order_status')}>
                                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                         <div className="space-y-1">
-                                            <p className="text-sm font-medium text-muted-foreground">Order Date</p>
+                                            <p className="text-sm font-medium text-muted-foreground">{t('order_date')}</p>
                                             <p className="font-semibold">{formatDate(order.date)}</p>
                                         </div>
                                         <div className="space-y-1">
-                                            <p className="text-sm font-medium text-muted-foreground">Payment Status</p>
+                                            <p className="text-sm font-medium text-muted-foreground">{t('payment_status')}</p>
                                             <Badge variant={getPaymentStatusVariant(order.paymentStatus)} className="text-sm">{order.paymentStatus}</Badge>
                                         </div>
                                         <div className="space-y-1">
-                                            <p className="text-sm font-medium text-muted-foreground">Order Status</p>
+                                            <p className="text-sm font-medium text-muted-foreground">{t('order_status')}</p>
                                             <Badge variant={getStatusVariant(order.status)} className="text-sm">{order.status}</Badge>
                                         </div>
                                     </div>
@@ -105,7 +107,7 @@ const OrderViewModal = ({ isOpen, onOpenChange, order }) => {
                     </div>
                     <DialogFooter className="px-6 py-4 bg-muted/40 border-t">
                         <Button variant="outline" onClick={() => onOpenChange(false)}>
-                            Close
+                            {t('close')}
                         </Button>
                     </DialogFooter>
                 </ScrollArea>

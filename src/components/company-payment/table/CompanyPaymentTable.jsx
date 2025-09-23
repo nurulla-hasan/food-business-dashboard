@@ -11,20 +11,22 @@ import {
 import { CheckCheck, Eye } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { getStatusVariant } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 const CompanyPaymentTable = ({ data, page, limit, onCheck, onView }) => {
+    const { t } = useTranslation('company_payment');
     return (
         <ScrollArea className="w-[calc(100vw-32px)] overflow-hidden overflow-x-auto md:w-full rounded-lg whitespace-nowrap">
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>S.N</TableHead>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Total Order</TableHead>
-                        <TableHead>Month</TableHead>
-                        <TableHead>Total Price</TableHead>
-                        <TableHead>Payment Status</TableHead>
-                        <TableHead className="text-right">Action</TableHead>
+                        <TableHead>{t('table.sn')}</TableHead>
+                        <TableHead>{t('table.name')}</TableHead>
+                        <TableHead>{t('table.total_order')}</TableHead>
+                        <TableHead>{t('table.month')}</TableHead>
+                        <TableHead>{t('table.total_price')}</TableHead>
+                        <TableHead>{t('table.payment_status')}</TableHead>
+                        <TableHead className="text-right">{t('table.action')}</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -37,7 +39,7 @@ const CompanyPaymentTable = ({ data, page, limit, onCheck, onView }) => {
                             <TableCell>{item.totalPrice}</TableCell>
                             <TableCell>
                                 <Badge variant={getStatusVariant(item.totalOrder === 0 ? "N/A" : item.paymentStatus)} className="capitalize">
-                                    {item.totalOrder === 0 ? "N/A" : item.paymentStatus}
+                                    {item.totalOrder === 0 ? t('table.not_available') : item.paymentStatus}
                                 </Badge>
                             </TableCell>
                             <TableCell className="text-right space-x-2">
