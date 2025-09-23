@@ -12,32 +12,17 @@ import {
     ListOrdered,
     DollarSign
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useDispatch } from "react-redux";
 import { setAccessToken, setAdmin } from "@/redux/feature/auth/authSlice";
 import { Button } from "../ui/button";
+import { useTranslation } from 'react-i18next';
 
-
-const navItems = [
-    { name: "Dashboard", icon: LayoutGrid, href: "/" },
-    { name: "Company Management", icon: Building2, href: "/company-management" },
-    { name: "User Managment", icon: UserRoundCog, href: "/users" },
-    { name: "Weekly Menu", icon: UtensilsCrossed, href: "/weekly-menu" },
-    { name: "Order Management", icon: ListOrdered, href: "/order-management" },
-    { name: "Company Payment", icon: DollarSign, href: "/company-payment" },
-];
-
-
-const settingsSubItems = [
-    { name: "Profile", icon: UserRoundPen, href: "/settings/profile" },
-    { name: "About Us", icon: BadgeInfo, href: "/settings/about" },
-    { name: "Terms & Condition", icon: ReceiptText, href: "/settings/terms" },
-    { name: "Privacy Policy", icon: GlobeLock, href: "/settings/privacy" },
-];
 
 const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const location = useLocation();
@@ -58,6 +43,23 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         window.location.href = "/auth/login";
     };
 
+    const navItems = useMemo(() => [
+        { name: t("dashboard"), icon: LayoutGrid, href: "/" },
+        { name: t("company-management"), icon: Building2, href: "/company-management" },
+        { name: t("user-management"), icon: UserRoundCog, href: "/users" },
+        { name: t("weekly-menu"), icon: UtensilsCrossed, href: "/weekly-menu" },
+        { name: t("order-management"), icon: ListOrdered, href: "/order-management" },
+        { name: t("company-payment"), icon: DollarSign, href: "/company-payment" },
+    ], [t]);
+
+
+    const settingsSubItems = useMemo(() => [
+        { name: t("profile"), icon: UserRoundPen, href: "/settings/profile" },
+        { name: t("about"), icon: BadgeInfo, href: "/settings/about" },
+        { name: t("terms"), icon: ReceiptText, href: "/settings/terms" },
+        { name: t("privacy"), icon: GlobeLock, href: "/settings/privacy" },
+    ], [t]);
+
     return (
         <div className={`fixed top-0 left-0 z-40 h-screen bg-sidebar text-sidebar-foreground w-64 transition-transform duration-300 ease-in-out transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 flex flex-col`}>
             <div className="p-4">
@@ -68,7 +70,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
                     {/* NavItems */}
                     {navItems.map((item) => (
-                        <NavLink key={item.name} to={item.href} end className={({ isActive }) =>
+                        <NavLink key={item.href} to={item.href} end className={({ isActive }) =>
                             `w-full flex items-center justify-start px-2 py-3 rounded-sm text-sm font-medium transition-colors duration-200 border 
                     ${isActive ? "bg-primary text-primary-foreground" : "hover:bg-accent hover:text-accent-foreground bg-background dark:bg-white/5"
                             }`
@@ -84,7 +86,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                             }`}>
                             <div className="flex items-center text-sm px-2 py-1">
                                 <Settings className="mr-2 h-4 w-4" />
-                                Settings
+                                {t('settings')}
                             </div>
                             <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${isSettingsOpen ? "-rotate-180" : ""}`} />
 
@@ -92,7 +94,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                         <CollapsibleContent className="py-2 space-y-2">
                             {settingsSubItems.map((item, index) => (
                                 <NavLink
-                                    key={item.name}
+                                    key={item.href}
                                     to={item.href}
                                     style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'both' }}
                                     className={({ isActive }) =>
@@ -112,7 +114,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             <div className="border-t p-4">
                 <Button onClick={handleLogout} variant="outline" className="justify-start w-full">
                     <LogOut />
-                    Log out
+                    {t('logout')}
                 </Button>
             </div>
         </div>

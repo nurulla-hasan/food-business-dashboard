@@ -1,0 +1,25 @@
+{
+    "translation": {
+      "dashboard": "Tablero",
+      "company-management": "Gestión de la empresa",
+      "user-management": "Gestión de usuarios",
+      "weekly-menu": "Menú semanal",
+      "order-management": "Gestión de pedidos",
+      "company-payment": "Pago de la empresa",
+      "profile": "Perfil",
+      "about": "Sobre nosotros",
+      "terms": "Términos y condiciones",
+      "privacy": "Política de privacidad",
+      "settings": "Ajustes",
+      "logout": "Cerrar sesión",
+      "notifications": "Notificaciones",
+      "light_mode": "Modo claro",
+      "dark_mode": "Modo oscuro",
+      "user": "Usuario",
+      "switch_to_light_mode": "Cambiar a modo claro",
+      "switch_to_dark_mode": "Cambiar a modo oscuro",
+      "language": "Idioma",
+      "english": "Inglés",
+      "spanish": "Español"
+    }
+}

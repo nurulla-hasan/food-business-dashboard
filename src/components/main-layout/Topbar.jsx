@@ -1,4 +1,4 @@
-import { Bell, Moon, Sun, Menu, LogOutIcon } from "lucide-react";
+import { Bell, Moon, Sun, Menu, LogOutIcon, Languages } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTheme } from "@/theme/theme-provider";
 import { Toggle } from "@/components/ui/toggle";
@@ -17,14 +17,20 @@ import { useSelector } from "react-redux";
 import { useGetAdminProfileQuery } from "@/redux/feature/auth/authApi";
 import { getImageUrl, getInitials } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useTranslation } from "react-i18next";
 
 const Topbar = ({ onMenuClick }) => {
     const { setTheme, theme } = useTheme();
+    const { t, i18n } = useTranslation();
     const admin = useSelector((state) => state.auth.admin);
     const { isLoading } = useGetAdminProfileQuery();
 
     const handleLogout = () => {
         window.location.href = 'auth/login';
+    };
+
+    const changeLanguage = (lng) => {
+        i18n.changeLanguage(lng);
     };
 
     return (
@@ -33,13 +39,24 @@ const Topbar = ({ onMenuClick }) => {
                 <Menu />
             </Button>
             <div className="flex items-center space-x-5 pr-2">
-                {/* <Link to="notifications" className="relative cursor-pointer hidden lg:block">
-                    <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                        <span className="absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
-                    </span>
-                    <Bell />
-                </Link> */}
+                {/* Language Switcher */}
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="icon" className="group rounded-full hidden lg:flex">
+                            <Languages className="h-[1.2rem] w-[1.2rem]" />
+                            <span className="sr-only">{t('language')}</span>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => changeLanguage('en')}>
+                            {t('english')}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => changeLanguage('es')}>
+                            {t('spanish')}
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+
                 {/* Theme Toggle */}
                 <Toggle
                     variant="outline"
@@ -48,7 +65,7 @@ const Topbar = ({ onMenuClick }) => {
                     onPressedChange={() =>
                         setTheme(theme === "dark" ? "light" : "dark")
                     }
-                    aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+                    aria-label={t(theme === "dark" ? "switch_to_light_mode" : "switch_to_dark_mode")}
                 >
                     <Moon
                         className="shrink-0 scale-0 opacity-0 transition-all group-data-[state=on]:scale-100 group-data-[state=on]:opacity-100"
@@ -75,11 +92,11 @@ const Topbar = ({ onMenuClick }) => {
                         ) : (
                             <>
                                 <Avatar className="h-10 w-10">
-                                    <AvatarImage src={getImageUrl(admin?.profile_image)} alt={admin?.name || "User avatar"} />
+                                    <AvatarImage src={getImageUrl(admin?.profile_image)} alt={admin?.name || t("user")} />
                                     <AvatarFallback>{getInitials(admin?.name)}</AvatarFallback>
                                 </Avatar>
-                                <span className="font-medium truncate max-w-[180px]" title={admin?.name || "User"}>
-                                    {admin?.name || "User"}
+                                <span className="font-medium truncate max-w-[180px]" title={admin?.name || t("user")}>
+                                    {admin?.name || t("user")}
                                 </span>
                             </>
                         )}
@@ -92,7 +109,7 @@ const Topbar = ({ onMenuClick }) => {
                                 <Skeleton className="h-10 w-10 rounded-full lg:hidden" />
                             ) : (
                                 <Avatar className="h-10 w-10 lg:hidden">
-                                    <AvatarImage src={getImageUrl(admin?.profile_image)} alt={admin?.name || "User avatar"} />
+                                    <AvatarImage src={getImageUrl(admin?.profile_image)} alt={admin?.name || t("user")} />
                                     <AvatarFallback>{getInitials(admin?.name)}</AvatarFallback>
                                 </Avatar>
                             )}
@@ -106,7 +123,7 @@ const Topbar = ({ onMenuClick }) => {
                             ) : (
                                 <DropdownMenuLabel className="flex min-w-0 flex-col">
                                     <span className="text-foreground truncate text-sm font-medium">
-                                        {admin?.name || "User"}
+                                        {admin?.name || t("user")}
                                     </span>
                                     <span className="text-muted-foreground truncate text-xs font-normal">
                                         {admin?.email || ""}
@@ -118,18 +135,28 @@ const Topbar = ({ onMenuClick }) => {
                                 <DropdownMenuItem asChild>
                                     <Link to="/notifications" className="w-full flex items-center">
                                         <Bell size={16} className="opacity-60 mr-2" aria-hidden="true" />
-                                        <span>Notifications</span>
+                                        <span>{t('notifications')}</span>
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
                                     {theme === 'dark' ? <Sun size={16} className="opacity-60 mr-2" /> : <Moon size={16} className="opacity-60 mr-2" />}
-                                    <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
+                                    <span>{t(theme === "dark" ? "light_mode" : "dark_mode")}</span>
+                                </DropdownMenuItem>
+                            </DropdownMenuGroup>
+                            <DropdownMenuSeparator />
+                             <DropdownMenuGroup>
+                                <DropdownMenuLabel>{t('language')}</DropdownMenuLabel>
+                                <DropdownMenuItem onClick={() => changeLanguage('en')}>
+                                    <span>{t('english')}</span>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => changeLanguage('es')}>
+                                    <span>{t('spanish')}</span>
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onClick={handleLogout}>
                                 <LogOutIcon size={16} className="opacity-60 mr-2" aria-hidden="true" />
-                                <span>Logout</span>
+                                <span>{t('logout')}</span>
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

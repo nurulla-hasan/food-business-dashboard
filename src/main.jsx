@@ -7,6 +7,7 @@ import { ThemeProvider } from './theme/theme-provider'
 import { Provider } from 'react-redux'
 import { store } from './redux/store'
 import { Toaster } from './components/ui/sonner'
+import './i18n';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
