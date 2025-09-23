@@ -150,7 +150,10 @@ const OrderManagement = () => {
         }
       </PageLayout>
 
-      <OrderViewModal isOpen={isViewModalOpen} onOpenChange={setIsViewModalOpen} order={selectedOrder} />
+      <OrderViewModal
+        isOpen={isViewModalOpen}
+        onOpenChange={setIsViewModalOpen}
+        order={selectedOrder} />
     </Suspense>
   );
 };

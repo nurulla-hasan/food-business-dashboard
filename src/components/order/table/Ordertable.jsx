@@ -37,7 +37,7 @@ const OrderTable = ({ data, page, limit, onStatusChange, onView }) => {
             <TableHead>{t('price')}</TableHead>
             <TableHead>{t('order_date')}</TableHead>
             <TableHead>{t('payment')}</TableHead>
-            <TableHead>{t('status')}</TableHead>
+            <TableHead>{t('order_status')}</TableHead>
             <TableHead className="text-right">{t('actions')}</TableHead>
           </TableRow>
         </TableHeader>

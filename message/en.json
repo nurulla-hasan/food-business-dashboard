@@ -30,17 +30,17 @@
     "total_company": "Total Company",
     "total_employer": "Total Employer",
     "total_income": "Total Income",
-    "total_order": "Total Order",
+    "total_order": "Pending Order",
     "earning_growth": "Earning Growth",
     "yearly_total": "Yearly Total:",
     "income": "Income",
     "user_growth": "User Growth",
     "users": "Users",
     "year": "Year",
-    "recent_companies": "Recent Companies",
+    "pending_request": "Pending Request",
     "view_all": "View All",
     "failed_to_load_companies": "Failed to load companies",
-    "no_companies_found": "No companies found"
+    "no_pending_requests": "No pending requests"
   },
   "company_management": {
     "add_company": "Add Company",

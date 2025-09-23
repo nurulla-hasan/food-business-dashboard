@@ -1,5 +1,4 @@
 
-import CompanyManagementTable from "@/components/company-management/table/CompanyManagementTable";
 import DashboardStats from "@/components/dashboard/DashboardStats";
 import EarningGrowthChart from "@/components/dashboard/EarningGrowthChart";
 import UserGrowthChart from "@/components/dashboard/UserGrowthChart";
@@ -9,7 +8,6 @@ import PageLayout from "@/components/main-layout/PageLayout";
 import TableSkeleton from "@/components/skeleton/TableSkeleton";
 import { Button } from "@/components/ui/button";
 import usePaginatedSearchQuery from "@/hooks/usePaginatedSearchQuery";
-import { useGetAllCompanyQuery } from "@/redux/feature/company/company";
 import {
     useGetDashboardEarningChartQuery,
     useGetDashboardStatsQuery,
@@ -19,9 +17,15 @@ import { MoveRight } from "lucide-react";
 import { Suspense, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import OrderTable from "@/components/order/table/Ordertable";
+import { useGetAllOrderQuery, useUpdateOrderMutation } from "@/redux/feature/order/orderApi";
+import { toast } from "sonner";
+import OrderViewModal from "@/components/order/modal/OrderViewModal";
 
 const Dashboard = () => {
     const { t } = useTranslation('dashboard');
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [selectedOrder, setSelectedOrder] = useState(null);
     // Year State
     const [userYear, setUserYear] = useState(new Date().getFullYear());
     const [earningYear, setEarningYear] = useState(new Date().getFullYear());
@@ -32,11 +36,24 @@ const Dashboard = () => {
     const { data: earningData, isLoading: isEarningLoading } = useGetDashboardEarningChartQuery({ years: earningYear });
 
     const {
-        items: companies,
+        items: orders,
         page,
         isLoading,
         isError,
-    } = usePaginatedSearchQuery(useGetAllCompanyQuery, { limit: 4, resultsKey: "company" });
+    } = usePaginatedSearchQuery(useGetAllOrderQuery, { resultsKey: "orders" });
+    const pendingOrders = orders?.filter((company) => company.status === 'pending');
+    const [updateOrder] = useUpdateOrderMutation();
+
+    const handleStatusChange = async (orderId, status) => {
+        toast.promise(
+            updateOrder({ orderId, status }).unwrap(),
+            {
+                loading: t('toast.loading'),
+                success: t('toast.success', { status }),
+                error: t('toast.error'),
+            }
+        );
+    };
 
     // Year Change Handlers
     const handleUserYearChange = (year) => setUserYear(parseInt(year));
@@ -77,9 +94,9 @@ const Dashboard = () => {
                 {/* Table */}
                 <div className="mt-4">
                     <div className="flex justify-between items-center mb-4">
-                        <h3 className="text-lg font-medium">{t('recent_companies')}</h3>
-                        <Link 
-                            to="/company-management" 
+                        <h3 className="text-lg font-medium">{t('pending_request')}</h3>
+                        <Link
+                            to="/company-management"
                             className="text-primary hover:underline text-sm font-medium"
                         >
                             <Button variant="ghost">{t('view_all')} <MoveRight /></Button>
@@ -90,11 +107,14 @@ const Dashboard = () => {
                             <TableSkeleton columns={3} rows={4} />
                             : isError ?
                                 <p className="text-center text-red-500">{t('failed_to_load_companies')}</p>
-                                : companies?.length > 0 ? (
-                                    <CompanyManagementTable
-                                        data={companies}
-                                        onEdit={() => { }}
-                                        onDelete={() => { }}
+                                : pendingOrders?.length > 0 ? (
+                                    <OrderTable
+                                        data={pendingOrders}
+                                        onStatusChange={handleStatusChange}
+                                        onView={(order) => {
+                                            setSelectedOrder(order);
+                                            setIsViewModalOpen(true);
+                                        }}
                                         updateLoading={false}
                                         deleteLoading={false}
                                         page={page}
@@ -102,11 +122,15 @@ const Dashboard = () => {
                                         isActionButton={false}
                                     />
                                 ) : (
-                                    <p className="text-center text-muted-foreground">{t('no_companies_found')}</p>
+                                    <p className="text-center text-muted-foreground">{t('no_pending_requests')}</p>
                                 )
                     }
                 </div>
             </PageLayout>
+            <OrderViewModal
+                isOpen={isViewModalOpen}
+                onOpenChange={setIsViewModalOpen}
+                order={selectedOrder} />
         </Suspense>
     );
 };

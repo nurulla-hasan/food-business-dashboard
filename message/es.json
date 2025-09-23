@@ -30,17 +30,17 @@
     "total_company": "Compañía total",
     "total_employer": "Empleador total",
     "total_income": "Ingresos totales",
-    "total_order": "Orden total",
+    "total_order": "Pendiente total",
     "earning_growth": "Crecimiento de las ganancias",
     "yearly_total": "Total anual:",
     "income": "Ingresos",
     "user_growth": "Crecimiento del usuario",
     "users": "Usuarios",
     "year": "Año",
-    "recent_companies": "Empresas recientes",
+    "pending_request": "Solicitudes pendientes",
     "view_all": "Ver todo",
     "failed_to_load_companies": "Error al cargar las empresas",
-    "no_companies_found": "No se encontraron empresas"
+    "no_pending_requests": "No hay solicitudes pendientes"
   },
   "company_management": {
     "add_company": "Añadir empresa",
