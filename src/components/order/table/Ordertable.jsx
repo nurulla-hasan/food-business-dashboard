@@ -64,7 +64,7 @@ const OrderTable = ({ data, page, limit, onStatusChange, onView }) => {
               </TableCell>
               <TableCell>
                 <Badge variant={getStatusVariant(order.status)}>
-                  {order.status.toUpperCase() || 'N/A'}
+                  {order.status === "complete" ? "COMPLETED" : order.status.toUpperCase() || 'N/A'}
                 </Badge>
               </TableCell>
               <TableCell className="text-right space-x-2">
