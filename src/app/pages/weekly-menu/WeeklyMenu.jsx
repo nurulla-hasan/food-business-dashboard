@@ -10,6 +10,7 @@ import MenuTable from '@/components/menu/table/MenuTable';
 import AddMenuModal from '@/components/menu/modal/AddMenuModal';
 import EditMenuModal from '@/components/menu/modal/EditMenuModal';
 import ConfirmationModal from '@/components/common/ConfirmationModal';
+import { useTranslation } from 'react-i18next';
 
 import {
     useGetAllMenuQuery,
@@ -24,6 +25,7 @@ import ViewMenuModal from '@/components/menu/modal/ViewMenuModal';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const WeeklyMenu = () => {
+    const { t } = useTranslation('weekly_menu');
     const [filters, setFilters] = useState({});
 
     const handleFilterChange = (key, value) => {
@@ -114,26 +116,26 @@ const WeeklyMenu = () => {
                 >
                     {/* Title and Search */}
                     <div className="flex flex-col md:flex-row md:items-start justify-between mb-4">
-                        <Title title="Weekly Menu" />
+                        <Title title={t('title')} />
                         <div className="flex flex-col md:flex-row md:items-center gap-3 w-full md:w-auto">
                             <Select
                                 value={filters.mealType}
                                 onValueChange={(value) => handleFilterChange('mealType', value)}>
                                 <SelectTrigger className="w-full sm:w-fit">
-                                    <SelectValue placeholder="Select Meal Type" />
+                                    <SelectValue placeholder={t('select_meal_type')} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Meal Type</SelectItem>
-                                    <SelectItem value="Breakfast">Breakfast</SelectItem>
-                                    <SelectItem value="Lunch">Lunch</SelectItem>
-                                    <SelectItem value="Dinner">Dinner</SelectItem>
+                                    <SelectItem value="all">{t('all_meal_type')}</SelectItem>
+                                    <SelectItem value="Breakfast">{t('breakfast')}</SelectItem>
+                                    <SelectItem value="Lunch">{t('lunch')}</SelectItem>
+                                    <SelectItem value="Dinner">{t('dinner')}</SelectItem>
                                 </SelectContent>
                             </Select>
                             <div className="relative w-full md:w-fit">
                                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                 <Input
                                     type="search"
-                                    placeholder="Search menus..."
+                                    placeholder={t('search_placeholder')}
                                     className="pl-9"
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -141,7 +143,7 @@ const WeeklyMenu = () => {
                             </div>
                             <Button onClick={() => setAddOpen(true)}>
                                 <Plus />
-                                Add Weekly Menu
+                                {t('add_button')}
                             </Button>
                         </div>
                     </div>
@@ -150,7 +152,7 @@ const WeeklyMenu = () => {
                     {isLoading ? (
                         <TableSkeleton columns={4} rows={10} />
                     ) : isError ? (
-                        <Error msg="Failed to load menus" />
+                        <Error msg={t('error_load')} />
                     ) : menus?.length > 0 ? (
                         <MenuTable
                             page={page}
@@ -170,7 +172,7 @@ const WeeklyMenu = () => {
                             }}
                         />
                     ) : (
-                        <NoData msg="No menus found" />
+                        <NoData msg={t('no_data')} />
                     )}
                 </PageLayout>
             </Suspense>
@@ -203,9 +205,9 @@ const WeeklyMenu = () => {
             <ConfirmationModal
                 isOpen={confirmOpen}
                 onOpenChange={setConfirmOpen}
-                title="Confirm Delete Menu"
-                description="Are you sure you want to delete this menu?"
-                confirmText="Delete"
+                title={t('confirm_delete_title')}
+                description={t('confirm_delete_description')}
+                confirmText={t('delete')}
                 loading={deleteLoading}
                 onConfirm={handleDeleteMenu}
             />

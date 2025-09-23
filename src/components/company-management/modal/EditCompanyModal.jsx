@@ -6,16 +6,20 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useTranslation } from 'react-i18next';
 
 // Schema updated to match the required update body
-const formSchema = z.object({
-    name: z.string().min(1, { message: "Name is required." }),
-    email: z.string().email({ message: "Invalid email address." }),
-    phone_number: z.string().min(1, { message: "Phone number is required." }),
-    address: z.string().min(1, { message: "Address is required." }),
+const getFormSchema = (t) => z.object({
+    name: z.string().min(1, { message: t('validation.name_required') }),
+    email: z.string().email({ message: t('validation.invalid_email') }),
+    phone_number: z.string().min(1, { message: t('validation.phone_required') }),
+    address: z.string().min(1, { message: t('validation.address_required') }),
 });
 
 const EditCompanyModal = ({ isOpen, onOpenChange, company, onSubmit, loading }) => {
+    const { t } = useTranslation('company_management');
+    const formSchema = getFormSchema(t);
+
     const form = useForm({
         resolver: zodResolver(formSchema),
         // Default values match the new schema
@@ -48,8 +52,8 @@ const EditCompanyModal = ({ isOpen, onOpenChange, company, onSubmit, loading }) 
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Edit Company</DialogTitle>
-                    <DialogDescription className="sr-only">Edit Company</DialogDescription>
+                    <DialogTitle>{t('edit_company')}</DialogTitle>
+                    <DialogDescription className="sr-only">{t('edit_company')}</DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-4">
@@ -59,9 +63,9 @@ const EditCompanyModal = ({ isOpen, onOpenChange, company, onSubmit, loading }) 
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Name</FormLabel>
+                                        <FormLabel>{t('name')}</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="e.g. Awesome Inc." {...field} />
+                                            <Input placeholder={t('placeholders.name')} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -72,9 +76,9 @@ const EditCompanyModal = ({ isOpen, onOpenChange, company, onSubmit, loading }) 
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Email</FormLabel>
+                                        <FormLabel>{t('email')}</FormLabel>
                                         <FormControl>
-                                            <Input readOnly placeholder="e.g. contact@awesome.com" {...field} />
+                                            <Input readOnly placeholder={t('placeholders.email')} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -85,9 +89,9 @@ const EditCompanyModal = ({ isOpen, onOpenChange, company, onSubmit, loading }) 
                                 name="phone_number"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Phone Number</FormLabel>
+                                        <FormLabel>{t('phone_number')}</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="e.g. 0123456789" {...field} />
+                                            <Input placeholder={t('placeholders.phone')} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -98,9 +102,9 @@ const EditCompanyModal = ({ isOpen, onOpenChange, company, onSubmit, loading }) 
                                 name="address"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Address</FormLabel>
+                                        <FormLabel>{t('address')}</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="e.g. 123 Main St, Anytown" {...field} />
+                                            <Input placeholder={t('placeholders.address')} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -109,10 +113,10 @@ const EditCompanyModal = ({ isOpen, onOpenChange, company, onSubmit, loading }) 
                         </div>
                         <DialogFooter>
                             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-                                Cancel
+                                {t('cancel')}
                             </Button>
                             <Button loading={loading} type="submit" disabled={loading}>
-                                Update
+                                {t('update')}
                             </Button>
                         </DialogFooter>
                     </form>

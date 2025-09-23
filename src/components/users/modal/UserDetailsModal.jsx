@@ -5,18 +5,20 @@ import { formatDate, getInitials, getSkillsName, getSocialIcon } from '@/lib/uti
 import { Button } from '@/components/ui/button';
 import { Calendar, Mail, Phone, MapPin, Info, Link as LinkIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { useTranslation } from 'react-i18next';
 
 const UserDetailsModal = ({ user, isOpen, onOpenChange, skills }) => {
+    const { t } = useTranslation('users');
     if (!user) return null
     const skillNames = getSkillsName(user.skills, skills);
     const displaySkills = (skillNames || []).filter(Boolean);
 
     return (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div>{t('loading')}</div>}>
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[425px] md:max-w-2xl p-0">
-                <DialogTitle className="sr-only">User Details</DialogTitle>
-                <DialogDescription className="sr-only">User Details</DialogDescription>
+                <DialogTitle className="sr-only">{t('user_details')}</DialogTitle>
+                <DialogDescription className="sr-only">{t('user_details')}</DialogDescription>
                 <div className="relative">
                     <img
                         src={user.cover_image || "https://placehold.co/600x200"}
@@ -32,15 +34,15 @@ const UserDetailsModal = ({ user, isOpen, onOpenChange, skills }) => {
                 <div className="pt-8 text-center">
                     <h2 className="text-2xl font-bold">{user.name}</h2>
                     <p className="text-muted-foreground text-wrap">
-                        {user.bio || "No bio available"}
+                        {user.bio || t('no_bio')}
                     </p>
                 </div>
 
                 <div className="p-4 grid gap-4 text-sm">
-                    <InfoRow icon={<Mail className="h-5 w-5" />} label="Email" value={user.email} />
-                    <InfoRow icon={<Phone className="h-5 w-5" />} label="Phone" value={user.phone} />
-                    <InfoRow icon={<Calendar className="h-5 w-5" />} label="Date of Birth" value={formatDate(user.dateOfBirth)} />
-                    <InfoRow icon={<MapPin className="h-5 w-5" />} label="Address" value={user.address} />
+                    <InfoRow icon={<Mail className="h-5 w-5" />} label={t('email')} value={user.email} />
+                    <InfoRow icon={<Phone className="h-5 w-5" />} label={t('phone')} value={user.phone} />
+                    <InfoRow icon={<Calendar className="h-5 w-5" />} label={t('dob')} value={formatDate(user.dateOfBirth)} />
+                    <InfoRow icon={<MapPin className="h-5 w-5" />} label={t('address')} value={user.address} />
 
                     {user.socialLinks?.length > 0 && (
                         <div className="flex items-center gap-3">
@@ -64,7 +66,7 @@ const UserDetailsModal = ({ user, isOpen, onOpenChange, skills }) => {
                     <div>
                         <h3 className="font-semibold mb-2 flex items-center gap-2">
                             <Info className="h-5 w-5 text-muted-foreground" />
-                            Skills
+                            {t('skills')}
                         </h3>
                         <div className="flex flex-wrap gap-2">
                             {displaySkills.length > 0 ? (
@@ -74,7 +76,7 @@ const UserDetailsModal = ({ user, isOpen, onOpenChange, skills }) => {
                                     </Badge>
                                 ))
                             ) : (
-                                <p className="text-muted-foreground">No skills found.</p>
+                                <p className="text-muted-foreground">{t('no_skills')}</p>
                             )}
                         </div>
                     </div>
@@ -83,7 +85,7 @@ const UserDetailsModal = ({ user, isOpen, onOpenChange, skills }) => {
                 <DialogFooter className="p-6 pt-0">
                     <DialogClose asChild>
                         <Button type="button" variant="secondary">
-                            Close
+                            {t('close')}
                         </Button>
                     </DialogClose>
                 </DialogFooter>
@@ -96,11 +98,12 @@ const UserDetailsModal = ({ user, isOpen, onOpenChange, skills }) => {
 export default UserDetailsModal;
 
 function InfoRow({ icon, label, value }) {
+    const { t } = useTranslation('users');
     return (
         <div className="flex items-center gap-3">
             {icon}
             <span className="font-medium text-muted-foreground">{label}:</span>
-            <span className="truncate">{value || '—'}</span>
+            <span className="truncate">{value || t('not_available_short')}</span>
         </div>
     )
 }

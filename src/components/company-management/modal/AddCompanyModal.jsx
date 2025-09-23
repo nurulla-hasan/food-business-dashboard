@@ -6,22 +6,26 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useTranslation } from 'react-i18next';
 
-const formSchema = z.object({
-    name: z.string().min(1, { message: 'Name is required.' }),
-    email: z.string().email({ message: 'Invalid email address.' }),
-    phone_number: z.string().min(1, { message: 'Phone number is required.' }),
-    address: z.string().min(1, { message: 'Address is required.' }),
-    password: z.string().min(8, { message: 'Password must be at least 8 characters.' }),
-    confirmPassword: z.string().min(8, { message: 'Password must be at least 8 characters.' }),
-    plants: z.coerce.number().int().positive({ message: 'Plants must be a positive number.' }),
+const getFormSchema = (t) => z.object({
+    name: z.string().min(1, { message: t('validation.name_required') }),
+    email: z.string().email({ message: t('validation.invalid_email') }),
+    phone_number: z.string().min(1, { message: t('validation.phone_required') }),
+    address: z.string().min(1, { message: t('validation.address_required') }),
+    password: z.string().min(8, { message: t('validation.password_min_length') }),
+    confirmPassword: z.string().min(8, { message: t('validation.password_min_length') }),
+    plants: z.coerce.number().int().positive({ message: t('validation.plants_positive') }),
 }).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match.",
+    message: t('validation.passwords_no_match'),
     path: ["confirmPassword"],
 });
 
 
 const AddCompanyModal = ({ isOpen, onOpenChange, onSubmit, loading }) => {
+    const { t } = useTranslation('company_management');
+    const formSchema = getFormSchema(t);
+
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -45,8 +49,8 @@ const AddCompanyModal = ({ isOpen, onOpenChange, onSubmit, loading }) => {
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Add Company</DialogTitle>
-                    <DialogDescription className="sr-only">Edit Company</DialogDescription>
+                    <DialogTitle>{t('add_company')}</DialogTitle>
+                    <DialogDescription className="sr-only">{t('add_company')}</DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-4">
@@ -56,9 +60,9 @@ const AddCompanyModal = ({ isOpen, onOpenChange, onSubmit, loading }) => {
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Name</FormLabel>
+                                        <FormLabel>{t('name')}</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="e.g. Awesome Inc." {...field} />
+                                            <Input placeholder={t('placeholders.name')} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -69,9 +73,9 @@ const AddCompanyModal = ({ isOpen, onOpenChange, onSubmit, loading }) => {
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Email</FormLabel>
+                                        <FormLabel>{t('email')}</FormLabel>
                                         <FormControl>
-                                            <Input type="email" placeholder="e.g. contact@awesome.com" {...field} />
+                                            <Input type="email" placeholder={t('placeholders.email')} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -82,9 +86,9 @@ const AddCompanyModal = ({ isOpen, onOpenChange, onSubmit, loading }) => {
                                 name="phone_number"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Phone Number</FormLabel>
+                                        <FormLabel>{t('phone_number')}</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="e.g. 0123456789" {...field} />
+                                            <Input placeholder={t('placeholders.phone')} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -95,9 +99,9 @@ const AddCompanyModal = ({ isOpen, onOpenChange, onSubmit, loading }) => {
                                 name="address"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Address</FormLabel>
+                                        <FormLabel>{t('address')}</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="e.g. 123 Main St, Anytown" {...field} />
+                                            <Input placeholder={t('placeholders.address')} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -108,9 +112,9 @@ const AddCompanyModal = ({ isOpen, onOpenChange, onSubmit, loading }) => {
                                 name="password"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Password</FormLabel>
+                                        <FormLabel>{t('password')}</FormLabel>
                                         <FormControl>
-                                            <Input type="password" placeholder="********" {...field} />
+                                            <Input type="password" placeholder={t('placeholders.password')} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -121,9 +125,9 @@ const AddCompanyModal = ({ isOpen, onOpenChange, onSubmit, loading }) => {
                                 name="confirmPassword"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Confirm Password</FormLabel>
+                                        <FormLabel>{t('confirm_password')}</FormLabel>
                                         <FormControl>
-                                            <Input type="password" placeholder="********" {...field} />
+                                            <Input type="password" placeholder={t('placeholders.password')} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -134,9 +138,9 @@ const AddCompanyModal = ({ isOpen, onOpenChange, onSubmit, loading }) => {
                                 name="plants"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Number of Plants</FormLabel>
+                                        <FormLabel>{t('number_of_plants')}</FormLabel>
                                         <FormControl>
-                                            <Input type="number" placeholder="e.g. 5" {...field} />
+                                            <Input type="number" placeholder={t('placeholders.plants')} {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -145,10 +149,10 @@ const AddCompanyModal = ({ isOpen, onOpenChange, onSubmit, loading }) => {
                         </div>
                         <DialogFooter>
                             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-                                Cancel
+                                {t('cancel')}
                             </Button>
                             <Button loading={loading} type="submit" disabled={loading}>
-                                Create Company
+                                {t('create_company')}
                             </Button>
                         </DialogFooter>
                     </form>

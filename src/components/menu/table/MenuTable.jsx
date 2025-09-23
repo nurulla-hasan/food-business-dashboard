@@ -6,8 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { IMAGE_BASE_URL } from "@/redux/feature/baseApi";
 import { formatDate, getInitials } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 const MenuTable = ({ data, onEdit, onDelete, onView, page, limit }) => {
+    const { t } = useTranslation('weekly_menu');
 
     return (
         <ScrollArea className="w-[calc(100vw-32px)] overflow-hidden overflow-x-auto md:w-full rounded-lg whitespace-nowrap">
@@ -15,12 +17,12 @@ const MenuTable = ({ data, onEdit, onDelete, onView, page, limit }) => {
                 <TableHeader>
                     <TableRow>
                         <TableHead>S.N</TableHead>
-                        <TableHead>Image</TableHead>
-                        <TableHead>Dish Name</TableHead>
-                        <TableHead>Meal Type</TableHead>
-                        <TableHead>Price</TableHead>
-                        <TableHead>Week Start</TableHead>
-                        <TableHead className="text-right">Action</TableHead>
+                        <TableHead>{t('image')}</TableHead>
+                        <TableHead>{t('dish_name')}</TableHead>
+                        <TableHead>{t('meal_type')}</TableHead>
+                        <TableHead>{t('price')}</TableHead>
+                        <TableHead>{t('week_start')}</TableHead>
+                        <TableHead className="text-right">{t('action')}</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>

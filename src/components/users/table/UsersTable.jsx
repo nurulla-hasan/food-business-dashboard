@@ -12,21 +12,23 @@ import { getInitials } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Ban } from 'lucide-react';
+import { useTranslation } from "react-i18next";
 
 const UsersTable = ({ data, page, limit, onBlock }) => {
+    const { t } = useTranslation('users');
     return (
         <>
             <ScrollArea className="w-[calc(100vw-32px)] overflow-hidden overflow-x-auto md:w-full rounded-lg whitespace-nowrap">
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>S.N</TableHead>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Phone Number</TableHead>
-                            <TableHead>Company ID</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead className="text-right">Action</TableHead>
+                            <TableHead>{t('sn')}</TableHead>
+                            <TableHead>{t('name')}</TableHead>
+                            <TableHead>{t('email')}</TableHead>
+                            <TableHead>{t('phone_number')}</TableHead>
+                            <TableHead>{t('company_id')}</TableHead>
+                            <TableHead>{t('status')}</TableHead>
+                            <TableHead className="text-right">{t('action')}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -43,7 +45,7 @@ const UsersTable = ({ data, page, limit, onBlock }) => {
                                     </div>
                                 </TableCell>
                                 <TableCell>{user.email}</TableCell>
-                                <TableCell>{user.phone_number || 'N/A'}</TableCell>
+                                <TableCell>{user.phone_number || t('not_available_long')}</TableCell>
                                 <TableCell className="font-mono text-xs">{user.company_id}</TableCell>
                                 <TableCell>
                                     <Badge 

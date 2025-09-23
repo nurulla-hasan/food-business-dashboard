@@ -3,21 +3,23 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SquarePen, Trash } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 
 const CompanyManagementTable = ({ data, onEdit, onDelete, updateLoading, deleteLoading, page, limit, isActionButton = true }) => {
+    const { t } = useTranslation('company_management');
     return (
         <ScrollArea className="w-[calc(100vw-32px)] overflow-hidden overflow-x-auto md:w-full rounded-lg whitespace-nowrap">
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>S.N</TableHead>
-                        <TableHead>Company Name</TableHead>
-                        <TableHead>Email</TableHead>
-                        <TableHead>Phone</TableHead>
-                        <TableHead>Plants</TableHead>
-                        <TableHead>Status</TableHead>
-                        {isActionButton && <TableHead className="text-right">Action</TableHead>}
+                        <TableHead>{t('sn')}</TableHead>
+                        <TableHead>{t('company_name')}</TableHead>
+                        <TableHead>{t('email')}</TableHead>
+                        <TableHead>{t('phone')}</TableHead>
+                        <TableHead>{t('plants')}</TableHead>
+                        <TableHead>{t('status')}</TableHead>
+                        {isActionButton && <TableHead className="text-right">{t('action')}</TableHead>}
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -28,7 +30,7 @@ const CompanyManagementTable = ({ data, onEdit, onDelete, updateLoading, deleteL
                             <TableCell>{item.email}</TableCell>
                             <TableCell>{item.phone_number}</TableCell>
                             <TableCell>
-                                <Badge variant="outline">{item.plants || "N/A"}</Badge>
+                                <Badge variant="outline">{item.plants || t('not_available')}</Badge>
                             </TableCell>
                             <TableCell><Badge variant="outline">{item.status}</Badge></TableCell>
                             {isActionButton && (

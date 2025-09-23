@@ -5,8 +5,10 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Flame, DollarSign, Calendar, Utensils, Info } from 'lucide-react';
 import { formatDate, getImageUrl } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 const ViewMenuModal = ({ isOpen, onOpenChange, menu }) => {
+    const { t } = useTranslation('weekly_menu');
     if (!menu) return null;
     const totalCalories = menu.calories || 0;
     return (
@@ -40,33 +42,33 @@ const ViewMenuModal = ({ isOpen, onOpenChange, menu }) => {
                                 <div className="grid grid-cols-2 gap-4">
                                     <StatCard
                                         icon={<Flame className="h-5 w-5 text-red-500" />}
-                                        label="Calories"
+                                        label={t('calories')}
                                         value={totalCalories}
                                     />
                                     <StatCard
                                         icon={<DollarSign className="h-5 w-5 text-green-500" />}
-                                        label="Price"
-                                        value={`$${menu.price?.toFixed(2)}`}
+                                        label={t('price')}
+                                        value={`${menu.price?.toFixed(2)}`}
                                     />
                                 </div>
                             </div>
 
                             {/* Right Column: Details */}
                             <div className="space-y-6">
-                                <InfoSection icon={<Info className="h-5 w-5 text-primary" />} title="Description">
+                                <InfoSection icon={<Info className="h-5 w-5 text-primary" />} title={t('description')}>
                                     <p className="text-muted-foreground">{menu.description}</p>
                                 </InfoSection>
 
                                 <Separator />
 
-                                <InfoSection icon={<Calendar className="h-5 w-5 text-primary" />} title="Availability">
+                                <InfoSection icon={<Calendar className="h-5 w-5 text-primary" />} title={t('availability')}>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
-                                            <p className="text-sm text-muted-foreground">From</p>
+                                            <p className="text-sm text-muted-foreground">{t('from')}</p>
                                             <p className="font-medium">{formatDate(menu.weekStart)}</p>
                                         </div>
                                         <div>
-                                            <p className="text-sm text-muted-foreground">To</p>
+                                            <p className="text-sm text-muted-foreground">{t('to')}</p>
                                             <p className="font-medium">{formatDate(menu.weekEnd)}</p>
                                         </div>
                                     </div>
@@ -75,10 +77,10 @@ const ViewMenuModal = ({ isOpen, onOpenChange, menu }) => {
                                 {totalCalories > 0 && (
                                     <>
                                         <Separator />
-                                        <InfoSection title="Nutritional Value">
+                                        <InfoSection title={t('nutritional_value')}>
                                             <div className="space-y-2">
                                                 <div className="flex justify-between items-center">
-                                                    <span className="text-sm font-medium">Total Calories</span>
+                                                    <span className="text-sm font-medium">{t('total_calories')}</span>
                                                     <span className="font-bold">{totalCalories} cal</span>
                                                 </div>
                                                 <div className="h-2.5 bg-muted rounded-full overflow-hidden w-full">
@@ -88,7 +90,7 @@ const ViewMenuModal = ({ isOpen, onOpenChange, menu }) => {
                                                     />
                                                 </div>
                                                 <p className="text-xs text-muted-foreground text-right">
-                                                    Based on a 2000 calorie diet
+                                                    {t('calorie_diet_base')}
                                                 </p>
                                             </div>
                                         </InfoSection>
@@ -96,7 +98,7 @@ const ViewMenuModal = ({ isOpen, onOpenChange, menu }) => {
                                 )}
                                 <Separator />
                                 {menu.nutrition && menu.nutrition.length > 0 && (
-                                    <InfoSection title="Nutrition">
+                                    <InfoSection title={t('nutrition')}>
                                         <div className="space-y-2">
                                             {menu.nutrition.map((nutrient, index) => {
                                                 const [label, value] = Object.entries(nutrient)[0];
@@ -115,7 +117,7 @@ const ViewMenuModal = ({ isOpen, onOpenChange, menu }) => {
                     </div>
                     <DialogFooter className="px-6 py-4 bg-muted/40 border-t">
                         <Button variant="outline" onClick={() => onOpenChange(false)}>
-                            Close
+                            {t('close')}
                         </Button>
                     </DialogFooter>
                 </ScrollArea>

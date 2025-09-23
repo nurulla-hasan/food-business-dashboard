@@ -12,27 +12,31 @@ import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { RangeCalendar } from '@/components/ui/range-calender';
 import { getImageUrl } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
-const formSchema = z.object({
+const getFormSchema = (t) => z.object({
   dateRange: z.object({
-    from: z.date({ required_error: "A start date is required." }),
-    to: z.date({ required_error: "An end date is required." }),
+    from: z.date({ required_error: t('validation.start_date_required') }),
+    to: z.date({ required_error: t('validation.end_date_required') }),
   }),
   mealType: z.enum(["Breakfast", "Lunch", "Dinner"], {
-    required_error: "You need to select a meal type.",
+    required_error: t('validation.meal_type_required'),
   }),
   image: z.any().optional(),
-  dishName: z.string().min(1, { message: 'Dish name is required.' }),
-  description: z.string().min(1, { message: 'Description is required.' }),
-  calories: z.coerce.number().positive({ message: 'Calories must be a positive number.' }),
-  price: z.coerce.number().positive({ message: 'Price must be a positive number.' }),
+  dishName: z.string().min(1, { message: t('validation.dish_name_required') }),
+  description: z.string().min(1, { message: t('validation.description_required') }),
+  calories: z.coerce.number().positive({ message: t('validation.calories_positive') }),
+  price: z.coerce.number().positive({ message: t('validation.price_positive') }),
   nutrition: z.array(z.object({
-    name: z.string().min(1, { message: 'Nutrient name cannot be empty.' }),
-    value: z.coerce.number().positive({ message: 'Value must be a positive number.' })
+    name: z.string().min(1, { message: t('validation.nutrient_name_empty') }),
+    value: z.coerce.number().positive({ message: t('validation.nutrient_value_positive') })
   })).optional(),
 });
 
 const EditMenuModal = ({ isOpen, onOpenChange, menu, onSubmit, loading }) => {
+  const { t } = useTranslation('weekly_menu');
+  const formSchema = getFormSchema(t);
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -126,8 +130,8 @@ const EditMenuModal = ({ isOpen, onOpenChange, menu, onSubmit, loading }) => {
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Edit Menu</DialogTitle>
-          <DialogDescription className="sr-only">Edit the menu details.</DialogDescription>
+          <DialogTitle>{t('edit_menu')}</DialogTitle>
+          <DialogDescription className="sr-only">{t('edit_menu_desc')}</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-6">
@@ -138,9 +142,9 @@ const EditMenuModal = ({ isOpen, onOpenChange, menu, onSubmit, loading }) => {
                   name="dishName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Dish Name</FormLabel>
+                      <FormLabel>{t('dish_name')}</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g. Classic Burger" {...field} />
+                        <Input placeholder={t('placeholders.dish_name')} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -152,9 +156,9 @@ const EditMenuModal = ({ isOpen, onOpenChange, menu, onSubmit, loading }) => {
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Description</FormLabel>
+                      <FormLabel>{t('description')}</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="A short description of the dish..." {...field} />
+                        <Textarea placeholder={t('placeholders.description')} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -166,7 +170,7 @@ const EditMenuModal = ({ isOpen, onOpenChange, menu, onSubmit, loading }) => {
                   name="dateRange"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel>Week Availability</FormLabel>
+                      <FormLabel>{t('week_availability')}</FormLabel>
                       <FormControl>
                         <RangeCalendar
                           value={field.value}
@@ -183,17 +187,17 @@ const EditMenuModal = ({ isOpen, onOpenChange, menu, onSubmit, loading }) => {
                   name="mealType"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Meal Type</FormLabel>
+                      <FormLabel>{t('meal_type')}</FormLabel>
                       <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a meal type" />
+                            <SelectValue placeholder={t('placeholders.select_meal_type')} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="Breakfast">Breakfast</SelectItem>
-                          <SelectItem value="Lunch">Lunch</SelectItem>
-                          <SelectItem value="Dinner">Dinner</SelectItem>
+                          <SelectItem value="Breakfast">{t('breakfast')}</SelectItem>
+                          <SelectItem value="Lunch">{t('lunch')}</SelectItem>
+                          <SelectItem value="Dinner">{t('dinner')}</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -207,9 +211,9 @@ const EditMenuModal = ({ isOpen, onOpenChange, menu, onSubmit, loading }) => {
                     name="calories"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Calories</FormLabel>
+                        <FormLabel>{t('calories')}</FormLabel>
                         <FormControl>
-                          <Input type="number" placeholder="e.g. 550" {...field} />
+                          <Input type="number" placeholder={t('placeholders.calories')} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -220,9 +224,9 @@ const EditMenuModal = ({ isOpen, onOpenChange, menu, onSubmit, loading }) => {
                     name="price"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Price</FormLabel>
+                        <FormLabel>{t('price')}</FormLabel>
                         <FormControl>
-                          <Input type="number" placeholder="e.g. 12.99" {...field} />
+                          <Input type="number" placeholder={t('placeholders.price')} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -231,7 +235,7 @@ const EditMenuModal = ({ isOpen, onOpenChange, menu, onSubmit, loading }) => {
                 </div>
 
                 <div>
-                  <FormLabel>Additional Nutrition (optional)</FormLabel>
+                  <FormLabel>{t('additional_nutrition')}</FormLabel>
                   <div className="space-y-3 mt-2">
                     {fields.map((item, index) => (
                       <div key={item.id} className="grid grid-cols-1 md:grid-cols-2 gap-2 items-start p-2 border rounded-md">
@@ -241,7 +245,7 @@ const EditMenuModal = ({ isOpen, onOpenChange, menu, onSubmit, loading }) => {
                           render={({ field }) => (
                             <FormItem>
                                 <FormControl>
-                                    <Input placeholder="Nutrient Name (e.g. Protein)" {...field} />
+                                    <Input placeholder={t('placeholders.nutrient_name')} {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -254,7 +258,7 @@ const EditMenuModal = ({ isOpen, onOpenChange, menu, onSubmit, loading }) => {
                             render={({ field }) => (
                               <FormItem className="flex-grow">
                                 <FormControl>
-                                  <Input type="number" placeholder="Value" {...field} />
+                                  <Input type="number" placeholder={t('placeholders.nutrient_value')} {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -279,7 +283,7 @@ const EditMenuModal = ({ isOpen, onOpenChange, menu, onSubmit, loading }) => {
                       onClick={() => append({ name: '', value: '' })}
                     >
                       <PlusCircle className="h-4 w-4 mr-2" />
-                      Add Nutrient
+                      {t('add_nutrient')}
                     </Button>
                   </div>
                 </div>
@@ -289,7 +293,7 @@ const EditMenuModal = ({ isOpen, onOpenChange, menu, onSubmit, loading }) => {
                   name="image"
                   render={({ field: { onChange, ...field } }) => (
                     <FormItem>
-                      <FormLabel>Dish Image</FormLabel>
+                      <FormLabel>{t('dish_image')}</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Input
@@ -319,15 +323,15 @@ const EditMenuModal = ({ isOpen, onOpenChange, menu, onSubmit, loading }) => {
                                   <span className="text-sm font-medium truncate max-w-[220px]">
                                     {selectedFile?.name || menu.dishName}
                                   </span>
-                                  <span className="text-xs text-muted-foreground">Click to change</span>
+                                  <span className="text-xs text-muted-foreground">{t('image_uploader.change_text')}</span>
                                 </div>
                               </>
                             ) : (
                               <>
                                 <UploadCloud className="h-6 w-6 text-muted-foreground" />
                                 <div className="flex flex-col items-start">
-                                  <span className="text-sm text-muted-foreground">Click to upload an image</span>
-                                  <span className="text-xs text-muted-foreground">PNG, JPG, GIF</span>
+                                  <span className="text-sm text-muted-foreground">{t('image_uploader.upload_text')}</span>
+                                  <span className="text-xs text-muted-foreground">{t('image_uploader.formats')}</span>
                                 </div>
                               </>
                             )}
@@ -342,10 +346,10 @@ const EditMenuModal = ({ isOpen, onOpenChange, menu, onSubmit, loading }) => {
             </ScrollArea>
             <DialogFooter className="pt-4">
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-                Cancel
+                {t('cancel')}
               </Button>
               <Button type="submit" disabled={loading} loading={loading}>
-                Update Menu
+                {t('update_menu')}
               </Button>
             </DialogFooter>
           </form>
