@@ -3,7 +3,6 @@ import PageLayout from "@/components/main-layout/PageLayout";
 import CustomPagination from "@/components/common/CustomPagination";
 import Title from "@/components/ui/Title";
 import { useGetAllOrderQuery, useUpdateOrderMutation } from "@/redux/feature/order/orderApi";
-import OrderTable from "@/components/order/table/OrderTable";
 import { Calendar as CalendarIcon, X } from "lucide-react";
 import TableSkeleton from "@/components/skeleton/TableSkeleton";
 import usePaginatedSearchQuery from "@/hooks/usePaginatedSearchQuery";
@@ -17,6 +16,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn, formatDate } from "@/lib/utils";
 import OrderViewModal from "@/components/order/modal/OrderViewModal";
 import { useTranslation } from "react-i18next";
+import OrderTable from "@/components/order/table/Ordertable";
 
 const OrderManagement = () => {
   const { t } = useTranslation('order_management');
