@@ -129,6 +129,8 @@ const WeeklyMenu = () => {
                                     <SelectItem value="Breakfast">{t('breakfast')}</SelectItem>
                                     <SelectItem value="Lunch">{t('lunch')}</SelectItem>
                                     <SelectItem value="Dinner">{t('dinner')}</SelectItem>
+                                    <SelectItem value="Vegano">{t('vegano')}</SelectItem>
+                                    <SelectItem value="Diabetes">{t('diabetes')}</SelectItem>
                                 </SelectContent>
                             </Select>
                             <div className="relative w-full md:w-fit">

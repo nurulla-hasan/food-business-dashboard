@@ -132,6 +132,8 @@
     "breakfast": "Desayuno",
     "lunch": "Almuerzo",
     "dinner": "Cena",
+    "vegano": "Vegan",
+    "diabetes": "Diabetes",
     "search_placeholder": "Buscar menús...",
     "add_button": "Añadir menú semanal",
     "error_load": "Error al cargar los menús",

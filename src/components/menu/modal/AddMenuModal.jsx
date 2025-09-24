@@ -73,11 +73,11 @@ const AddMenuModal = ({ isOpen, onOpenChange, onSubmit, loading }) => {
   const handleFormSubmit = async (values) => {
     const formData = new FormData();
     const formatDate = (date) => date.toISOString().split('T')[0];
-    
+
     if (values.image instanceof File) {
       formData.append('image', values.image);
     }
-    
+
     formData.append('weekStart', formatDate(values.dateRange.from));
     formData.append('weekEnd', formatDate(values.dateRange.to));
     formData.append('mealType', values.mealType);
@@ -87,16 +87,16 @@ const AddMenuModal = ({ isOpen, onOpenChange, onSubmit, loading }) => {
     formData.append('price', values.price);
 
     if (values.nutrition && values.nutrition.length > 0) {
-        const transformedNutrition = values.nutrition.map(item => {
-            if (item.name && item.value) {
-                return { [item.name]: item.value };
-            }
-            return null;
-        }).filter(Boolean);
-
-        if (transformedNutrition.length > 0) {
-            formData.append('nutrition', JSON.stringify(transformedNutrition));
+      const transformedNutrition = values.nutrition.map(item => {
+        if (item.name && item.value) {
+          return { [item.name]: item.value };
         }
+        return null;
+      }).filter(Boolean);
+
+      if (transformedNutrition.length > 0) {
+        formData.append('nutrition', JSON.stringify(transformedNutrition));
+      }
     }
 
     await onSubmit(formData);
@@ -176,6 +176,8 @@ const AddMenuModal = ({ isOpen, onOpenChange, onSubmit, loading }) => {
                           <SelectItem value="Breakfast">{t('breakfast')}</SelectItem>
                           <SelectItem value="Lunch">{t('lunch')}</SelectItem>
                           <SelectItem value="Dinner">{t('dinner')}</SelectItem>
+                          <SelectItem value="Vegano">{t('vegano')}</SelectItem>
+                          <SelectItem value="Diabetes">{t('diabetes')}</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -222,10 +224,10 @@ const AddMenuModal = ({ isOpen, onOpenChange, onSubmit, loading }) => {
                           name={`nutrition.${index}.name`}
                           render={({ field }) => (
                             <FormItem>
-                                <FormControl>
-                                    <Input placeholder={t('placeholders.nutrient_name')} {...field} />
-                                </FormControl>
-                                <FormMessage />
+                              <FormControl>
+                                <Input placeholder={t('placeholders.nutrient_name')} {...field} />
+                              </FormControl>
+                              <FormMessage />
                             </FormItem>
                           )}
                         />
@@ -260,7 +262,7 @@ const AddMenuModal = ({ isOpen, onOpenChange, onSubmit, loading }) => {
                       className="mt-2"
                       onClick={() => append({ name: '', value: '' })}
                     >
-                      <PlusCircle/>
+                      <PlusCircle />
                       {t('add_nutrient')}
                     </Button>
                   </div>

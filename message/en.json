@@ -132,6 +132,8 @@
     "breakfast": "Breakfast",
     "lunch": "Lunch",
     "dinner": "Dinner",
+    "vegano": "Vegano",
+    "diabetes": "Diabetes",
     "search_placeholder": "Search menus...",
     "add_button": "Add Weekly Menu",
     "error_load": "Failed to load menus",
