@@ -20,13 +20,20 @@ export default defineConfig({
       brotliSize: true,
     }),
   ],
+  server: {
+    host: "10.10.20.70",
+    port: "3000",
+  },
+  preview: {
+    host: "0.0.0.0",
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
   },
   build: {
-    chunkSizeWarningLimit: 1500, 
+    chunkSizeWarningLimit: 1500,
     rollupOptions: {
       output: {
         manualChunks: {
@@ -38,3 +45,4 @@ export default defineConfig({
     },
   },
 });
+
