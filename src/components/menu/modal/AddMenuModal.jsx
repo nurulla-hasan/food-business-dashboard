@@ -19,7 +19,7 @@ const getFormSchema = (t) => z.object({
     from: z.date({ required_error: t('validation.start_date_required') }),
     to: z.date({ required_error: t('validation.end_date_required') }),
   }),
-  mealType: z.enum(["Breakfast", "Lunch", "Dinner"], {
+  mealType: z.enum(["Breakfast", "Lunch", "Dinner", "Vegano", "Diabetes"], {
     required_error: t('validation.meal_type_required'),
   }),
   image: z.any().refine((file) => file instanceof File, {
@@ -69,6 +69,7 @@ const AddMenuModal = ({ isOpen, onOpenChange, onSubmit, loading }) => {
     }
     setPreviewUrl(null);
   }, [selectedFile]);
+
 
   const handleFormSubmit = async (values) => {
     const formData = new FormData();

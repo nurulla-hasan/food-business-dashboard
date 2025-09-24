@@ -8,6 +8,7 @@ import { formatDate, getImageUrl } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 
 const ViewMenuModal = ({ isOpen, onOpenChange, menu }) => {
+    console.log(menu);
     const { t } = useTranslation('weekly_menu');
     if (!menu) return null;
     const totalCalories = menu.calories || 0;
@@ -29,7 +30,7 @@ const ViewMenuModal = ({ isOpen, onOpenChange, menu }) => {
                             <div className="space-y-4">
                                 <div className="relative aspect-video lg:aspect-square overflow-hidden rounded-lg border">
                                     <img
-                                        src={getImageUrl(menu.image)}
+                                        src={getImageUrl(menu?.image)}
                                         alt={menu.dishName}
                                         className="h-full w-full object-cover"
                                         onError={(e) => {

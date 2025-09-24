@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { setAccessToken, setAdmin } from './auth/authSlice'
 
-export const IMAGE_BASE_URL = 'http://10.10.20.11:5000';
+export const IMAGE_BASE_URL = 'http://18.218.29.205:5000';
 
 const rawBaseQuery = fetchBaseQuery({
     // baseUrl: 'http://10.10.20.11:5000',
