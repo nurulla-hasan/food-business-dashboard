@@ -32,7 +32,7 @@ const CompanyManagementTable = ({ data, onEdit, onDelete, updateLoading, deleteL
                             <TableCell>
                                 <Badge variant="outline">{item.plants || t('not_available')}</Badge>
                             </TableCell>
-                            <TableCell><Badge variant="outline">{item.status}</Badge></TableCell>
+                            <TableCell><Badge variant="outline" className="capitalize">{item.status}</Badge></TableCell>
                             {isActionButton && (
                                 <TableCell className="text-right space-x-2">
                                     <>

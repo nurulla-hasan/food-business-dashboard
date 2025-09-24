@@ -94,11 +94,11 @@ const OrderViewModal = ({ isOpen, onOpenChange, order }) => {
                                         </div>
                                         <div className="space-y-1">
                                             <p className="text-sm font-medium text-muted-foreground">{t('payment_status')}</p>
-                                            <Badge variant={getPaymentStatusVariant(order.paymentStatus)} className="text-sm">{order.paymentStatus}</Badge>
+                                            <Badge variant={getPaymentStatusVariant(order.paymentStatus)} className="text-sm capitalize">{order.paymentStatus}</Badge>
                                         </div>
                                         <div className="space-y-1">
                                             <p className="text-sm font-medium text-muted-foreground">{t('order_status')}</p>
-                                            <Badge variant={getStatusVariant(order.status)} className="text-sm">{order.status}</Badge>
+                                            <Badge variant={getStatusVariant(order.status)} className="text-sm capitalize">{order.status}</Badge>
                                         </div>
                                     </div>
                                 </InfoSection>

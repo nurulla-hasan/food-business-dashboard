@@ -36,7 +36,7 @@ const EmployeOrderTable = ({ data, page, limit }) => {
                             <TableCell>{formatDate(order.date)}</TableCell>
                             <TableCell>
                                 <Badge variant={getStatusVariant(order.status)} className="capitalize">
-                                    {order.status}
+                                    {order.status === 'complete' ? 'Completed' : order.status}
                                 </Badge>
                             </TableCell>
                             <TableCell>
