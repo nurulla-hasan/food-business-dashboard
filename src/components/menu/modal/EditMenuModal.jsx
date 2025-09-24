@@ -19,7 +19,7 @@ const getFormSchema = (t) => z.object({
     from: z.date({ required_error: t('validation.start_date_required') }),
     to: z.date({ required_error: t('validation.end_date_required') }),
   }),
-  mealType: z.enum(["Breakfast", "Lunch", "Dinner"], {
+  mealType: z.enum(["Breakfast", "Lunch", "Dinner", "Vegano", "Diabetes"], {
     required_error: t('validation.meal_type_required'),
   }),
   image: z.any().optional(),
@@ -198,6 +198,8 @@ const EditMenuModal = ({ isOpen, onOpenChange, menu, onSubmit, loading }) => {
                           <SelectItem value="Breakfast">{t('breakfast')}</SelectItem>
                           <SelectItem value="Lunch">{t('lunch')}</SelectItem>
                           <SelectItem value="Dinner">{t('dinner')}</SelectItem>
+                          <SelectItem value="Vegano">{t('vegano')}</SelectItem>
+                          <SelectItem value="Diabetes">{t('diabetes')}</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
