@@ -66,7 +66,7 @@ const OrderManagement = () => {
     <Suspense fallback={<TableSkeleton rows={10} />}>
       <PageLayout
         pagination={
-          totalPages > 1 && (
+          // totalPages > 1 && (
             <div className="mt-4">
               <CustomPagination
                 currentPage={currentPage}
@@ -74,7 +74,7 @@ const OrderManagement = () => {
                 onPageChange={setCurrentPage}
               />
             </div>
-          )
+          // )
         }
       >
         <div className="flex flex-col md:flex-row md:items-start justify-between mb-4">

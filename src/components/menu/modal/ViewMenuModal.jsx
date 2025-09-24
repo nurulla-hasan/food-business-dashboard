@@ -8,7 +8,7 @@ import { formatDate, getImageUrl } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 
 const ViewMenuModal = ({ isOpen, onOpenChange, menu }) => {
-    console.log(menu);
+    // console.log(menu);
     const { t } = useTranslation('weekly_menu');
     if (!menu) return null;
     const totalCalories = menu.calories || 0;

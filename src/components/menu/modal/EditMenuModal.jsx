@@ -95,11 +95,11 @@ const EditMenuModal = ({ isOpen, onOpenChange, menu, onSubmit, loading }) => {
   const handleFormSubmit = async (values) => {
     const formData = new FormData();
     const formatDate = (date) => date.toISOString().split('T')[0];
-    
+
     if (values.image instanceof File) {
       formData.append('image', values.image);
     }
-    
+
     formData.append('weekStart', formatDate(values.dateRange.from));
     formData.append('weekEnd', formatDate(values.dateRange.to));
     formData.append('mealType', values.mealType);
@@ -109,16 +109,16 @@ const EditMenuModal = ({ isOpen, onOpenChange, menu, onSubmit, loading }) => {
     formData.append('price', values.price);
 
     if (values.nutrition && values.nutrition.length > 0) {
-        const transformedNutrition = values.nutrition.map(item => {
-            if (item.name && item.value) {
-                return { [item.name]: item.value };
-            }
-            return null;
-        }).filter(Boolean);
-
-        if (transformedNutrition.length > 0) {
-            formData.append('nutrition', JSON.stringify(transformedNutrition));
+      const transformedNutrition = values.nutrition.map(item => {
+        if (item.name && item.value) {
+          return { [item.name]: item.value };
         }
+        return null;
+      }).filter(Boolean);
+
+      if (transformedNutrition.length > 0) {
+        formData.append('nutrition', JSON.stringify(transformedNutrition));
+      }
     }
 
     await onSubmit(formData);
@@ -246,10 +246,10 @@ const EditMenuModal = ({ isOpen, onOpenChange, menu, onSubmit, loading }) => {
                           name={`nutrition.${index}.name`}
                           render={({ field }) => (
                             <FormItem>
-                                <FormControl>
-                                    <Input placeholder={t('placeholders.nutrient_name')} {...field} />
-                                </FormControl>
-                                <FormMessage />
+                              <FormControl>
+                                <Input placeholder={t('placeholders.nutrient_name')} {...field} />
+                              </FormControl>
+                              <FormMessage />
                             </FormItem>
                           )}
                         />
@@ -316,16 +316,15 @@ const EditMenuModal = ({ isOpen, onOpenChange, menu, onSubmit, loading }) => {
                           >
                             {previewUrl || menu?.image ? (
                               <>
-                                <img 
-                                  src={previewUrl || getImageUrl(menu?.image)} 
-                                  alt={selectedFile?.name || menu.dishName} 
-                                  className="h-12 w-12 rounded object-cover" 
-                                />
-                                <div className="flex flex-col items-start">
-                                  <span className="text-sm font-medium truncate max-w-[220px]">
-                                    {selectedFile?.name || menu.dishName}
-                                  </span>
-                                  <span className="text-xs text-muted-foreground">{t('image_uploader.change_text')}</span>
+                                                                <img 
+                                                                  src={previewUrl || getImageUrl(menu?.image)} 
+                                                                  alt={selectedFile?.name || menu?.dishName} 
+                                                                  className="h-12 w-12 rounded object-cover" 
+                                                                />
+                                                                <div className="flex flex-col items-start">
+                                                                  <span className="text-sm font-medium truncate max-w-[220px]">
+                                                                    {selectedFile?.name || menu?.dishName}
+                                                                  </span>                                  <span className="text-xs text-muted-foreground">{t('image_uploader.change_text')}</span>
                                 </div>
                               </>
                             ) : (

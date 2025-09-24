@@ -68,22 +68,15 @@ const WeeklyMenu = () => {
         }
     };
 
-    const handleEditMenu = async (data) => {
+    const handleEditMenu = async (formData) => {
         if (!selectedMenu?._id) return;
-        const formData = new FormData();
-        if (data?.topic_image) {
-            formData.append('topic_image', data.topic_image);
-        }
-        formData.append(
-            'data',
-            JSON.stringify({ id: selectedMenu._id, name: data?.name })
-        );
         try {
             await updateMenuMutation({ id: selectedMenu._id, data: formData }).unwrap();
             setEditOpen(false);
             setSelectedMenu(null);
         } catch (err) {
             console.error('Update menu failed:', err);
+            throw err;
         }
     };
 
