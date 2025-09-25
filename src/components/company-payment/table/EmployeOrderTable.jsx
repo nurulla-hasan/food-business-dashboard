@@ -44,7 +44,7 @@ const EmployeOrderTable = ({ data, page, limit }) => {
                                     {order.paymentStatus}
                                 </Badge>
                             </TableCell>
-                            <TableCell className="text-right">৳{order.menuPrice.toFixed(2)}</TableCell>
+                            <TableCell className="text-right">${order.menuPrice.toFixed(2)}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

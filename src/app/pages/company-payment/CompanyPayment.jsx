@@ -13,9 +13,8 @@ import NoData from "@/components/common/NoData";
 import { useNavigate } from "react-router-dom";
 import ConfirmationModal from "@/components/common/ConfirmationModal";
 import { toast } from "sonner";
-import { formatDate, getMonthNumber } from "@/lib/utils";
+import { getMonthNumber } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
@@ -33,19 +32,17 @@ const CompanyPayment = () => {
     if (!date) {
       setFilters(prev => ({
         ...Object.fromEntries(
-          Object.entries(prev).filter(([key]) => !['month', 'year', 'selectedDay'].includes(key))
+          Object.entries(prev).filter(([key]) => !['month', 'year'].includes(key))
         )
       }));
       return;
     }
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
-    const selectedDay = date.getDate();
     setFilters(prev => ({
       ...prev,
       month,
-      year,
-      selectedDay
+      year
     }));
   };
 
@@ -127,24 +124,65 @@ const CompanyPayment = () => {
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {filters.month && filters.year
-                      ? formatDate(`${filters.year}-${filters.month}-${filters.selectedDay}`)
+                      ? new Date(filters.year, filters.month - 1, 1).toLocaleString('default', { month: 'long', year: 'numeric' })
                       : <span>{t('pick_date')}</span>}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={filters.month && filters.year
-                      ? new Date(filters.year, filters.month - 1, filters.selectedDay || new Date().getDate())
-                      : null
-                    }
-                    onSelect={handleDateSelect}
-                    initialFocus
-                    defaultMonth={filters.month && filters.year
-                      ? new Date(filters.year, filters.month - 1, 1)
-                      : new Date()
-                    }
-                  />
+                    <div className="flex items-center justify-between">
+                      <button
+                        onClick={() => {
+                          const prevMonth = new Date(filters.year || new Date().getFullYear(), (filters.month || new Date().getMonth() + 1) - 2, 1);
+                          handleDateSelect(prevMonth);
+                        }}
+                        className="p-2 rounded-full hover:bg-accent"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="h-5 w-5"
+                        >
+                          <path d="m15 18-6-6 6-6" />
+                        </svg>
+                      </button>
+                      
+                      <div className="text-base font-medium px-4">
+                        {new Date(filters.year || new Date().getFullYear(), (filters.month || new Date().getMonth() + 1) - 1, 1).toLocaleString('default', { 
+                          month: 'long',
+                          year: 'numeric' 
+                        })}
+                      </div>
+                      
+                      <button
+                        onClick={() => {
+                          const nextMonth = new Date(filters.year || new Date().getFullYear(), (filters.month || new Date().getMonth() + 1), 1);
+                          handleDateSelect(nextMonth);
+                        }}
+                        className="p-2 rounded-full hover:bg-accent"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="h-5 w-5"
+                        >
+                          <path d="m9 18 6-6-6-6" />
+                        </svg>
+                      </button>
+                    </div>
                 </PopoverContent>
               </Popover>
               {filters.month && filters.year && (
