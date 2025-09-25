@@ -233,7 +233,7 @@
   },
   "company_payment": {
     "title": "Pago de la empresa",
-    "pick_date": "Elige una fecha",
+    "pick_date": "Elige un mes",
     "search_placeholder": "Buscar pago...",
     "error_load_payments": "Error al cargar los pagos",
     "no_payments_found": "No se encontraron pagos",

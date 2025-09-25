@@ -233,7 +233,7 @@
   },
   "company_payment": {
     "title": "Company Payment",
-    "pick_date": "Pick a date",
+    "pick_date": "Pick a month",
     "search_placeholder": "Search payment...",
     "error_load_payments": "Failed to load payments",
     "no_payments_found": "No payments found",

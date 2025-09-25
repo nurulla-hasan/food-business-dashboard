@@ -1,14 +1,14 @@
 import { useParams } from "react-router-dom";
 import { useGetCompanyDetailsQuery, useGetCompanyOrderQuery } from "@/redux/feature/company-payment/companyPaymentApi";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, CalendarIcon, Search, X } from "lucide-react";
+import { ArrowLeft, CalendarIcon, ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { cn, formatDate, getInitials } from "@/lib/utils";
+import { cn, getInitials } from "@/lib/utils";
 import usePaginatedSearchQuery from "@/hooks/usePaginatedSearchQuery";
 import PageLayout from "@/components/main-layout/PageLayout";
 import CustomPagination from "@/components/common/CustomPagination";
@@ -17,7 +17,6 @@ import TableSkeleton from "@/components/skeleton/TableSkeleton";
 import Error from "@/components/common/Error";
 import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { useTranslation } from "react-i18next";
 
@@ -27,24 +26,22 @@ const CompanyPaymentDetails = () => {
     const navigate = useNavigate();
 
     const [filters, setFilters] = useState({});
-    // Handle Date Select
+    // Handle Date Select - Only month and year
     const handleDateSelect = (date) => {
         if (!date) {
             setFilters(prev => ({
                 ...Object.fromEntries(
-                    Object.entries(prev).filter(([key]) => !['month', 'year', 'selectedDay'].includes(key))
+                    Object.entries(prev).filter(([key]) => !['month', 'year'].includes(key))
                 )
             }));
             return;
         }
         const month = date.getMonth() + 1;
         const year = date.getFullYear();
-        const selectedDay = date.getDate();
         setFilters(prev => ({
             ...prev,
             month,
-            year,
-            selectedDay
+            year
         }));
     };
 
@@ -214,24 +211,43 @@ const CompanyPaymentDetails = () => {
                                     >
                                         <CalendarIcon className="mr-2 h-4 w-4" />
                                         {filters.month && filters.year
-                                            ? formatDate(`${filters.year}-${filters.month}-${filters.selectedDay}`)
+                                            ? new Date(filters.year, filters.month - 1, 1).toLocaleString('default', { month: 'long', year: 'numeric' })
                                             : <span>{t('pick_date')}</span>}
                                     </Button>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-auto p-0" align="start">
-                                    <Calendar
-                                        mode="single"
-                                        selected={filters.month && filters.year
-                                            ? new Date(filters.year, filters.month - 1, filters.selectedDay || new Date().getDate())
-                                            : null
-                                        }
-                                        onSelect={handleDateSelect}
-                                        initialFocus
-                                        defaultMonth={filters.month && filters.year
-                                            ? new Date(filters.year, filters.month - 1, 1)
-                                            : new Date()
-                                        }
-                                    />
+                                    <div className="flex items-center justify-between p-2">
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            onClick={() => {
+                                                const prevMonth = new Date(filters.year || new Date().getFullYear(), (filters.month || new Date().getMonth() + 1) - 2, 1);
+                                                handleDateSelect(prevMonth);
+                                            }}
+                                            className="p-2 rounded-full hover:bg-accent"
+                                        >
+                                            <ChevronLeft />
+                                        </Button>
+
+                                        <div className="text-sm font-medium px-4">
+                                            {new Date(filters.year || new Date().getFullYear(), (filters.month || new Date().getMonth() + 1) - 1, 1).toLocaleString('default', {
+                                                month: 'long',
+                                                year: 'numeric'
+                                            })}
+                                        </div>
+
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            onClick={() => {
+                                                const nextMonth = new Date(filters.year || new Date().getFullYear(), (filters.month || new Date().getMonth() + 1), 1);
+                                                handleDateSelect(nextMonth);
+                                            }}
+                                            className="p-2 rounded-full hover:bg-accent"
+                                        >
+                                            <ChevronRight />
+                                        </Button>
+                                    </div>
                                 </PopoverContent>
                             </Popover>
                             {filters.month && filters.year && (
