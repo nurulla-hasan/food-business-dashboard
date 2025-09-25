@@ -2,7 +2,7 @@ import { Suspense, useState } from "react";
 import Title from "@/components/ui/Title";
 import PageLayout from "@/components/main-layout/PageLayout";
 import CustomPagination from "@/components/common/CustomPagination";
-import { CalendarIcon, Search, X } from "lucide-react";
+import { CalendarIcon, ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useGetAllCompanyPaymentQuery, useUpdateCompanyPaymentMutation } from "@/redux/feature/company-payment/companyPaymentApi";
 import CompanyPaymentTable from "@/components/company-payment/table/CompanyPaymentTable";
@@ -129,60 +129,38 @@ const CompanyPayment = () => {
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                    <div className="flex items-center justify-between">
-                      <button
-                        onClick={() => {
-                          const prevMonth = new Date(filters.year || new Date().getFullYear(), (filters.month || new Date().getMonth() + 1) - 2, 1);
-                          handleDateSelect(prevMonth);
-                        }}
-                        className="p-2 rounded-full hover:bg-accent"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="h-5 w-5"
-                        >
-                          <path d="m15 18-6-6 6-6" />
-                        </svg>
-                      </button>
-                      
-                      <div className="text-base font-medium px-4">
-                        {new Date(filters.year || new Date().getFullYear(), (filters.month || new Date().getMonth() + 1) - 1, 1).toLocaleString('default', { 
-                          month: 'long',
-                          year: 'numeric' 
-                        })}
-                      </div>
-                      
-                      <button
-                        onClick={() => {
-                          const nextMonth = new Date(filters.year || new Date().getFullYear(), (filters.month || new Date().getMonth() + 1), 1);
-                          handleDateSelect(nextMonth);
-                        }}
-                        className="p-2 rounded-full hover:bg-accent"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="h-5 w-5"
-                        >
-                          <path d="m9 18 6-6-6-6" />
-                        </svg>
-                      </button>
+                  <div className="flex items-center justify-between p-2">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => {
+                        const prevMonth = new Date(filters.year || new Date().getFullYear(), (filters.month || new Date().getMonth() + 1) - 2, 1);
+                        handleDateSelect(prevMonth);
+                      }}
+                      className="p-2 rounded-full hover:bg-accent"
+                    >
+                      <ChevronLeft />
+                    </Button>
+
+                    <div className="text-sm font-medium px-4">
+                      {new Date(filters.year || new Date().getFullYear(), (filters.month || new Date().getMonth() + 1) - 1, 1).toLocaleString('default', {
+                        month: 'long',
+                        year: 'numeric'
+                      })}
                     </div>
+
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => {
+                        const nextMonth = new Date(filters.year || new Date().getFullYear(), (filters.month || new Date().getMonth() + 1), 1);
+                        handleDateSelect(nextMonth);
+                      }}
+                      className="p-2 rounded-full hover:bg-accent"
+                    >
+                      <ChevronRight />
+                    </Button>
+                  </div>
                 </PopoverContent>
               </Popover>
               {filters.month && filters.year && (
