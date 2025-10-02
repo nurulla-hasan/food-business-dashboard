@@ -21,7 +21,7 @@ export default defineConfig({
     }),
   ],
   preview: {
-    host: "0.0.0.0",
+   allowedHosts: ['dashboard.koumanisdietapp.com', '16.16.183.92', "www.dashboard.koumanisdietapp.com"]
   },
   resolve: {
     alias: {
