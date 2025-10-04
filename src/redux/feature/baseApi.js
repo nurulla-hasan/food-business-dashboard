@@ -1,7 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { setAccessToken, setAdmin } from './auth/authSlice'
 
-export const IMAGE_BASE_URL = 'https://backend.koumanisdietapp.com';
+// export const IMAGE_BASE_URL = 'https://backend.koumanisdietapp.com';
+export const IMAGE_BASE_URL = 'http://18.218.29.205:5173';
 
 const rawBaseQuery = fetchBaseQuery({
     // baseUrl: 'https://backend.koumanisdietapp.com',
