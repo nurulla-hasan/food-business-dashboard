@@ -4,7 +4,8 @@ import { setAccessToken, setAdmin } from './auth/authSlice'
 export const IMAGE_BASE_URL = 'https://backend.koumanisdietapp.com';
 
 const rawBaseQuery = fetchBaseQuery({
-    baseUrl: ' https://backend.koumanisdietapp.com',
+    // baseUrl: 'https://backend.koumanisdietapp.com',
+    baseUrl: 'http://18.218.29.205:5173',
 
     prepareHeaders: (headers, { getState }) => {
         const token = getState()?.auth.accessToken;
