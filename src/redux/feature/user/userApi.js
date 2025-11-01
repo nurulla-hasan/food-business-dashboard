@@ -33,7 +33,15 @@ const userApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ["USER"],
         }),
+
+        activateUser: builder.mutation({
+            query: (employerId) => ({
+                url: `/dashboard/admin/approved_employer?status=active&employerId=${employerId}`,
+                method: "PATCH",
+            }),
+            invalidatesTags: ["USER"],
+        }),
     })
 })
 
-export const { useGetAllUserQuery, useBlockUserMutation } = userApi
+export const { useGetAllUserQuery, useBlockUserMutation, useActivateUserMutation } = userApi

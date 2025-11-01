@@ -122,8 +122,12 @@
     "confirm_unblock_desc": "Are you sure you want to unblock ({{name}})?",
     "confirm_block_desc_no_name": "Are you sure you want to block this user?",
     "confirm_unblock_desc_no_name": "Are you sure you want to unblock this user?",
+    "confirm_activate_title": "Activate User",
+    "confirm_activate_desc": "Are you sure you want to activate {{name}}?",
+    "confirm_activate_desc_no_name": "Are you sure you want to activate this user?",
     "block": "Block",
-    "unblock": "Unblock"
+    "unblock": "Unblock",
+    "activate": "Activate"
   },
   "weekly_menu": {
     "title": "Weekly Menu",

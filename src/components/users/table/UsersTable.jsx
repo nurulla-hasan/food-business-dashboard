@@ -11,10 +11,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Ban } from 'lucide-react';
+import { Ban, Check } from 'lucide-react';
 import { useTranslation } from "react-i18next";
 
-const UsersTable = ({ data, page, limit, onBlock }) => {
+const UsersTable = ({ data, page, limit, onBlock, onActivate }) => {
     const { t } = useTranslation('users');
     return (
         <>
@@ -48,19 +48,25 @@ const UsersTable = ({ data, page, limit, onBlock }) => {
                                 <TableCell>{user.phone_number || t('not_available_long')}</TableCell>
                                 <TableCell className="font-mono text-xs">{user.company_id}</TableCell>
                                 <TableCell>
-                                    <Badge 
+                                    <Badge
                                         variant={
-                                            user.status === 'active' ? 'default' : 
-                                            user.status === 'pending' ? 'warning' : 'destructive'
+                                            user.status === 'active' ? 'default' :
+                                                user.status === 'pending' ? 'warning' : 'destructive'
                                         }
                                     >
                                         {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
                                     </Badge>
                                 </TableCell>
                                 <TableCell className="text-right space-x-2">
-                                    <Button disabled={user.status === 'pending'} onClick={() => onBlock(user)} variant="outline" size="icon" className="text-red-500">
-                                        <Ban className="h-5 w-5" />
-                                    </Button>
+                                    {user.status === 'pending' ? (
+                                        <Button onClick={() => onActivate(user)} variant="outline" size="icon" className="text-green-500">
+                                            <Check className="h-5 w-5" />
+                                        </Button>
+                                    ) : (
+                                        <Button onClick={() => onBlock(user)} variant="outline" size="icon" className="text-red-500">
+                                            <Ban className="h-5 w-5" />
+                                        </Button>
+                                    )}
                                 </TableCell>
                             </TableRow>
                         ))}

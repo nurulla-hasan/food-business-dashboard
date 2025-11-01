@@ -3,7 +3,7 @@ import Title from "@/components/ui/Title";
 import { Input } from "@/components/ui/input";
 import CustomPagination from "@/components/common/CustomPagination";
 import PageLayout from "@/components/main-layout/PageLayout";
-import { useBlockUserMutation, useGetAllUserQuery } from "@/redux/feature/user/userApi";
+import { useActivateUserMutation, useBlockUserMutation, useGetAllUserQuery } from "@/redux/feature/user/userApi";
 import UsersTable from "@/components/users/table/UsersTable";
 import TableSkeleton from "@/components/skeleton/TableSkeleton";
 import { Search } from "lucide-react";
@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 const Users = () => {
     const { t } = useTranslation('users');
     const [confirmOpen, setConfirmOpen] = useState(false);
+    const [confirmActivateOpen, setConfirmActivateOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
     const {
         searchTerm,
@@ -31,6 +32,7 @@ const Users = () => {
     } = usePaginatedSearchQuery(useGetAllUserQuery, { resultsKey: "employers" });
 
     const [toggleBanUser, { isLoading: banLoading }] = useBlockUserMutation();
+    const [activateUser, { isLoading: activateLoading }] = useActivateUserMutation();
 
     const handleToggleBanUser = async (selectedUser) => {
         const payload = {
@@ -42,6 +44,16 @@ const Users = () => {
             const response = await toggleBanUser(payload).unwrap();
             SuccessToast(response?.message);
             setConfirmOpen(false);
+        } catch (error) {
+            ErrorToast(error?.data?.message);
+        }
+    };
+
+    const handleActivateUser = async (selectedUser) => {
+        try {
+            const response = await activateUser(selectedUser._id).unwrap();
+            SuccessToast(response?.message);
+            setConfirmActivateOpen(false);
         } catch (error) {
             ErrorToast(error?.data?.message);
         }
@@ -93,6 +105,10 @@ const Users = () => {
                             setConfirmOpen(true);
                             setSelectedUser(user);
                         }}
+                        onActivate={(user) => {
+                            setConfirmActivateOpen(true);
+                            setSelectedUser(user);
+                        }}
                     />
                 ) : (
                     <NoData msg={t('no_data')} />
@@ -108,6 +124,17 @@ const Users = () => {
                 confirmText={t(selectedUser?.authId?.is_block ? 'unblock' : 'block')}
                 loading={banLoading}
                 onConfirm={() => handleToggleBanUser(selectedUser)}
+            />
+
+            {/* Confirmation Modal for Activate */}
+            <ConfirmationModal
+                isOpen={confirmActivateOpen}
+                onOpenChange={setConfirmActivateOpen}
+                title={t('confirm_activate_title')}
+                description={selectedUser?.name ? t('confirm_activate_desc', { name: selectedUser.name }) : t('confirm_activate_desc_no_name')}
+                confirmText={t('activate')}
+                loading={activateLoading}
+                onConfirm={() => handleActivateUser(selectedUser)}
             />
         </Suspense>
     );
