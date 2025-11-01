@@ -96,9 +96,14 @@ const Topbar = ({ onMenuClick }) => {
                                     <AvatarImage src={getImageUrl(admin?.profile_image)} alt={admin?.name || t("user")} />
                                     <AvatarFallback>{getInitials(admin?.name)}</AvatarFallback>
                                 </Avatar>
-                                <span className="font-medium truncate max-w-[180px]" title={admin?.name || t("user")}>
-                                    {admin?.name || t("user")}
-                                </span>
+                                <div className="flex flex-col">
+                                    <span className="text-sm font-medium truncate max-w-[180px]" title={admin?.name || t("user")}>
+                                        {admin?.name || t("user")}
+                                    </span>
+                                    <span className="text-xs truncate max-w-[180px]" title={admin?.email || t("user")}>
+                                        {admin?.email || t("user")}
+                                    </span>
+                                </div>
                             </>
                         )}
                     </Link>
@@ -145,7 +150,7 @@ const Topbar = ({ onMenuClick }) => {
                                 </DropdownMenuItem>
                             </DropdownMenuGroup>
                             <DropdownMenuSeparator />
-                             <DropdownMenuGroup>
+                            <DropdownMenuGroup>
                                 <DropdownMenuLabel>{t('language')}</DropdownMenuLabel>
                                 <DropdownMenuItem onClick={() => changeLanguage('en')}>
                                     <span>{t('english')}</span>

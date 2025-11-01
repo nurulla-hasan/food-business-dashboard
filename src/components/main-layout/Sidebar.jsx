@@ -71,8 +71,8 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                     {/* NavItems */}
                     {navItems.map((item) => (
                         <NavLink key={item.href} to={item.href} end className={({ isActive }) =>
-                            `w-full flex items-center justify-start px-2 py-3 rounded-sm text-sm font-medium transition-colors duration-200 border 
-                    ${isActive ? "bg-primary text-primary-foreground" : "hover:bg-accent hover:text-accent-foreground bg-background dark:bg-white/5"
+                            `w-full flex items-center justify-start p-2 rounded-sm text-sm font-medium transition-colors duration-200
+                    ${isActive ? "border-x-2 border-primary bg-primary/20" : "hover:bg-accent hover:text-accent-foreground"
                             }`
                         } onClick={() => setIsSidebarOpen(false)}>
                             <item.icon className="mr-2 w-4 h-4" />
@@ -81,10 +81,10 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                     ))}
 
                     <Collapsible defaultOpen={isSettingsPath}>
-                        <CollapsibleTrigger onClick={() => setIsSettingsOpen(!isSettingsOpen)} className={`w-full flex items-center justify-between px-2 py-2 rounded-sm text-base font-medium cursor-pointer transition-colors duration-200 border 
-                    ${isSettingsPath ? "bg-primary text-primary-foreground" : "hover:bg-accent hover:text-accent-foreground bg-background dark:bg-white/5"
+                        <CollapsibleTrigger onClick={() => setIsSettingsOpen(!isSettingsOpen)} className={`w-full flex items-center justify-between p-2 rounded-sm text-base font-medium cursor-pointer transition-colors duration-200 
+                    ${isSettingsPath ? "border-x-2 border-primary bg-primary/20" : "hover:bg-accent hover:text-accent-foreground"
                             }`}>
-                            <div className="flex items-center text-sm px-2 py-1">
+                            <div className="flex items-center text-sm px-2">
                                 <Settings className="mr-2 h-4 w-4" />
                                 {t('settings')}
                             </div>
@@ -98,8 +98,8 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                                     to={item.href}
                                     style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'both' }}
                                     className={({ isActive }) =>
-                                        `animate-fade-in-up w-[90%] ml-5 flex items-center justify-start px-2 py-2 rounded-sm text-sm font-medium transition-colors duration-200 border 
-                                ${isActive ? "bg-primary text-primary-foreground" : "hover:bg-accent hover:text-accent-foreground bg-background dark:bg-white/5"}`
+                                        `animate-fade-in-up w-[90%] ml-5 flex items-center justify-start px-2 py-2 rounded-sm text-sm font-medium transition-colors duration-200  
+                                ${isActive ? "border-x-2 border-primary bg-primary/20" : "hover:bg-accent hover:text-accent-foreground"}`
                                     }
                                     onClick={() => setIsSidebarOpen(false)}
                                 >
