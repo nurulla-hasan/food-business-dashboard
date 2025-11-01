@@ -21,7 +21,7 @@ export default defineConfig({
     }),
   ],
   preview: {
-   allowedHosts: ['dashboard.koumanisdietapp.com', '16.16.183.92', "www.dashboard.koumanisdietapp.com"]
+   allowedHosts: ['dashboard.grupoanfguakamol.com', '16.16.183.92', "www.dashboard.grupoanfguakamol.com"]
   },
   resolve: {
     alias: {
