@@ -23,6 +23,7 @@ import Error from '@/components/common/Error';
 import NoData from '@/components/common/NoData';
 import ViewMenuModal from '@/components/menu/modal/ViewMenuModal';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { SuccessToast } from '@/lib/utils';
 
 const WeeklyMenu = () => {
     const { t } = useTranslation('weekly_menu');
@@ -62,6 +63,7 @@ const WeeklyMenu = () => {
         try {
             await addMenuMutation(formData).unwrap();
             setAddOpen(false);
+            SuccessToast("Menu created successfully")
         } catch (err) {
             console.error('Add menu failed:', err);
             throw err;
@@ -119,11 +121,12 @@ const WeeklyMenu = () => {
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="all">{t('all_meal_type')}</SelectItem>
-                                    <SelectItem value="Breakfast">{t('breakfast')}</SelectItem>
-                                    <SelectItem value="Lunch">{t('lunch')}</SelectItem>
-                                    <SelectItem value="Dinner">{t('dinner')}</SelectItem>
-                                    <SelectItem value="Vegano">{t('vegano')}</SelectItem>
+                                    <SelectItem value="Sopa">{t('soup')}</SelectItem>
+                                    <SelectItem value="Plato_Principal">{t('main_course')}</SelectItem>
+                                    <SelectItem value="Guarnición">{t('side_dish')}</SelectItem>
+                                    <SelectItem value="Postre">{t('dessert')}</SelectItem>
                                     <SelectItem value="Diabetes">{t('diabetes')}</SelectItem>
+                                    <SelectItem value="Vegano">{t('vegano')}</SelectItem>
                                 </SelectContent>
                             </Select>
                             <div className="relative w-full md:w-fit">
